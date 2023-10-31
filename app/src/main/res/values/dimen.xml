@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="param_card_pin">128.dp</dimen>
+    <dimen name="param_menu_length_max">280.dp</dimen>
+    <dimen name="param_menu_length_min">160.dp</dimen>
+    <dimen name="param_title_width">88.dp</dimen>
+    <dimen name="param_title_width_max">144.dp</dimen>
+    <dimen name="param_pad_item_height">52.dp</dimen>
+    <dimen name="param_phone_item_height">64.dp</dimen>
+    <dimen name="param_prompt_height">240.dp</dimen>
+    <dimen name="script_value_height">120.dp</dimen>
+    <dimen name="param_drop_menu">36.dp</dimen>
+    <dimen name="param_model_item">36.dp</dimen>
+    <dimen name="param_progress_num_width">54.dp</dimen>
+
+
+    <dimen name="s_normal_height">36.dp</dimen>
+    <dimen name="s_menu_width">220.dp</dimen>
+    <dimen name="s_vae_width">220.dp</dimen>
+    <dimen name="s_title_height">18.dp</dimen>
+
+
+    <dimen name="c_size_width">160.dp</dimen>
+
+    <dimen name="top_bar_height">52.dp</dimen>
+
+    <dimen name="icon_mini">28.dp</dimen>
+    <dimen name="icon_normal">32.dp</dimen>
+</resources>

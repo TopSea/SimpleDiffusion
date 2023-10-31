@@ -1,0 +1,305 @@
+<resources>
+    <string name="app_name">SimpleDiffusion</string>
+
+
+    <string name="key_private" translatable="false">
+        EpAIBAAKCAQEAtxASK7qrJTrtk2w8/k4wyoZxOimowTF73g3Vccw4tCZon5Yy
+        66FveywVWM4K3gFfiOvGUxzjDuvBDHY3KHp57wFoVp4V3oyzATfjAdhhiChpBDf5
+        jw0s219z98ecTrdTGZtCXsDoNdOIkwcksJUjFwQ/r8S+Z1AERNRkpTzQJny+VS4Y
+        iNfF6gZwGoV2K5P+edRVY0JYGTTub+toar3xdhe9H+E5Yb0eaJprZMrfluKsF9eh
+        K8uj+57RNImWcrhleliD8s0txhe5Q8d7rOODoihuPFH+zLt8sy+0xSjZ/5/oqK/R
+        rl8BLBrJW19nPCvBRsFef/yEmTVUZdn/7LODNQIDAQABAoIBACS2RV6drermeXSi
+        NU0usxw6gASRDDXKTbQHhDGxKgH+3eZ7QbT9iBTkj1di4s0I63bTCc/rMCHy56Ev
+        J/qnLULgPmN4ipw6DUAGTDE3ir+6kuz0qMimdMN9zgz37AHhQ/oTp+jGuQrqZC5Q
+        NWxwTDw2bus6ApFHe8Ot8I0ut/Ovo789ZFCjRQzyR9mRvnmfPCYD/jjTYNeyy9Sb
+        srar3RD7Q0i6ZOcyKayDVOfRumafpg0+ywvM0U3bQIL3ezvk9gmnzO+WBy+9ep+x
+        u8q2FKuicy996dqts2kJitJpjB6o6vSiLQ4A4I1EWRLNoSIfcDaYPQahYwJFRlAY
+        Spna6GECgYEA0VMle3j/KPsiIk541s/9J19QKhRZkz6nuYrHJfvE7EBuE7kDc/gP
+        j5MFELLCdM+kINE1Rg5VaAZGVEJGjt33XKJUV04NfnVi/qozCTDO1UJHeDJ46mPo
+        ouL+gseWXIlIWbpYWH8G7rXmHi8D/UxMlrLkr4L/AIuVnUWXFtb6RtkCgYEA3+HQ
+        co9qfX3LugAkOqEwn7j8p9+3g/OMiLiB02bC4GEwlLxcmZNhEfeDmgQA7ukYoGli
+        1RM4E+X8cnZ/mjlW+lcTJDi0aVXL155sRiTcTeLE1poetP6UXQ+7AVXR8G/p3Y2c
+        c4NpoWiIurG/oS57h5CtpsVkU/f1ckOQNI83vb0CgYEAsuYX88X+dTzk+GMOvbC2
+        0I6SSdRolgKHgHjOKXVa4PtT2MFX5SZNzkw9mP7eWM0Znf6PRFd9wNEUDHE0Mmgc
+        P+xwnskTmU+kErjNs34mV3c089JXKyPGMGhGUulXZbDix+UOGlw+RYfqq0NNao9q
+        KaWs8x/G5uVlMivGrHuBHUkCgYEAspkYyZsBL7T/pZThUeguuuw+mckNQ/UxQgw2
+        fSd4BLljoPOWx2jbwhJ66I2TFQPcgnMvxZz8WltZBRLk/moJqdF20qltuq4X3B1k
+        cJyNJpDlx/DQ2EBSqN6YpxsITE9q+DQ0/61wwbN7h7uujG1hXCcdcHH9dELVid6+
+        Fj++Dt0CgYA2m8U+jU28HPhjd5Vjj7POw1A1PlHyuVdl3vkrXIwi6sNSmA1W5LXc
+        heoxKhbB/GsIfu56JqN5vnxLzTcC3d8zQN6WPykdu5WBzjehVgF8683bgz3IVdD/
+        mbIJReaQLMWUAyo9cwsyN813baSw6tarpOHVcF8g6bsDuLYbeVpiBQ==
+    </string>
+    <string name="key_public" translatable="false">
+        BIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4rB3/wZ33SSHwEvUH5XM
+        oWVgt8ltwsv/03GvRHdFxRC0tS6x0dTFSbptBQpxr7gDIchS+PI4OZoKuhe0cC/y
+        hrzKXWyKAB8mTrO8nQTSWSCLC6Xa6UOPoCUUJn7T0qNpDjJ76Jw4LYRlYIz9dcpG
+        wbnp3EP+CGw1xoNwG+An4m+vAO5gixpoyLdkMH/drNSu5WeTRyUOy2PlTJ4O3htJ
+        D66478tcCEv5QH0POpq9MO4yXSkseNzdXQL6RDYpIB7GmIQ3rW/Gx6tYDWuUnExF
+        6DR3xp41k8oZM4seg1SFwyx/fKvypENhA4/5/LOfjRuYha4EDFQGxyaTOFnAkhli
+        CQIDAQAB
+    </string>
+    <string name="sd_top" translatable="false">http://sd.top</string>
+
+
+    <string name="txt_2_img">Txt2Img</string>
+    <string name="send">Send</string>
+    <string name="textfield_hint">Enter Message…</string>
+    <string name="e_top_bar">Edit Param</string>
+
+
+    <!--文生图参数字符串-->
+    <string name="enable_hr">enable_hr</string>
+    <string name="denoising_strength">denoising_strength</string>
+    <string name="firstphase_width">firstphase_width</string>
+    <string name="firstphase_height">firstphase_height</string>
+    <string name="hr_scale">hr_scale</string>
+    <string name="hr_upscaler">hr_upscaler</string>
+    <string name="hr_second_pass_steps">hr_second_pass_steps</string>
+    <string name="hr_resize_x">hr_resize_x</string>
+    <string name="hr_resize_y">hr_resize_y</string>
+    <string name="hr_sampler_name">hr_sampler_name</string>
+    <string name="hr_prompt">hr_prompt</string>
+    <string name="hr_negative_prompt">hr_negative_prompt</string>
+    <string name="prompt">prompt</string>
+    <string name="styles">styles</string>
+    <string name="seed">seed</string>
+    <string name="subseed">subseed</string>
+    <string name="subseed_strength">subseed_strength</string>
+    <string name="seed_resize_from_h">seed_resize_from_h</string>
+    <string name="seed_resize_from_w">seed_resize_from_w</string>
+    <string name="sampler_name">sampler_name</string>
+    <string name="batch_size">batch_size</string>
+    <string name="n_iter">n_iter</string>
+    <string name="steps">steps</string>
+    <string name="cfg_scale">cfg_scale</string>
+    <string name="width">width</string>
+    <string name="height">height</string>
+    <string name="restore_faces">restore_faces</string>
+    <string name="tiling">tiling</string>
+    <string name="do_not_save_samples">do_not_save_samples</string>
+    <string name="do_not_save_grid">do_not_save_grid</string>
+    <string name="negative_prompt">negative_prompt</string>
+    <string name="eta">eta</string>
+    <string name="s_min_uncond">s_min_uncond</string>
+    <string name="s_churn">s_churn</string>
+    <string name="s_tmax">s_tmax</string>
+    <string name="s_tmin">s_tmin</string>
+    <string name="s_noise">s_noise</string>
+    <string name="override_settings">override_settings</string>
+    <string name="override_settings_restore_afterwards">override_settings_restore_afterwards</string>
+    <string name="script_args">script_args</string>
+    <string name="sampler_index">sampler_index</string>
+    <string name="script_name">script_name</string>
+    <string name="send_images">send_images</string>
+    <string name="save_images">save_images</string>
+    <string name="alwayson_scripts">alwayson_scripts</string>
+
+    <!-- Request中的字符串 -->
+    <string name="r_request_card_a1">Txt to Img</string>
+    <string name="r_request_card_a2">Img to Img</string>
+    <string name="r_request_card_a3">ControlNet</string>
+    <string name="r_request_card_a4">Settings</string>
+    <string name="r_request_card_n">Params</string>
+    <string name="r_denoising_strength">Denoise Strength: </string>
+    <string name="r_param_name">Name: </string>
+    <string name="r_choose_image">Choose Image</string>
+    <string name="r_base_model">SD Model:</string>
+    <string name="r_refiner_model">Refiner Model:</string>
+    <string name="r_refiner_at">Refiner At:</string>
+    <string name="r_control_net">ControlNet:</string>
+    <string name="r_gen_steps">Steps:</string>
+    <string name="r_cfg_scales">CFG Scales:</string>
+    <string name="r_choose_sampler">Sampler:</string>
+    <string name="r_batch_size">Batch Size:</string>
+    <string name="r_sd_prompt">SD Style:</string>
+    <string name="r_prompt">Prompt:</string>
+    <string name="r_neg_prompt">Negative Prompt:</string>
+    <string name="r_btn_confirm">Confirm</string>
+    <string name="r_btn_clear">Clear</string>
+    <string name="r_img_width">Width: </string>
+    <string name="r_img_height">Height: </string>
+    <string name="r_img_choose">Choose Image</string>
+    <string name="r_scripts">Scripts: </string>
+    <!-- Request中Scripts的字符串 -->
+    <string name="rs_xtype">X Type: </string>
+    <string name="rs_ytype">Y Type: </string>
+    <string name="rs_ztype">Z Type: </string>
+    <string name="rs_xvalues">X Values: </string>
+    <string name="rs_yvalues">Y Values: </string>
+    <string name="rs_zvalues">Z Values: </string>
+    <string name="rs_xyz_check1">Draw legend: </string>
+    <string name="rs_xyz_check2">Keep -1 for seeds: </string>
+    <string name="rs_xyz_check3">Include Sub Imgs: </string>
+    <string name="rs_xyz_check4">Include Sub Grids: </string>
+    <string name="rs_xyz_changexy">X-Y</string>
+    <string name="rs_xyz_changeyz">Y-Z</string>
+    <string name="rs_xyz_changexz">X-Z</string>
+    <!-- ControlNet 中的字符串 -->
+    <string name="rs_cn_control_t">Control Mode: </string>
+    <string name="rs_cn_enabled">Enabled: </string>
+    <string name="rs_cn_low_vram">Low VRAM: </string>
+    <string name="rs_cn_pixel_perfect">Pixel Perfect: </string>
+    <string name="rs_cn_use_img">Use Img2Img Image: </string>
+    <string name="rs_cn_module">Pre Processor: </string>
+    <string name="rs_cn_model">Model: </string>
+    <string name="rs_cn_weight">Control Weight: </string>
+    <string name="rs_cn_guid_start">Guidance Start: </string>
+    <string name="rs_cn_guid_end">Guidance End: </string>
+    <string name="rs_cn_pre_res">Preprocessor Res: </string>
+    <string name="rs_cn_threshold">Binarization Threshold: </string>
+    <string name="rs_cn_control_m1">Balanced</string>
+    <string name="rs_cn_control_m2">My prompt is more important</string>
+    <string name="rs_cn_control_m3">ControlNet is more important</string>
+    <string name="rs_cn_resize_t">Resize Mode: </string>
+    <string name="rs_cn_resize_m1">Just Resize</string>
+    <string name="rs_cn_resize_m2">Scale to Fit (Inner Fit)</string>
+    <string name="rs_cn_resize_m3">Envelope (Outer Fit)</string>
+
+
+    <!-- Popup 字符串 -->
+    <string name="p_btn_dismiss">Dismiss</string>
+    <string name="p_btn_confirm">Confirm</string>
+    <string name="p_btn_refresh">Refresh</string>
+    <string name="p_btn_activate">Activate</string>
+    <string name="change_default_prompt">Change Default Prompt</string>
+    <string name="p_change_name">Change Title</string>
+    <string name="p_change_name_old">Old Title: </string>
+    <string name="p_change_name_new">New Title: </string>
+    <string name="p_change_vae_success">Change Vae Model Succeed!</string>
+    <string name="p_addable_prompt_title_add">New Addable Prompt</string>
+    <string name="p_addable_prompt_title_mod">Modify Addable Prompt</string>
+    <string name="p_addable_prompt_name">Addable Prompt Name: </string>
+    <string name="p_addable_prompt_name_2l">The name of addable prompt should not be too long.</string>
+    <string name="p_addable_prompt_value">Addable Prompt Value: </string>
+    <string name="p_addable_prompt_value_2l">The length of addable prompt value is limited in 50.</string>
+    <string name="p_request_error">Error occurred</string>
+    <string name="p_input_code_title">Please input activate code: </string>
+    <string name="p_activate_code">Activate Code</string>
+    <string name="p_activate_code_empty">Empty activate code! </string>
+    <string name="p_activate_code_success">This device was successfully activated!</string>
+    <string name="p_activate_code_continued">Activation code for this device is still valid!</string>
+    <string name="p_activate_code_invalid">Invalid activation code!</string>
+    <string name="p_activate_code_expired">This activation code has expired!</string>
+    <string name="p_activate_code_used">This activation code has been used!</string>
+    <string name="p_activate_code_error">Error occurred!</string>
+    <string name="p_activate_code_reinput">Input Code</string>
+    <string name="p_activate_code_newbie">Use Basic Mode</string>
+    <string name="p_device_error">This software has been maliciously modified, please re-download and install.</string>
+    <string name="p_proof_expired">An error has occurred, Please try again later.</string>
+
+    <!-- Toast字符串 -->
+    <string name="download_sucecssed">Download succeed!</string>
+    <string name="download_failed">Download failed…</string>
+    <string name="t_sd_connected">SD server is connect</string>
+    <string name="t_sd_not_connected">SD server is NOT connect.</string>
+    <string name="t_cnm_more_than_max">Selected ControlNet Model More Than Max.</string>
+    <string name="t_incorrect_param">Please select the appropriate parameter.</string>
+    <string name="t_input_int">Please input Integers</string>
+    <string name="t_empty_name">Name cannot be empty</string>
+    <string name="t_no_param_selected">No param selected.</string>
+    <string name="t_image_added">Image added.</string>
+    <string name="t_too_many_gen">The generation queue is full.</string>
+    <string name="t_no_ex">This extension was not found on SD server.</string>
+
+    <!--MMKV字符串-->
+    <string name="kv_card_position" translatable="false">Card_Position</string>
+    <string name="kv_use_mode" translatable="false">Use_Mode</string>
+    <string name="kv_activate_code" translatable="false">Activate_Code</string>
+    <string name="kv_gen_size" translatable="false">Gen_Size</string>
+    <string name="kv_activate_code_expired" translatable="false">Activate_Code_Expired</string>
+    <string name="kv_last_check" translatable="false">Last_Check</string>
+
+    <string name="url_afd" translatable="false">https://afdian.net/a/GoAHi</string>
+    <string name="url_github" translatable="false">https://github.com/TopSea/SimpleDiffusion</string>
+
+    <string name="server_ip">Server_IP</string>
+    <string name="chat_history">Chat_History</string>
+    <string name="voice_chat">Voice_Chat</string>
+
+
+    <!-- 设置中的字符串 -->
+    <string name="s_top_bar">Settings</string>
+    <string name="s_sd_dress">SD Server Dress: </string>
+    <string name="s_card_position">Param card position: </string>
+    <string name="s_save_cap_img">Save captured image: </string>
+    <string name="s_save_control">Save control image: </string>
+    <string name="s_use_mode">Mode: </string>
+    <string name="s_vae">Vae: </string>
+    <string name="s_save_on_server">Save pictures on Server: </string>
+    <string name="s_gen_size">Gen list size: </string>
+    <string name="s_show_gen_one">Show gen progress after shot images: </string>
+    <string name="s_delete_mode">Delete pictures after: </string>
+    <string name="s_delete_mode_one">One day</string>
+    <string name="s_delete_mode_three">Three days</string>
+    <string name="s_delete_mode_week">A week</string>
+    <string name="s_delete_mode_week2">Two weeks</string>
+    <string name="s_delete_mode_month">One month</string>
+    <string name="s_delete_mode_month6">Six month</string>
+    <string name="s_delete_mode_never">Never</string>
+    <string name="s_addable_prompt">Addable Prompt: </string>
+    <string name="s_addable_prompt_add">New Addable Prompt</string>
+    <string name="s_default_set">Default settings</string>
+    <string name="s_control_net_set">ControlNet settings</string>
+    <string name="s_gen_scheduler_set">AgentScheduler settings</string>
+    <string name="s_control_net_max">ControlNet Max Models Num: </string>
+    <string name="s_control_net_version">ControlNet Version: </string>
+    <string name="s_server_ip">SD Server Dress: </string>
+    <string name="s_btn_sd_connection">Check SD Server Connection</string>
+    <string name="s_agent_set_later">Task queue is not empty currently, please set it later.</string>
+    <string name="s_btn_confirm">Confirm</string>
+    <string name="s_btn_modify">Modify</string>
+
+    <!-- XYZPlot 中的字符串 -->
+    <string name="xyz_1">Nothing</string>
+    <string name="xyz_2">Seed</string>
+    <string name="xyz_3">Var.seed</string>
+    <string name="xyz_4">Var.strength</string>
+    <string name="xyz_5">Steps</string>
+    <string name="xyz_6">Hires steps</string>
+    <string name="xyz_7">CFG Scale</string>
+    <string name="xyz_8">Image CFG Scale</string>
+    <string name="xyz_9">Prompt S/R</string>
+    <string name="xyz_10">Prompt order</string>
+    <string name="xyz_11">Sampler</string>
+    <string name="xyz_12">Sampler</string>
+    <string name="xyz_13">Checkpoint name</string>
+    <string name="xyz_14">Negative Guidance minimum sigma</string>
+    <string name="xyz_15">Sigma Churn</string>
+    <string name="xyz_16">Sigma min</string>
+    <string name="xyz_17">Sigma max</string>
+    <string name="xyz_18">Sigma noise</string>
+    <string name="xyz_19">Schedule type</string>
+    <string name="xyz_20">Schedule min sigma</string>
+    <string name="xyz_21">Schedule max sigma</string>
+    <string name="xyz_22">Schedule rho</string>
+    <string name="xyz_23">Eta</string>
+    <string name="xyz_24">Clip skip</string>
+    <string name="xyz_25">Denoising</string>
+    <string name="xyz_26">Hires upscaler</string>
+    <string name="xyz_27">Cond. Image Mask Weight</string>
+    <string name="xyz_28">VAE</string>
+    <string name="xyz_29">Styles</string>
+    <string name="xyz_30">UniPC Order</string>
+    <string name="xyz_31">Face restore</string>
+    <string name="xyz_32">Token merging ratio</string>
+    <string name="xyz_33">Token merging ratio high-res</string>
+    <string name="xyz_34">Always discard next-to-last sigma</string>
+
+    <!-- 关于中的字符串 -->
+    <string name="a_top_bar">About SimpleDiffusion</string>
+    <string name="a_curr_version">Current version: %1$s</string>
+    <string name="a_develop_by">Developed by %1$s</string>
+    <string name="a_default_version" translatable="false">1234</string>
+    <string name="a_is_latest">This is the latest version.</string>
+    <string name="a_apk_ver">Version: %1$s</string>
+    <string name="a_apk_size">Size: %1$s</string>
+    <string name="a_apk_download">Download</string>
+    <string name="a_apk_update">Update</string>
+    <string name="a_goto_user">User agreement</string>
+    <string name="a_goto_version">Check for updates</string>
+    <string name="a_sponsor">Buy me a coffee</string>
+    <string name="a_open_source">Open source project</string>
+
+    <!-- SimpleDiffusion 桌面中的字符串 -->
+    <string name="sd_top_bar">SimpleDiffusion Desktop</string>
+</resources>
