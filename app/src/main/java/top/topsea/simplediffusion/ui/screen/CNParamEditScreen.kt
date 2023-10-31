@@ -228,9 +228,7 @@ fun CNParamEditContent(
             modifier = Modifier.align(Alignment.BottomStart),
             onDismiss = {
                 cnEvent(ControlNetEvent.EditCNParam(cnModel, false))
-                uiEvent(UIEvent.Navigate(BaseScreen){
-                    navController.popBackStack()
-                })
+                navController.popBackStack()
             },
         ) {
             val param = CNParam(
@@ -252,9 +250,7 @@ fun CNParamEditContent(
             TextUtil.topsea("ControlNets: $param", Log.ERROR)
 
             cnEvent(ControlNetEvent.UpdateCNParam(param){
-                uiEvent(UIEvent.Navigate(BaseScreen){
-                    navController.popBackStack()
-                })
+                navController.popBackStack()
             })
         }
     }

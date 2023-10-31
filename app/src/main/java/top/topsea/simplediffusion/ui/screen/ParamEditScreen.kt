@@ -341,7 +341,7 @@ fun ParamEditContent(
                     )
                     // 脚本参数
                     if (script_name.value == "X/Y/Z plot") {
-                        XYZPlotScript(script_args!!)
+                        XYZPlotScript(script_args)
                     }
                     Divider(
                         thickness = 2.dp,
@@ -361,9 +361,7 @@ fun ParamEditContent(
             modifier = Modifier.align(Alignment.BottomStart),
             onDismiss = {
                 paramEvent(ParamEvent.EditParam(currParam, false))
-                uiEvent(UIEvent.Navigate(BaseScreen){
-                    navController.popBackStack()
-                })
+                navController.popBackStack()
             },
         ) {
             TextUtil.topsea("ParamEditScreen currParam: ${currParam}")
@@ -390,7 +388,7 @@ fun ParamEditContent(
                         defaultPrompt = defaultPrompt.value,
                         defaultNegPrompt = defaultNegPrompt.value,
                         script_name = script_name.value,
-                        script_args = script_args!!.value,
+                        script_args = script_args.value,
                         control_net = controlNets,
                     )
                 }
@@ -429,9 +427,7 @@ fun ParamEditContent(
 
             paramEvent(ParamEvent.UpdateParam(param))
 
-            uiEvent(UIEvent.Navigate(BaseScreen){
-                navController.popBackStack()
-            })
+            navController.popBackStack()
         }
     }
 }
