@@ -122,6 +122,7 @@ fun ParamEditContent(
     uiEvent: (UIEvent) -> Unit,
     normalViewModel: NormalViewModel,
 ) {
+    val isCamera = navController.previousBackStackEntry?.destination?.route == top.topsea.simplediffusion.CameraSettingScreen.route
     val name = remember { mutableStateOf(currParam.name) }
 
     val cnState by normalViewModel.cnState.collectAsState()
@@ -361,7 +362,15 @@ fun ParamEditContent(
             modifier = Modifier.align(Alignment.BottomStart),
             onDismiss = {
                 paramEvent(ParamEvent.EditParam(currParam, false))
-                navController.popBackStack()
+
+                if (isCamera)
+                    uiEvent(UIEvent.Navigate(top.topsea.simplediffusion.CameraSettingScreen){
+                        navController.popBackStack()
+                    })
+                else
+                    uiEvent(UIEvent.Navigate(BaseScreen){
+                        navController.popBackStack()
+                    })
             },
         ) {
             TextUtil.topsea("ParamEditScreen currParam: ${currParam}")
@@ -427,7 +436,15 @@ fun ParamEditContent(
 
             paramEvent(ParamEvent.UpdateParam(param))
 
-            navController.popBackStack()
+
+            if (isCamera)
+                uiEvent(UIEvent.Navigate(top.topsea.simplediffusion.CameraSettingScreen){
+                    navController.popBackStack()
+                })
+            else
+                uiEvent(UIEvent.Navigate(BaseScreen){
+                    navController.popBackStack()
+                })
         }
     }
 }

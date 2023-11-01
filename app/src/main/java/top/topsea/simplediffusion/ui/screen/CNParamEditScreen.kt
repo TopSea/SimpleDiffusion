@@ -28,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import top.topsea.simplediffusion.BaseScreen
+import top.topsea.simplediffusion.CameraSettingScreen
 import top.topsea.simplediffusion.R
 import top.topsea.simplediffusion.api.dto.listTypes
 import top.topsea.simplediffusion.data.param.CNParam
@@ -85,6 +86,7 @@ fun CNParamEditContent(
     uiEvent: (UIEvent) -> Unit,
     cnEvent: (ControlNetEvent) -> Unit,
 ) {
+    val isCamera = navController.previousBackStackEntry?.destination?.route == CameraSettingScreen.route
     val context = LocalContext.current
     val name = remember { mutableStateOf(cnModel.cn_name) }
 
@@ -228,7 +230,14 @@ fun CNParamEditContent(
             modifier = Modifier.align(Alignment.BottomStart),
             onDismiss = {
                 cnEvent(ControlNetEvent.EditCNParam(cnModel, false))
-                navController.popBackStack()
+                if (isCamera)
+                    uiEvent(UIEvent.Navigate(CameraSettingScreen){
+                        navController.popBackStack()
+                    })
+                else
+                    uiEvent(UIEvent.Navigate(BaseScreen){
+                        navController.popBackStack()
+                    })
             },
         ) {
             val param = CNParam(
@@ -249,9 +258,14 @@ fun CNParamEditContent(
             )
             TextUtil.topsea("ControlNets: $param", Log.ERROR)
 
-            cnEvent(ControlNetEvent.UpdateCNParam(param){
-                navController.popBackStack()
-            })
+            if (isCamera)
+                uiEvent(UIEvent.Navigate(CameraSettingScreen){
+                    navController.popBackStack()
+                })
+            else
+                uiEvent(UIEvent.Navigate(BaseScreen){
+                    navController.popBackStack()
+                })
         }
     }
 }
