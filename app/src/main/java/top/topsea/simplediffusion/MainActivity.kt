@@ -85,6 +85,12 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val taskQueue = TaskQueue(
+            genImgApi = genImgApi,
+            normalApi = normalApi,
+            dao = taskParamDao,
+            context = this
+        )
 
         setContent {
             TextUtil.topsea("setContent...", Log.ERROR)
@@ -92,24 +98,16 @@ class MainActivity : ComponentActivity() {
             val context = LocalContext.current
 
             val imgDataViewModel: ImgDataViewModel = hiltViewModel()
-            val uiViewModel = hiltViewModel<UIViewModel>()
+            val uiViewModel: UIViewModel = hiltViewModel()
             val normalViewModel: NormalViewModel = hiltViewModel()
             val cnState by normalViewModel.cnState.collectAsState()
-            val taskQueue = TaskQueue(
-                cancelGenerate = normalViewModel::cancelGenerate,
-                cnState = cnState,
-                uiViewModel = uiViewModel,
-                imgViewModel = imgDataViewModel,
-                genImgApi = genImgApi,
-                normalApi = normalApi,
-                dao = taskParamDao,
-                context = context
-            )
+            taskQueue.cancelGenerate = normalViewModel::cancelGenerate
+            taskQueue.imgViewModel = imgDataViewModel
+            taskQueue.cnState = cnState
+            taskQueue.uiViewModel = uiViewModel
 
             val taskState by taskQueue.tasksState.collectAsState()
             val generateState by taskQueue.genState.collectAsState()
-            // 生成任务循环开始
-            taskQueue.trueOp()
 
             val paramViewModel = hiltViewModel<ParamViewModel>()
             val paramState by paramViewModel.paramState.collectAsState()
@@ -117,6 +115,8 @@ class MainActivity : ComponentActivity() {
             LaunchedEffect(key1 = uiViewModel.serverConnected) {
                 if (uiViewModel.serverConnected) {
                     Toast.makeText(context, context.getText(R.string.t_sd_connected), Toast.LENGTH_SHORT).show()
+                    // 生成任务循环开始
+                    taskQueue.trueOp()
                     val vae = uiViewModel.currentVae
                     if (vae.model_name.isNotEmpty())
                         uiViewModel.onEvent(UIEvent.UpdateVae(vae, {}){})
@@ -199,7 +199,7 @@ class MainActivity : ComponentActivity() {
                                     uiViewModel = uiViewModel,
                                     paramState = paramState,
                                     paramEvent = paramViewModel::paramEvent,
-                                    tasks = taskState.tasks,
+                                    tasks = taskQueue.tasks,
                                     taskListEvent = taskQueue::genListEvent
                                 )
                         },
@@ -217,7 +217,7 @@ class MainActivity : ComponentActivity() {
                                     normalViewModel = normalViewModel,
                                     imgDataViewModel = imgDataViewModel,
                                     paramViewModel = paramViewModel,
-                                    tasks = taskState.tasks,
+                                    tasks = taskQueue.tasks,
                                     errorTasks = taskState.errorTasks,
                                     genState = generateState,
                                     generateEvent = taskQueue::generateEvent
@@ -248,7 +248,7 @@ class MainActivity : ComponentActivity() {
                                     navController = navController,
                                     uiViewModel = uiViewModel,
                                     normalViewModel = normalViewModel,
-                                    tasks = taskState.tasks,
+                                    tasks = taskQueue.tasks,
                                 )
                             }
                             composable(AboutScreen.route) {
@@ -269,7 +269,7 @@ class MainActivity : ComponentActivity() {
                                     paramViewModel = paramViewModel,
                                     normalViewModel = normalViewModel,
                                     uiViewModel = uiViewModel,
-                                    tasks = taskState.tasks,
+                                    tasks = taskQueue.tasks,
                                 )
                             }
                             composable(DesktopScreen.route) {

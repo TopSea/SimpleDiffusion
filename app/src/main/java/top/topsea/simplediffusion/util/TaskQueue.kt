@@ -2,13 +2,11 @@ package top.topsea.simplediffusion.util
 
 import android.content.Context
 import android.util.Log
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.runtime.toMutableStateList
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -33,7 +31,6 @@ import top.topsea.simplediffusion.data.state.ControlNetState
 import top.topsea.simplediffusion.data.state.GenerateState
 import top.topsea.simplediffusion.data.state.TaskState
 import top.topsea.simplediffusion.data.viewmodel.ImgDataViewModel
-import top.topsea.simplediffusion.data.viewmodel.NormalViewModel
 import top.topsea.simplediffusion.data.viewmodel.UIViewModel
 import top.topsea.simplediffusion.event.TaskListEvent
 import top.topsea.simplediffusion.event.GenerateEvent
@@ -41,15 +38,18 @@ import top.topsea.simplediffusion.event.ImageEvent
 import top.topsea.simplediffusion.event.RequestState
 
 class TaskQueue(
-    val cancelGenerate: (String) -> Unit,
-    val cnState: ControlNetState,
-    val imgViewModel: ImgDataViewModel,
-    val uiViewModel: UIViewModel,
+
     val genImgApi: GenImgApiImp,
     val normalApi: NormalApiImp,
     val dao: TaskParamDao,
     val context: Context
-) {
+)
+{
+    var cancelGenerate: ((String) -> Unit)? = null
+    var cnState: ControlNetState? = null
+    var imgViewModel: ImgDataViewModel? = null
+    var uiViewModel: UIViewModel? = null
+
     // 图像生成状态
     private val _genState = MutableStateFlow(GenerateState())
     val genState: StateFlow<GenerateState> = _genState
@@ -57,13 +57,11 @@ class TaskQueue(
     private val scope = CoroutineScope(Dispatchers.IO)
 
     private val _state = MutableStateFlow(TaskState())
-    private val _tasks = dao.getTaskParam()
-        .stateIn(scope, SharingStarted.WhileSubscribed(), emptyList())
+    val tasks: SnapshotStateList<TaskParam> = dao.getTasks().toMutableStateList()
     private val _error_tasks = dao.getErrorTask()
         .stateIn(scope, SharingStarted.WhileSubscribed(), emptyList())
-    val tasksState = combine(_state, _tasks, _error_tasks) { state, tasks, errorTasks ->
+    val tasksState = combine(_state, _error_tasks) { state, errorTasks ->
         state.copy(
-            tasks = tasks,
             errorTasks = errorTasks,
         )
     }.stateIn(scope, SharingStarted.WhileSubscribed(5000), TaskState())
@@ -72,6 +70,7 @@ class TaskQueue(
     val capGenImgList: SnapshotStateList<ImageData> = mutableStateListOf()
 
     private var started = false
+    private var currTask: TaskParam? = null
 
     fun genListEvent(event: TaskListEvent) {
         when(event) {
@@ -86,11 +85,11 @@ class TaskQueue(
      * 判断加入队列还是直接执行
      */
     private fun addGenImage(gen: Pair<ImageData?, BasicParam>, onAddFailure: () -> Unit) {
-        if (tasksState.value.tasks.size >= uiViewModel.taskQueueSize) {
+        if (tasks.size >= uiViewModel!!.taskQueueSize) {
             onAddFailure()
         } else {
             val task = TaskParam(image = gen.first, param = gen.second)
-            if (uiViewModel.exAgentScheduler) {
+            if (uiViewModel!!.exAgentScheduler) {
                 getRealTask(task)
             } else {
                 addTask(task)
@@ -101,27 +100,30 @@ class TaskQueue(
     private fun addTask(task: TaskParam) {
         scope.launch {
             TextUtil.topsea("Add task: $task", Log.ERROR)
-            dao.insert(task)
+            task.id = dao.insert(task).toInt()
+            tasks.add(task)
         }
     }
     private fun updateTask(task: TaskParam) {
         scope.launch {
             TextUtil.topsea("Update task: $task", Log.ERROR)
+            if (task.genInfo.isNotEmpty()) {
+                tasks.remove(task)
+            } else {
+                tasks.add(task)
+            }
             dao.update(task)
         }
     }
     private suspend fun removeTask(task: TaskParam) {
         TextUtil.topsea("Delete task: $task", Log.ERROR)
-
-        // 不 delay 一下可能会造成无尽的请求
-        delay(100)
         dao.delete(task)
+        tasks.remove(task)
     }
 
 
-    @OptIn(DelicateCoroutinesApi::class)
     private fun getRealTask(task: TaskParam) {
-        GlobalScope.launch {
+        scope.launch {
             val param = task.param
             when (param) {
                 is ImgParam -> {
@@ -143,18 +145,28 @@ class TaskQueue(
             started = true
             scope.launch {
                 while (true) {
-                    if (tasksState.value.tasks.isEmpty()) {
+                    if (tasks.isEmpty()) {
                         delay(1000)
                     } else {
-                        val task = tasksState.value.tasks[0]
-                        if (uiViewModel.exAgentScheduler) {
+                        val task = tasks[0]
+                        TextUtil.topsea("tasks.size: ${tasks.size}", Log.ERROR)
+                        if (uiViewModel!!.exAgentScheduler) {
                             requestTaskProgress(task = task)
                         } else {
                             startGenOp(task = task)
                         }
-                        // 删除需要一点时间
-                        delay(100)
                     }
+//                    if (_tasks.value.isEmpty()) {
+//                        delay(1000)
+//                    } else {
+//                        val task = _tasks.value[0]
+//                        TextUtil.topsea("tasks.size: ${_tasks.value.size}", Log.ERROR)
+//                        if (uiViewModel!!.exAgentScheduler) {
+//                            requestTaskProgress(task = task)
+//                        } else {
+//                            startGenOp(task = task)
+//                        }
+//                    }
                 }
             }
         }
@@ -257,11 +269,11 @@ class TaskQueue(
             is GenerateEvent.RemoveTask -> {
                 val task = event.task
                 if (event.isGenThis) {
-                    if (!uiViewModel.exAgentScheduler) {
-                        cancelGenerate("")
+                    if (!uiViewModel!!.exAgentScheduler) {
+                        cancelGenerate?.let { it("") }!!
                     } else {
                         val taskID = task.taskID
-                        cancelGenerate(taskID)
+                        cancelGenerate?.let { it(taskID) }
                     }
                     _genState.update {
                         it.copy(
@@ -269,9 +281,9 @@ class TaskQueue(
                         )
                     }
                 } else {
-                    if (uiViewModel.exAgentScheduler) {
+                    if (uiViewModel!!.exAgentScheduler) {
                         val taskID = task.taskID
-                        cancelGenerate(taskID)
+                        cancelGenerate?.let { it(taskID) }
                     }
                     scope.launch {
                         removeTask(task)
@@ -311,21 +323,21 @@ class TaskQueue(
             // 先添加拍摄的照片
             if (capImg != null) {
                 capGenImgList.add(capImg)
-                if (uiViewModel.saveCapImage) {
-                    imgViewModel.onEvent(ImageEvent.AddImages(capImg))
+                if (uiViewModel!!.saveCapImage) {
+                    imgViewModel!!.onEvent(ImageEvent.AddImages(capImg))
                 }
             }
             // 添加生成的图片
-            if (uiViewModel.saveControlNet) {
+            if (uiViewModel!!.saveControlNet) {
                 images.forEach { image ->
                     image?.let {
-                        imgViewModel.onEvent(ImageEvent.AddImages(it))
+                        imgViewModel!!.onEvent(ImageEvent.AddImages(it))
                         capGenImgList.add(it)
                     }
                 }
             } else {
                 // AgentScheduler 的图片顺序不同
-                if (uiViewModel.exAgentScheduler) {
+                if (uiViewModel!!.exAgentScheduler) {
                     val imageSubList = if (batchSize < images.lastIndex) {
                         images.subList(1, batchSize + 1)
                     } else {
@@ -333,7 +345,7 @@ class TaskQueue(
                     }
                     imageSubList.forEach { image ->
                         image?.let {
-                            imgViewModel.onEvent(ImageEvent.AddImages(it))
+                            imgViewModel!!.onEvent(ImageEvent.AddImages(it))
                             capGenImgList.add(it)
                         }
                     }
@@ -341,7 +353,7 @@ class TaskQueue(
                     val imageSubList = images.subList(0, batchSize)
                     imageSubList.forEach { image ->
                         image?.let {
-                            imgViewModel.onEvent(ImageEvent.AddImages(it))
+                            imgViewModel!!.onEvent(ImageEvent.AddImages(it))
                             capGenImgList.add(it)
                         }
                     }
@@ -426,7 +438,7 @@ class TaskQueue(
             script_args = param.script_args,
         )
 
-        val controlNets = cnState.cnParams.filter {
+        val controlNets = cnState!!.cnParams.filter {
             param.control_net.contains(it.id)
         }
         controlNets.forEach {
@@ -436,7 +448,7 @@ class TaskQueue(
             }
         }
 
-        img2Img.save_images = uiViewModel.saveOnServer
+        img2Img.save_images = uiViewModel!!.saveOnServer
 
         return img2Img.requestWithCN(controlNets)
     }
@@ -456,12 +468,12 @@ class TaskQueue(
             script_args = param.script_args,
             batch_size = param.batch_size
         )
-        val controlNets = cnState.cnParams.filter {
+        val controlNets = cnState!!.cnParams.filter {
             TextUtil.topsea("ControlNets: ${it}", Log.ERROR)
             param.control_net.contains(it.id)
         }
 
-        txt2Img.save_images = uiViewModel.saveOnServer
+        txt2Img.save_images = uiViewModel!!.saveOnServer
         return txt2Img.requestWithCN(controlNets)
     }
 }

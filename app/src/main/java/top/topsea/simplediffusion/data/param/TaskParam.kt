@@ -42,13 +42,15 @@ interface TaskParamDao {
     //    @Query("SELECT * FROM TxtParam order by `id` desc limit 20")
     @Query("SELECT * FROM TaskParam WHERE length(genInfo)<=0 order by `id` ")
     fun getTaskParam(): Flow<List<TaskParam>>
+    @Query("SELECT * FROM TaskParam WHERE length(genInfo)<=0 order by `id` ")
+    fun getTasks(): List<TaskParam>
     @Query("SELECT * FROM TaskParam WHERE length(genInfo)>0 order by `id` ")
     fun getErrorTask(): Flow<List<TaskParam>>
 
     @Update(TaskParam::class)
     suspend fun update(taskParam: TaskParam)
     @Insert
-    suspend fun insert(vararg taskParam: TaskParam)
+    suspend fun insert(taskParam: TaskParam): Long
     @Delete(TaskParam::class)
     suspend fun delete(taskParam: TaskParam): Int
 }

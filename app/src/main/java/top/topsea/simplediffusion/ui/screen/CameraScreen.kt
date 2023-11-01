@@ -219,7 +219,7 @@ fun CameraView(
             camIndex = camIndex,
             paramViewModel = paramViewModel,
             uiViewModel = uiViewModel,
-            genQueue = taskQueue,
+            taskQueue = taskQueue,
         )
     }
 }
@@ -231,15 +231,15 @@ fun CamBottomBar(
     camIndex: MutableState<Int>,
     paramViewModel: BasicViewModel,
     uiViewModel: UIViewModel,
-    genQueue: TaskQueue,
+    taskQueue: TaskQueue,
 ) {
     val context = LocalContext.current
     val scrollState = rememberScrollState()
     var path by remember { mutableStateOf("") }
 
-    val imageList: SnapshotStateList<ImageData> = remember { genQueue.capGenImgList }
+    val imageList: SnapshotStateList<ImageData> = remember { taskQueue.capGenImgList }
 
-    val tasksState by genQueue.tasksState.collectAsState()
+    val tasksState by taskQueue.tasksState.collectAsState()
     val paramState by paramViewModel.paramState.collectAsState()
     val param = paramState.currParam
     val currParam = param as ImgParam
@@ -313,13 +313,13 @@ fun CamBottomBar(
                         .size(54.dp)
                         .background(Color.Black)
                         .clickable {
-                            if (imageList.isNotEmpty() || tasksState.tasks.isNotEmpty())
+                            if (imageList.isNotEmpty() || taskQueue.tasks.isNotEmpty())
                                 uiViewModel.onEvent(UIEvent.DisplayImg(-1))
                         },
                 )
                 // 待生成的图片
                 Text(
-                    text = "${tasksState.tasks.size}",
+                    text = "${taskQueue.tasks.size}",
                     modifier = Modifier
                         .padding(4.dp)
                         .align(Alignment.BottomEnd),
@@ -388,7 +388,7 @@ fun CamBottomBar(
                                             script_args = currParam.script_args,
                                             control_net = currParam.control_net
                                         )
-                                        genQueue.genListEvent(TaskListEvent.AddTaskImage(capImg to trueParam){
+                                        taskQueue.genListEvent(TaskListEvent.AddTaskImage(capImg to trueParam){
                                             Toast.makeText(context, context.getString(R.string.t_too_many_gen), Toast.LENGTH_SHORT).show()
                                         })
 

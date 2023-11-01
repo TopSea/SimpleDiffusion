@@ -172,18 +172,14 @@ fun DisplayImagesInCam(
     normalViewModel: NormalViewModel,
     taskQueue: TaskQueue,
 ) {
-    val context = LocalContext.current
-    val wp = context.resources.displayMetrics.widthPixels
-    val pdp = with(LocalDensity.current) { (wp * 0.08F).toDp() }
-
     val tasksState by taskQueue.tasksState.collectAsState()
     val genState by taskQueue.genState.collectAsState()
     val state = rememberLazyListState()
 
-    LaunchedEffect(key1 = tasksState.tasks.size, key2 = images.size) {
+    LaunchedEffect(key1 = taskQueue.tasks.size, key2 = images.size) {
         val image = if (images.lastIndex >= 0) images.lastIndex else 0
         val errorTask = if (tasksState.errorTasks.lastIndex > 0) tasksState.errorTasks.lastIndex else 0
-        val task = if (tasksState.tasks.lastIndex > 0) tasksState.tasks.lastIndex else 1
+        val task = if (taskQueue.tasks.lastIndex > 0) taskQueue.tasks.lastIndex else 1
         state.animateScrollToItem(image + errorTask + task)
     }
 
@@ -215,7 +211,7 @@ fun DisplayImagesInCam(
                 ErrorTaskInDisplay(true, task = task, generateEvent = taskQueue::generateEvent)
             }
             itemsIndexed(
-                items = tasksState.tasks
+                items = taskQueue.tasks
             ) { index, task ->
                 TaskInDisplay(true, gen = task, genState = genState, generateEvent = taskQueue::generateEvent, index = index)
             }
