@@ -429,7 +429,6 @@ class TaskQueue(
         val controlNets = cnState.cnParams.filter {
             param.control_net.contains(it.id)
         }
-        TextUtil.topsea("ControlNets[0]: ${controlNets[0]}", Log.ERROR)
         controlNets.forEach {
             TextUtil.topsea("ControlNets: ${it}", Log.ERROR)
             if (it.use_imgImg) {

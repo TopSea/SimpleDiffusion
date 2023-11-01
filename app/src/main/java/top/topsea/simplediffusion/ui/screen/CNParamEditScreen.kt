@@ -258,14 +258,16 @@ fun CNParamEditContent(
             )
             TextUtil.topsea("ControlNets: $param", Log.ERROR)
 
-            if (isCamera)
-                uiEvent(UIEvent.Navigate(CameraSettingScreen){
-                    navController.popBackStack()
-                })
-            else
-                uiEvent(UIEvent.Navigate(BaseScreen){
-                    navController.popBackStack()
-                })
+            cnEvent(ControlNetEvent.UpdateCNParam(param){
+                if (isCamera)
+                    uiEvent(UIEvent.Navigate(CameraSettingScreen){
+                        navController.popBackStack()
+                    })
+                else
+                    uiEvent(UIEvent.Navigate(BaseScreen){
+                        navController.popBackStack()
+                    })
+            })
         }
     }
 }
