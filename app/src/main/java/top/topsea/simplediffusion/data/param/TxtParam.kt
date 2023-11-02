@@ -150,12 +150,9 @@ data class SavableTxtParam(
 interface TxtParamDao {
 //    @Query("SELECT * FROM TxtParam order by `id` desc limit 20")
     @Query("SELECT * FROM TxtParam order by `id` desc")
-    fun getLatest20(): Flow<List<TxtParam>>
-    @Query("SELECT * FROM TxtParam WHERE name LIKE '%' || :searchTxt || '%' order by `id` desc limit 20")
-    fun getALikeLatest20(searchTxt: String): Flow<List<TxtParam>>
-
-    @Query("SELECT * FROM TxtParam WHERE `id` < (:before)  order by `id` desc limit 10")
-    fun get10More(before: Int): List<TxtParam>
+    fun getTxtParams(): Flow<List<TxtParam>>
+    @Query("SELECT * FROM TxtParam WHERE name LIKE '%' || :searchTxt || '%' order by `id` desc")
+    fun getSearchParams(searchTxt: String): Flow<List<TxtParam>>
 
     @Update(TxtParam::class)
     suspend fun update(txtParam: TxtParam)

@@ -41,17 +41,17 @@ class ParamViewModel @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     private val _tparams: StateFlow<List<TxtParam>> = searchTxt.flatMapLatest { txt ->
         if (txt.isEmpty()) {
-            aTxtDao.getLatest20()
+            aTxtDao.getTxtParams()
         } else {
-            aTxtDao.getALikeLatest20(txt)
+            aTxtDao.getSearchParams(txt)
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
     private val _iparams: StateFlow<List<ImgParam>> = searchImg.flatMapLatest { txt ->
         if (txt.isEmpty()) {
-            aImgDao.getLatest20()
+            aImgDao.getImgParams()
         } else {
-            aImgDao.getALikeLatest20(txt)
+            aImgDao.getSearchParams(txt)
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
@@ -366,7 +366,6 @@ class ParamViewModel @Inject constructor(
                     }
                 }
             }
-            is ParamEvent.LoadParam -> TODO()
             is ParamEvent.SearchParam -> {
                 if (event.isi2i) {
                     searchImg.value = event.txt

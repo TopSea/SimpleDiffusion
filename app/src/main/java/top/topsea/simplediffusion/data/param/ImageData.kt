@@ -65,11 +65,8 @@ data class SavableImage (
 
 @Dao
 interface ImageDataDao {
-
-    // 查询最近二十八张图片
-//    @Query("SELECT * FROM ImageData order by `index` desc limit 100")
     @Query("SELECT * FROM ImageData order by `index` desc")
-    fun getLatest100(): Flow<List<ImageData>>
+    fun getAllImages(): Flow<List<ImageData>>
 
     @Query("SELECT * FROM ImageData WHERE `index` < (:before)  order by `index` desc limit 16")
     fun get16More(before: Int): List<ImageData>

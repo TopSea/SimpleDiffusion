@@ -104,7 +104,7 @@ class NormalViewModel @Inject constructor(
 
     // ControlNet
     private val _cnState = MutableStateFlow(ControlNetState())
-    private val _cnParams = dao.getLatest20()
+    private val _cnParams = dao.getParams()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
     private val _cnTypes = normalApiImp.getCNTypes()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())

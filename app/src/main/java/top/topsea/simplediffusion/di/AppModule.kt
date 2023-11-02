@@ -150,7 +150,7 @@ object AppModule {
             "SimpleDiffusion.db"
         )
 //            .createFromAsset("SimpleDiffusion.db")
-            .allowMainThreadQueries()
+//            .allowMainThreadQueries()
             .build()
     }
 

@@ -23,7 +23,7 @@ class ImgDataViewModel @Inject constructor(
     private val newbieApi: GenImgApiImp,
 ): ViewModel() {
     private val _state = MutableStateFlow(ImgDataState())
-    private val _images = dao.getLatest100()
+    private val _images = dao.getAllImages()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
     val state = combine(_state, _images) { state, images ->

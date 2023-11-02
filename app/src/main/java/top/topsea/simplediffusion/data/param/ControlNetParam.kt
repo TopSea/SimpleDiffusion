@@ -130,10 +130,10 @@ data class CNParam(
 interface CNParamDao {
 //    @Query("SELECT * FROM CNParam order by `id` desc limit 20")
     @Query("SELECT * FROM CNParam order by `id` desc")
-    fun getLatest20(): Flow<List<CNParam>>
+    fun getParams(): Flow<List<CNParam>>
 
-    @Query("SELECT * FROM CNParam WHERE `id` < (:before)  order by `id` desc limit 10")
-    fun get10More(before: Int): List<CNParam>
+    @Query("SELECT * FROM CNParam WHERE `id` < (:before)  order by `id` desc")
+    fun getSearchParams(before: Int): List<CNParam>
 
     @Update(CNParam::class)
     suspend fun update(cnParam: CNParam)

@@ -171,12 +171,9 @@ data class SavableImgParam(
 interface ImgParamDao {
 //    @Query("SELECT * FROM ImgParam order by `id` desc limit 20")
     @Query("SELECT * FROM ImgParam order by `id` desc")
-    fun getLatest20(): Flow<List<ImgParam>>
-    @Query("SELECT * FROM ImgParam WHERE name LIKE '%' || :searchTxt || '%' order by `id` desc limit 20")
-    fun getALikeLatest20(searchTxt: String): Flow<List<ImgParam>>
-
-    @Query("SELECT * FROM ImgParam WHERE `id` < (:before)  order by `id` desc limit 10")
-    fun get10More(before: Int): List<ImgParam>
+    fun getImgParams(): Flow<List<ImgParam>>
+    @Query("SELECT * FROM ImgParam WHERE name LIKE '%' || :searchTxt || '%' order by `id` desc")
+    fun getSearchParams(searchTxt: String): Flow<List<ImgParam>>
 
     @Update(ImgParam::class)
     suspend fun update(imgParam: ImgParam)

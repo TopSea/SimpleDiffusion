@@ -39,9 +39,6 @@ class TaskParam(
 
 @Dao
 interface TaskParamDao {
-    //    @Query("SELECT * FROM TxtParam order by `id` desc limit 20")
-    @Query("SELECT * FROM TaskParam WHERE length(genInfo)<=0 order by `id` ")
-    fun getTaskParam(): Flow<List<TaskParam>>
     @Query("SELECT * FROM TaskParam WHERE length(genInfo)<=0 order by `id` ")
     fun getTasks(): List<TaskParam>
     @Query("SELECT * FROM TaskParam WHERE length(genInfo)>0 order by `id` ")

@@ -57,7 +57,7 @@ class TaskQueue(
     private val scope = CoroutineScope(Dispatchers.IO)
 
     private val _state = MutableStateFlow(TaskState())
-    val tasks: SnapshotStateList<TaskParam> = dao.getTasks().toMutableStateList()
+    val tasks: SnapshotStateList<TaskParam> = mutableStateListOf()
     private val _error_tasks = dao.getErrorTask()
         .stateIn(scope, SharingStarted.WhileSubscribed(), emptyList())
     val tasksState = combine(_state, _error_tasks) { state, errorTasks ->
@@ -144,6 +144,7 @@ class TaskQueue(
         if (!started) {
             started = true
             scope.launch {
+                tasks.addAll(dao.getTasks())
                 while (true) {
                     if (tasks.isEmpty()) {
                         delay(1000)

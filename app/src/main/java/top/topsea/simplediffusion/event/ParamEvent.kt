@@ -6,7 +6,6 @@ import android.util.Size
 import top.topsea.simplediffusion.data.param.ImgParam
 
 sealed class ParamEvent {
-    data class LoadParam(val bps: List<BasicParam>) : ParamEvent()
     data class AddParam(val bp: BasicParam?) : ParamEvent()
     data class UpdateParam(val bp: BasicParam) : ParamEvent()
     data class DeleteParam(val bp: BasicParam) : ParamEvent()
