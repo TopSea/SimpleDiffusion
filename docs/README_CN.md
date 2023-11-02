@@ -1,6 +1,6 @@
-![封面][img-sd-part]
+![封面][img_sd_part]
 
-# SimpleDiffusion: Generate AI images anytime anywhere
+# SimpleDiffusion：随时随地打开二次元的大门
 
 <div align="center">
 <img src="https://img.shields.io/badge/Android-gray?style=for-the-badge&logo=android" alt="Static Badge"/>
@@ -21,23 +21,23 @@
 <a href="https://github.com/TopSea/SimpleDiffusion/releases/tag/nightly"><img src="https://img.shields.io/github/downloads/TopSea/SimpleDiffusion/nightly/total" alt="Download Badge"/></a>
 </div>
 
-English | [简体中文](./docs/README_CN.md)
+[English](../README.md) | 简体中文
 
-## Demonstration of Generation
+## 生图演示
 
 <iframe src="https://player.bilibili.com/player.html?aid=407964910&bvid=BV1CG411X7oa&cid=1318996037&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" width="100%" height="500"> </iframe>
 
-## Features
+## 功能
 
-* Txt2Img
-* Img2Img
-* Capture image to generate image
-* Generation task queue
-* Generation progress showing
-* Interupt Generation
-* ControlNet support support
-* Agent Scheduler extension support
+* 文生图
+* 图生图
+* 拍摄生图
+* 生成队列
+* 生成进度的显示
+* 中断生成
+* ControlNet 插件支持
+* Agent Scheduler 插件支持
 
-Please let me know if you have any suggestions. Even better if you pull a request. (￣▽￣)
 
-[img-sd-part]: ./docs/image/Simple_Diffusion_part.jpg
+
+[img_sd_part]: ./image/Simple_Diffusion_part.jpg
