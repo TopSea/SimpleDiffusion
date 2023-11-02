@@ -1,9 +1,11 @@
 package top.topsea.simplediffusion.ui.screen
 
 import android.Manifest
+import android.util.Log
 import android.widget.Toast
 import androidx.annotation.Keep
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -17,20 +19,29 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.pullrefresh.pullRefresh
+import androidx.compose.material3.pullrefresh.pullRefreshIndicatorTransform
+import androidx.compose.material3.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -42,6 +53,8 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import top.topsea.simplediffusion.CameraScreen
 import top.topsea.simplediffusion.EditScreen
 import top.topsea.simplediffusion.R
@@ -59,6 +72,7 @@ import top.topsea.simplediffusion.event.GenerateEvent
 import top.topsea.simplediffusion.event.ParamEvent
 import top.topsea.simplediffusion.ui.component.DisplayImages
 import top.topsea.simplediffusion.ui.component.DisplayInGrid
+import top.topsea.simplediffusion.util.TextUtil
 import top.topsea.simplediffusion.util.getWidthDp
 
 
@@ -82,6 +96,21 @@ fun BaseScreen(
     genState: GenerateState,
     generateEvent: (GenerateEvent) -> Unit
 ) {
+    var refreshing by remember { mutableStateOf(false) }
+    val refreshScope = rememberCoroutineScope()
+
+    fun refresh() = refreshScope.launch {
+        refreshing = true
+        // 每次刷新检查SD的连接状态
+        normalViewModel.checkSDConnect {
+            uiViewModel.onEvent(UIEvent.ServerConnected(it))
+            refreshing = false
+        }
+    }
+
+    val state = rememberPullRefreshState(refreshing, onRefresh = ::refresh)
+    val rotation = animateFloatAsState(state.progress * 120, label = "")
+
     val paramState = paramViewModel.paramState.collectAsState()
     val imgState by imgDataViewModel.state.collectAsState()
     val cnState by normalViewModel.cnState.collectAsState()
@@ -109,6 +138,7 @@ fun BaseScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .pullRefresh(state)
     ) {
         when (selectedItem.value) {
             Bottom.PHOTO -> {
@@ -134,6 +164,28 @@ fun BaseScreen(
                     paramEvent = paramViewModel::paramEvent,
                     cnEvent = normalViewModel::cnEvent,
                 )
+            }
+        }
+
+        Surface(
+            modifier = Modifier
+                .size(40.dp)
+                .align(Alignment.TopCenter)
+                .pullRefreshIndicatorTransform(state)
+                .rotate(rotation.value),
+            shape = RoundedCornerShape(10.dp),
+            color = MaterialTheme.colorScheme.primary,
+        ) {
+            Box {
+                if (refreshing) {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .size(25.dp),
+                        color = Color.White,
+                        strokeWidth = 3.dp
+                    )
+                }
             }
         }
     }

@@ -285,10 +285,8 @@ class NormalViewModel @Inject constructor(
         }
     }
 
-    fun checkSDConnect(checkConnect: (Boolean) -> Unit) {
-        viewModelScope.launch {
-            normalApiImp.checkSDConnect(checkConnect)
-        }
+    suspend fun checkSDConnect(checkConnect: (Boolean) -> Unit) {
+        normalApiImp.checkSDConnect(checkConnect)
     }
 
     fun cancelGenerate(taskID: String = "") {
