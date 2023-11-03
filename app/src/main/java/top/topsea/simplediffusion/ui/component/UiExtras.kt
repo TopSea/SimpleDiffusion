@@ -64,6 +64,7 @@ import top.topsea.simplediffusion.SettingScreen
 import top.topsea.simplediffusion.data.param.UserPrompt
 import top.topsea.simplediffusion.data.state.UIEvent
 import top.topsea.simplediffusion.navUp
+import top.topsea.simplediffusion.util.Constant
 
 
 @Keep
@@ -245,8 +246,9 @@ fun ChangePromptPopup(
     onDismiss: () -> Unit,
     onConfirm: (UserPrompt) -> Unit,
 ) {
+    val truePrompt = userPrompt.alias.replace(Constant.addablePrompt, "")
     val temp1 = remember { mutableStateOf(userPrompt.name) }
-    val temp2 = remember { mutableStateOf(userPrompt.alias) }
+    val temp2 = remember { mutableStateOf(truePrompt) }
     var temp1TooLong by remember { mutableStateOf(false) }
     var temp2TooLong by remember { mutableStateOf(false) }
 
@@ -327,8 +329,9 @@ fun ChangePromptPopup(
         },
         confirmButton = {
             TextButton(onClick = {
+                val addablePrompt = Constant.addablePrompt + temp2.value + Constant.addablePrompt
                 if (!temp1TooLong && !temp2TooLong)
-                    onConfirm(UserPrompt(id = userPrompt.id, name = temp1.value, alias = temp2.value))
+                    onConfirm(UserPrompt(id = userPrompt.id, name = temp1.value, alias = addablePrompt))
             }) {
                 Text(text = stringResource(id = R.string.p_btn_confirm))
             }

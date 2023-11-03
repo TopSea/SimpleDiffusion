@@ -421,10 +421,11 @@ class TaskQueue(
     }
 
     private fun getImgParam(param: ImgParam): String {
+        val truePrompt = param.defaultPrompt.replace(Constant.addablePrompt, "")
         val img2Img =  Img2Img(
             init_images = arrayOf(param.image.value),
             denoising_strength = param.denoising_strength,
-            prompt = param.defaultPrompt,
+            prompt = truePrompt,
             refiner_checkpoint = param.refinerModel,
             refiner_switch_at = param.refinerAt,
             negative_prompt = param.defaultNegPrompt,
@@ -455,8 +456,9 @@ class TaskQueue(
     }
 
     private fun getTxtParam(param: TxtParam): String {
+        val truePrompt = param.defaultPrompt.replace(Constant.addablePrompt, "")
         val txt2Img =  Txt2Img(
-            prompt = param.defaultPrompt,
+            prompt = truePrompt,
             refiner_checkpoint = param.refinerModel,
             refiner_switch_at = param.refinerAt,
             negative_prompt = param.defaultNegPrompt,

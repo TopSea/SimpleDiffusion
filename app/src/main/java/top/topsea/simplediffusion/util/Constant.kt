@@ -2,9 +2,15 @@ package top.topsea.simplediffusion.util
 
 object Constant {
     // Lora 格式
-    val symbolPattern by lazy {
-        //  <lora:AnimeKiss:1>
+    val loraPattern by lazy {
         Regex("""(<lora:)([^>]+)(:)(\d+)([.]?)(\d*)(>)(,)""")
+    }
+    // AddablePrompt 格式
+    val addablePattern by lazy {
+        Regex("""(巜)([\s\S]*)(巜)""")
+    }
+    val addablePrompt by lazy {
+        "巜"
     }
     const val date_format = "yyyy-MM-dd HH:mm:ss"
     const val default_date = "1997-01-01 00:00:00"

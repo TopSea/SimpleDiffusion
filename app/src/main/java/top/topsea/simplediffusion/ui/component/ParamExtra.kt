@@ -30,6 +30,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.TextDelegate
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
@@ -51,6 +52,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -78,6 +80,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
@@ -95,6 +98,7 @@ import top.topsea.simplediffusion.data.param.UserPrompt
 import top.topsea.simplediffusion.event.ParamEvent
 import top.topsea.simplediffusion.pickingImg
 import top.topsea.simplediffusion.ui.theme.Pink80
+import top.topsea.simplediffusion.util.Constant
 import top.topsea.simplediffusion.util.FileUtil
 import top.topsea.simplediffusion.util.TextUtil
 import top.topsea.simplediffusion.util.getWidthDp
@@ -955,7 +959,8 @@ fun ParamRowPrompt(
                                         value = 16F,
                                         type = TextUnitType.Sp
                                     )
-                                )
+                                ),
+                                
                             )
                         } else {
                             ClickableMessage(
@@ -1207,7 +1212,9 @@ fun LoraField(
         modifier = modifier
     ) {
         item {
-            FlowRow(modifier = Modifier.padding(bottom = 4.dp, end = 4.dp).fillMaxWidth()) {
+            FlowRow(modifier = Modifier
+                .padding(bottom = 4.dp, end = 4.dp)
+                .fillMaxWidth()) {
                 models.forEach {
                     if (it is LoraModel)
                         LoraItem(lora = it, onClickAdd)
@@ -1291,7 +1298,9 @@ fun PromptField(
         modifier = modifier
     ) {
         item {
-            FlowRow(modifier = Modifier.padding(bottom = 4.dp, end = 4.dp).fillMaxWidth()) {
+            FlowRow(modifier = Modifier
+                .padding(bottom = 4.dp, end = 4.dp)
+                .fillMaxWidth()) {
 
                 models.forEach {
                     PromptItem(userPrompt = it as UserPrompt, inSettings = true, onClickAdd = {}, onDelete, onUpdate)
