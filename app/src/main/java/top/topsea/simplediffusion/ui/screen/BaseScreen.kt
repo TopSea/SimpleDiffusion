@@ -144,7 +144,6 @@ fun BaseScreen(
             Bottom.PHOTO -> {
                 DisplayInGrid(
                     modifier = Modifier
-                        .padding(top = 1.dp)
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.background),
                     imageState = imgState,

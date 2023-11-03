@@ -1,11 +1,14 @@
 package top.topsea.simplediffusion.ui.component
 
+import android.icu.util.Calendar
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.snapping.SnapLayoutInfoProvider
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
@@ -13,12 +16,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.Divider
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -28,18 +35,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import top.topsea.simplediffusion.data.param.ImageData
+import top.topsea.simplediffusion.data.param.TaskParam
 import top.topsea.simplediffusion.data.state.GenerateState
 import top.topsea.simplediffusion.data.state.ImgDataState
 import top.topsea.simplediffusion.data.state.UIEvent
+import top.topsea.simplediffusion.data.viewmodel.BasicViewModel
 import top.topsea.simplediffusion.data.viewmodel.ImgDataViewModel
 import top.topsea.simplediffusion.data.viewmodel.NormalViewModel
 import top.topsea.simplediffusion.data.viewmodel.UIViewModel
 import top.topsea.simplediffusion.event.GenerateEvent
 import top.topsea.simplediffusion.util.TaskQueue
-import top.topsea.simplediffusion.data.param.TaskParam
-import top.topsea.simplediffusion.data.viewmodel.BasicViewModel
 import top.topsea.simplediffusion.util.getWidthDp
 
 
@@ -65,6 +73,16 @@ fun DisplayInGrid(
         verticalArrangement = Arrangement.spacedBy(1.dp),
         horizontalArrangement = Arrangement.spacedBy(1.dp)
     ) {
+        // 生成任务
+        item(
+            span = {
+                // 占据最大宽度
+                GridItemSpan(maxLineSpan) }
+        ) {
+            if (errorTasks.isNotEmpty() || tasks.isNotEmpty())
+                GridHeader(headStr = "Task")
+        }
+
         itemsIndexed(items = errorTasks) { index, task ->
             ErrorTaskInGrid(
                 modifier = Modifier
@@ -88,22 +106,85 @@ fun DisplayInGrid(
             )
         }
 
-        itemsIndexed(
-            items = images,
-            key = { _, img ->
-                img.index
+        // 图片
+        images.forEachIndexed { index, image ->
+            if (index == 0)
+                item(
+                    span = {
+                        // 占据最大宽度
+                        GridItemSpan(maxLineSpan) }
+                ) {
+                    GridHeader(headStr = image.genDate.toString())
+                }
+            else {
+                val preDate = images[index - 1].genDate
+                val nowDate = images[index].genDate
+
+                val fromCalendar: Calendar = Calendar.getInstance()
+                fromCalendar.time = preDate
+                fromCalendar.set(Calendar.HOUR_OF_DAY, 0)
+                fromCalendar.set(Calendar.MINUTE, 0)
+                fromCalendar.set(Calendar.SECOND, 0)
+                fromCalendar.set(Calendar.MILLISECOND, 0)
+                val toCalendar: Calendar = Calendar.getInstance()
+                toCalendar.time = nowDate
+                toCalendar.set(Calendar.HOUR_OF_DAY, 0)
+                toCalendar.set(Calendar.MINUTE, 0)
+                toCalendar.set(Calendar.SECOND, 0)
+                toCalendar.set(Calendar.MILLISECOND, 0)
+
+                val days = (toCalendar.timeInMillis - fromCalendar.timeInMillis) / (86400000L)
+                if (days < 0L) { // 不在同一天之内
+                    item(
+                        span = { GridItemSpan(maxLineSpan) }
+                    ) {
+                        GridHeader(headStr = image.genDate.toString())
+                    }
+                }
             }
-        ) { index, img ->
-            ImageInGrid(
-                modifier = Modifier
-                    .height(wdp)
-                    .clickable {
-                        uiViewModel.onEvent(UIEvent.DisplayImg(index))
-                    },
-                imgName = img.imageName
-            )
+
+            item(key = image.index) {
+                ImageInGrid(
+                    modifier = Modifier
+                        .height(wdp)
+                        .clickable {
+                            uiViewModel.onEvent(UIEvent.DisplayImg(index))
+                        },
+                    imgName = image.imageName
+                )
+            }
         }
     }
+}
+
+
+@Composable
+fun GridHeader(headStr: String) {
+    Row(
+        modifier = Modifier
+            .padding(bottom = 4.dp, top = 10.dp, start = 16.dp, end = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        GridHeaderLine()
+        Text(
+            text = headStr,
+            modifier = Modifier.padding(horizontal = 16.dp),
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.primary,
+            fontWeight = FontWeight.Bold
+        )
+        GridHeaderLine()
+    }
+}
+
+@Composable
+private fun RowScope.GridHeaderLine() {
+    Divider(
+        modifier = Modifier
+            .weight(1f),
+        color = MaterialTheme.colorScheme.primary,
+        thickness = 1.6.dp
+    )
 }
 
 @OptIn(ExperimentalFoundationApi::class)
