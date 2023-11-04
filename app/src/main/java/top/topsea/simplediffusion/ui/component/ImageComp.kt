@@ -206,11 +206,12 @@ fun ShowingIcon(
 @Composable
 fun ShowingIcon(
     onclick: () -> Unit,
-    icon: Painter
+    icon: Painter,
+    tint: Color = Color.White,
 ) {
     IconButton(onClick = { onclick() }) {
         Icon(
-            painter = icon, contentDescription = "", tint = Color.White, modifier = Modifier
+            painter = icon, contentDescription = "", tint = tint, modifier = Modifier
                 .size(32.dp)
         )
     }
@@ -356,7 +357,9 @@ fun ErrorTaskInDisplay(
                         imageVector = Icons.Default.Info,
                         contentDescription = "",
                         tint = Color.Red,
-                        modifier = Modifier.padding(top = 16.dp).size(32.dp)
+                        modifier = Modifier
+                            .padding(top = 16.dp)
+                            .size(32.dp)
                     )
                     Text(
                         text = task.genInfo,
@@ -393,21 +396,32 @@ fun ErrorTaskInDisplay(
 @Composable
 fun ImageInGrid(
     modifier: Modifier,
-    imgName: String
+    imgName: String,
+    longPressed: Boolean = false,
+    selected: Boolean = false,
 ) {
     val context = LocalContext.current
     val path = File(context.filesDir, imgName).absolutePath
 
-    AsyncImage(
-        model = ImageRequest.Builder(LocalContext.current)
-            .data(path)
-            .crossfade(true)
-            .build(),
-        placeholder = painterResource(R.drawable.placeholder_32),
-        contentDescription = "Display image.",
-        contentScale = ContentScale.Crop,
-        modifier = modifier
-    )
+    Box(modifier = modifier) {
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(path)
+                .crossfade(true)
+                .build(),
+            placeholder = painterResource(R.drawable.placeholder_32),
+            contentDescription = "Display image.",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
+        )
+        if (longPressed)
+            Icon(
+                painter = if (selected) painterResource(id = R.drawable.rounded_check) else painterResource(
+                    id = R.drawable.rounded_uncheck),
+                contentDescription = "",
+                modifier = Modifier.padding(8.dp).align(Alignment.BottomEnd),
+                tint = MaterialTheme.colorScheme.primary)
+    }
 }
 
 @Composable

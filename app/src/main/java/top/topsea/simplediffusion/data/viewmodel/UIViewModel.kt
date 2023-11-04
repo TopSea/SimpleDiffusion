@@ -4,8 +4,10 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tencent.mmkv.MMKV
@@ -37,6 +39,9 @@ class UIViewModel @Inject constructor(
     // 页面相关
     var displaying by mutableStateOf(false)
         private set     // 是否在展示图片
+    var longPressImage by mutableStateOf(false)
+        private set     // 是否在展示图片
+    val fullSelected: SnapshotStateList<String> = mutableStateListOf()      // 全选了的模块
     var modelChanging by mutableStateOf(false)
         private set     // 是否正在修改基础模型，初次进入时要先更新模型
     var displayingImg by mutableStateOf(-1)
@@ -65,21 +70,6 @@ class UIViewModel @Inject constructor(
         kv.decodeParcelable(Constant.sd_vae, VaeModel::class.java)?: VaeModel("", "")
     )
         private set     // 当前 Vae 模型
-    var deleteMode by mutableStateOf(
-        when (kv.decodeString(Constant.k_delete_mode, DeleteImage.NEVER.name)!!) {
-            DeleteImage.ONE.name -> DeleteImage.ONE
-            DeleteImage.THREE.name -> DeleteImage.THREE
-            DeleteImage.WEEK.name -> DeleteImage.WEEK
-            DeleteImage.WEEK2.name -> DeleteImage.WEEK2
-            DeleteImage.MONTH.name -> DeleteImage.MONTH
-            DeleteImage.MONTH6.name -> DeleteImage.MONTH6
-            DeleteImage.NEVER.name -> DeleteImage.NEVER
-            else -> {
-                DeleteImage.MONTH
-            }
-        }
-    )
-        private set     // 按什么周期删除图片
     var taskQueueSize by mutableStateOf(
         kv.decodeInt(context.getString(R.string.kv_gen_size), 1)
     )
@@ -117,10 +107,6 @@ class UIViewModel @Inject constructor(
 
     fun onEvent(event: UIEvent) {
         when (event) {
-            is UIEvent.ChangeDeleteMode -> {
-                deleteMode = event.mode
-                kv.encode(Constant.k_delete_mode, event.mode.name)
-            }
             is UIEvent.Display -> {
                 displaying = event.display
             }
@@ -128,6 +114,9 @@ class UIViewModel @Inject constructor(
                 displaying = !displaying
                 displayingImg = event.index
                 TextUtil.topsea("DisplayImg: ${event.index}", Log.ERROR)
+            }
+            is UIEvent.LongPressImage -> {
+                longPressImage = event.longPressImage
             }
             is UIEvent.IsSaveCapImg -> {
                 saveCapImage = event.saveCapImage

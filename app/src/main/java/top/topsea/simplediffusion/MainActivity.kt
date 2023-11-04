@@ -125,18 +125,6 @@ class MainActivity : ComponentActivity() {
                 }
             }
 
-            LaunchedEffect(key1 = uiViewModel.deleteMode) {
-                when(uiViewModel.deleteMode) {
-                    DeleteImage.ONE -> imgDataViewModel.onEvent(ImageEvent.DeleteByDate(1, context))
-                    DeleteImage.THREE -> imgDataViewModel.onEvent(ImageEvent.DeleteByDate(3, context))
-                    DeleteImage.WEEK -> imgDataViewModel.onEvent(ImageEvent.DeleteByDate(7, context))
-                    DeleteImage.WEEK2 -> imgDataViewModel.onEvent(ImageEvent.DeleteByDate(14, context))
-                    DeleteImage.MONTH -> imgDataViewModel.onEvent(ImageEvent.DeleteByDate(31, context))
-                    DeleteImage.MONTH6 -> imgDataViewModel.onEvent(ImageEvent.DeleteByDate(61, context))
-                    DeleteImage.NEVER -> { }
-                }
-            }
-
             LaunchedEffect(key1 = pickingImg.value) {
                 when (pickingImg.value) {
                     in -1..Int.MAX_VALUE -> {
@@ -196,6 +184,7 @@ class MainActivity : ComponentActivity() {
                                 BaseBottomBar(
                                     selectedItem,
                                     navController,
+                                    imgDataViewModel = imgDataViewModel,
                                     uiViewModel = uiViewModel,
                                     paramState = paramState,
                                     paramEvent = paramViewModel::paramEvent,
@@ -281,13 +270,19 @@ class MainActivity : ComponentActivity() {
 
                         BackHandler(enabled = true) {
                             TextUtil.topsea("BackHandler.")
-                            if (uiViewModel.displaying) {
-                                uiViewModel.onEvent(UIEvent.DisplayImg(-1))
+                            if (uiViewModel.longPressImage) {
+                                uiViewModel.onEvent(UIEvent.LongPressImage(false))
+                                uiViewModel.fullSelected.clear()
+                                imgDataViewModel.selectedID.clear()
                             } else {
-                                if (!navController.popBackStack())
-                                    this.finish()
-                                else
-                                    updateCurrScreen(navController.currentDestination!!.route!!)
+                                if (uiViewModel.displaying) {
+                                    uiViewModel.onEvent(UIEvent.DisplayImg(-1))
+                                } else {
+                                    if (!navController.popBackStack())
+                                        this.finish()
+                                    else
+                                        updateCurrScreen(navController.currentDestination!!.route!!)
+                                }
                             }
                         }
                     }

@@ -1,10 +1,10 @@
 package top.topsea.simplediffusion.ui.screen
 
 import android.Manifest
-import android.util.Log
 import android.widget.Toast
 import androidx.annotation.Keep
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,15 +14,21 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -53,7 +59,6 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import top.topsea.simplediffusion.CameraScreen
 import top.topsea.simplediffusion.EditScreen
@@ -67,12 +72,12 @@ import top.topsea.simplediffusion.data.viewmodel.ImgDataViewModel
 import top.topsea.simplediffusion.data.viewmodel.NormalViewModel
 import top.topsea.simplediffusion.data.viewmodel.UIViewModel
 import top.topsea.simplediffusion.event.ControlNetEvent
-import top.topsea.simplediffusion.event.TaskListEvent
 import top.topsea.simplediffusion.event.GenerateEvent
+import top.topsea.simplediffusion.event.ImageEvent
 import top.topsea.simplediffusion.event.ParamEvent
+import top.topsea.simplediffusion.event.TaskListEvent
 import top.topsea.simplediffusion.ui.component.DisplayImages
 import top.topsea.simplediffusion.ui.component.DisplayInGrid
-import top.topsea.simplediffusion.util.TextUtil
 import top.topsea.simplediffusion.util.getWidthDp
 
 
@@ -147,6 +152,8 @@ fun BaseScreen(
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.background),
                     imageState = imgState,
+                    imageEvent = imgDataViewModel::onEvent,
+                    selectedID = imgDataViewModel.selectedID,
                     uiViewModel = uiViewModel,
                     tasks = tasks,
                     errorTasks = errorTasks,
@@ -218,6 +225,7 @@ fun BaseScreen(
 fun BaseBottomBar(
     selectedItem: MutableState<Bottom>,
     navController: NavController,
+    imgDataViewModel: ImgDataViewModel,
     uiViewModel: UIViewModel,
     paramState: ParamLocalState,
     paramEvent: (ParamEvent) -> Unit,
@@ -226,110 +234,82 @@ fun BaseBottomBar(
 ) {
     val permissionCamera = rememberPermissionState(Manifest.permission.CAMERA)
     val context = LocalContext.current
+    val offsetDP by animateDpAsState(targetValue = if (uiViewModel.longPressImage) 0.dp else -getWidthDp(),
+        label = ""
+    )
 
-    NavigationBar {
-        NavigationBarItem(
-            icon = {
-                Box(modifier = Modifier.size(24.dp)) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.bottom_photo),
-                        contentDescription = "item",
-                        modifier = Modifier.fillMaxSize()
-                    )
-                    if (tasks.isNotEmpty())
-                        Box(
-                            modifier = Modifier
-                                .offset(x = 8.dp, y = -(4).dp)
-                                .size(12.dp)
-                                .background(Color.Red, CircleShape)
-                                .clip(CircleShape)
-                                .align(Alignment.TopEnd),
-                            contentAlignment = Alignment.Center
-                        ){
-                            Text(text = "${tasks.size}", fontSize = 8.sp, color = Color.White)
-                        }
-                }
-            },
-            label = { Text("图片") },
-            selected = selectedItem.value == Bottom.PHOTO,
-            onClick = { selectedItem.value = Bottom.PHOTO },
-            modifier = Modifier.weight(1f)
-        )
-        Row(
-            modifier = Modifier
-                .fillMaxHeight(),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Box(
-                modifier = Modifier
-                    .background(
-                        color = MaterialTheme.colorScheme.inversePrimary,
-                        shape = RoundedCornerShape(16.dp)
-                    )
-                    .clip(RoundedCornerShape(16.dp))
-                    .clickable {
-                        if (uiViewModel.displaying) {
-                            uiViewModel.onEvent(UIEvent.DisplayImg(-1))
-                        } else {
-                            paramEvent(ParamEvent.CheckCapture(
-                                notInI2I = {
-                                    Toast
-                                        .makeText(
-                                            context,
-                                            context.getText(R.string.t_incorrect_param),
-                                            Toast.LENGTH_SHORT
-                                        )
-                                        .show()
-                                }
-                            ) {
-                                if (uiViewModel.serverConnected)
-                                    if (!permissionCamera.status.isGranted) {
-                                        permissionCamera.launchPermissionRequest()
-                                    } else {
-                                        uiViewModel.onEvent(UIEvent.Navigate(CameraScreen) {
-                                            navController.navigate(CameraScreen.route)
-                                        })
-                                    }
-                                else
-                                    Toast
-                                        .makeText(
-                                            context,
-                                            context.getText(R.string.t_sd_not_connected),
-                                            Toast.LENGTH_SHORT
-                                        )
-                                        .show()
-                            })
-                        }
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(80.dp),
+        shadowElevation = 16.dp
+    ) {
+        NavigationBar {
+            NavigationBarItem(
+                icon = {
+                    Box(modifier = Modifier.size(24.dp)) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.bottom_photo),
+                            contentDescription = "item",
+                            modifier = Modifier.fillMaxSize()
+                        )
+                        if (tasks.isNotEmpty())
+                            Box(
+                                modifier = Modifier
+                                    .offset(x = 8.dp, y = -(4).dp)
+                                    .size(12.dp)
+                                    .background(Color.Red, CircleShape)
+                                    .clip(CircleShape)
+                                    .align(Alignment.TopEnd),
+                                contentAlignment = Alignment.Center
+                            ){
+                                Text(text = "${tasks.size}", fontSize = 8.sp, color = Color.White)
+                            }
                     }
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.camera_gen),
-                    contentDescription = "item",
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .size(32.dp)
-                )
-            }
-            Box(
+                },
+                label = { Text("图片") },
+                selected = selectedItem.value == Bottom.PHOTO,
+                onClick = { selectedItem.value = Bottom.PHOTO },
+                modifier = Modifier.weight(1f)
+            )
+            Row(
                 modifier = Modifier
-                    .background(
-                        color = MaterialTheme.colorScheme.inversePrimary,
-                        shape = RoundedCornerShape(16.dp)
+                    .fillMaxHeight(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                BottomFuncIcon(modifier = Modifier.padding(horizontal = 16.dp), icon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.camera_gen),
+                        contentDescription = "item",
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .size(32.dp)
                     )
-                    .clip(RoundedCornerShape(16.dp))
-                    .clickable {
-                        if (uiViewModel.displaying) {
-                            uiViewModel.onEvent(UIEvent.DisplayImg(-1))
-                        } else {
-                            if (uiViewModel.serverConnected) {
-                                val currParam = paramState.currParam
-                                if (currParam != null) {
-                                    taskListEvent(TaskListEvent.AddTaskImage(null to currParam){
-                                        Toast.makeText(context, context.getString(R.string.t_too_many_gen), Toast.LENGTH_SHORT).show()
+                }) {
+                    if (uiViewModel.displaying) {
+                        uiViewModel.onEvent(UIEvent.DisplayImg(-1))
+                    } else {
+                        paramEvent(ParamEvent.CheckCapture(
+                            notInI2I = {
+                                Toast
+                                    .makeText(
+                                        context,
+                                        context.getText(R.string.t_incorrect_param),
+                                        Toast.LENGTH_SHORT
+                                    )
+                                    .show()
+                            }
+                        ) {
+                            if (uiViewModel.serverConnected)
+                                if (!permissionCamera.status.isGranted) {
+                                    permissionCamera.launchPermissionRequest()
+                                } else {
+                                    uiViewModel.onEvent(UIEvent.Navigate(CameraScreen) {
+                                        navController.navigate(CameraScreen.route)
                                     })
                                 }
-                            } else {
+                            else
                                 Toast
                                     .makeText(
                                         context,
@@ -337,76 +317,163 @@ fun BaseBottomBar(
                                         Toast.LENGTH_SHORT
                                     )
                                     .show()
-                            }
-                        }
+                        })
                     }
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.photo_gen),
-                    contentDescription = "item",
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .size(32.dp)
-                )
-            }
-            Box(
-                modifier = Modifier
-                    .background(
-                        color = MaterialTheme.colorScheme.inversePrimary,
-                        shape = RoundedCornerShape(16.dp)
+                }
+                BottomFuncIcon(modifier = Modifier.padding(horizontal = 16.dp), icon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.photo_gen),
+                        contentDescription = "item",
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .size(32.dp)
                     )
-                    .clip(RoundedCornerShape(16.dp))
-                    .clickable {
-                        if (uiViewModel.displaying) {
-                            uiViewModel.onEvent(UIEvent.DisplayImg(-1))
-                        } else {
-                            paramEvent(
-                                ParamEvent.EditActivate(
-                                    editingActivate = true,
-                                    editing = false
-                                ) {
+                }) {
+                    if (uiViewModel.displaying) {
+                        uiViewModel.onEvent(UIEvent.DisplayImg(-1))
+                    } else {
+                        if (uiViewModel.serverConnected) {
+                            val currParam = paramState.currParam
+                            if (currParam != null) {
+                                taskListEvent(TaskListEvent.AddTaskImage(null to currParam) {
                                     Toast
                                         .makeText(
                                             context,
-                                            context.getString(R.string.t_no_param_selected),
+                                            context.getString(R.string.t_too_many_gen),
                                             Toast.LENGTH_SHORT
                                         )
                                         .show()
                                 })
-                            if (paramState.currParam != null) {
-                                uiViewModel.onEvent(UIEvent.Navigate(EditScreen) {
-                                    navController.navigate(EditScreen.route)
-                                })
                             }
+                        } else {
+                            Toast
+                                .makeText(
+                                    context,
+                                    context.getText(R.string.t_sd_not_connected),
+                                    Toast.LENGTH_SHORT
+                                )
+                                .show()
                         }
                     }
-            ) {
+                }
+                BottomFuncIcon(modifier = Modifier.padding(horizontal = 16.dp), icon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.edit),
+                        contentDescription = "item",
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .size(32.dp)
+                    )
+                }) {
+                    if (uiViewModel.displaying) {
+                        uiViewModel.onEvent(UIEvent.DisplayImg(-1))
+                    } else {
+                        paramEvent(
+                            ParamEvent.EditActivate(
+                                editingActivate = true,
+                                editing = false
+                            ) {
+                                Toast
+                                    .makeText(
+                                        context,
+                                        context.getString(R.string.t_no_param_selected),
+                                        Toast.LENGTH_SHORT
+                                    )
+                                    .show()
+                            })
+                        if (paramState.currParam != null) {
+                            uiViewModel.onEvent(UIEvent.Navigate(EditScreen) {
+                                navController.navigate(EditScreen.route)
+                            })
+                        }
+                    }
+                }
+            }
+            NavigationBarItem(
+                icon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.bottom_param),
+                        contentDescription = "item",
+                        modifier = Modifier.size(24.dp)
+                    )
+                },
+                label = { Text("参数") },
+                selected = selectedItem.value == Bottom.PARAM,
+                onClick = {
+                    if (uiViewModel.displaying) {
+                        uiViewModel.onEvent(UIEvent.DisplayImg(-1))
+                    }
+                    selectedItem.value = Bottom.PARAM
+                },
+                modifier = Modifier.weight(1f)
+            )
+        }
+
+        // 长按图片后显示的功能按钮
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .offset(x = offsetDP)
+                .background(NavigationBarDefaults.containerColor),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.End
+        ) {
+//            BottomFuncIcon(modifier = Modifier.padding(horizontal = 16.dp), icon = {
+//                Icon(
+//                    imageVector = Icons.Default.Favorite,
+//                    contentDescription = "",
+//                    modifier = Modifier
+//                        .padding(8.dp)
+//                        .size(32.dp)
+//                )
+//            }) {
+//
+//            }
+            BottomFuncIcon(modifier = Modifier.padding(horizontal = 16.dp), icon = {
                 Icon(
-                    painter = painterResource(id = R.drawable.edit),
-                    contentDescription = "item",
+                    painter = painterResource(id = R.drawable.download_32),
+                    contentDescription = "",
                     modifier = Modifier
                         .padding(8.dp)
-                        .size(32.dp)
+                        .size(32.dp),
+                    tint = Color.DarkGray
                 )
+            }) {
+                imgDataViewModel.onEvent(ImageEvent.DownloadByIDs(context))
+            }
+            BottomFuncIcon(modifier = Modifier.padding(start = 16.dp, end = 32.dp), icon = {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "",
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .size(32.dp),
+                    tint = Color.DarkGray
+                )
+            }) {
+                imgDataViewModel.onEvent(ImageEvent.DeleteByIDs(context))
             }
         }
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.bottom_param),
-                    contentDescription = "item",
-                    modifier = Modifier.size(24.dp)
-                )
-            },
-            label = { Text("参数") },
-            selected = selectedItem.value == Bottom.PARAM,
-            onClick = {
-                if (uiViewModel.displaying) {
-                    uiViewModel.onEvent(UIEvent.DisplayImg(-1))
-                }
-                selectedItem.value = Bottom.PARAM
-            },
-            modifier = Modifier.weight(1f)
-        )
+    }
+}
+
+@Composable
+fun BottomFuncIcon(
+    modifier: Modifier = Modifier,
+    icon: @Composable () -> Unit,
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = modifier
+            .background(
+                color = MaterialTheme.colorScheme.inversePrimary,
+                shape = RoundedCornerShape(16.dp)
+            )
+            .clip(RoundedCornerShape(16.dp))
+            .clickable {
+                onClick()
+            }
+    ) {
+        icon()
     }
 }

@@ -451,47 +451,6 @@ fun DefaultSettings(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            SettingTitle(name = stringResource(id = R.string.s_delete_mode))
-            Menu(
-                items = listOf(
-                    DeleteImage.ONE.name to stringResource(id = R.string.s_delete_mode_one),
-                    DeleteImage.THREE.name to stringResource(id = R.string.s_delete_mode_three),
-                    DeleteImage.WEEK.name to stringResource(id = R.string.s_delete_mode_week),
-                    DeleteImage.WEEK2.name to stringResource(id = R.string.s_delete_mode_week2),
-                    DeleteImage.MONTH.name to stringResource(id = R.string.s_delete_mode_month),
-                    DeleteImage.MONTH6.name to stringResource(id = R.string.s_delete_mode_month6),
-                    DeleteImage.NEVER.name to stringResource(id = R.string.s_delete_mode_never),
-                ),
-                selected = when (uiViewModel.deleteMode) {
-                    DeleteImage.ONE -> stringResource(id = R.string.s_delete_mode_one)
-                    DeleteImage.THREE -> stringResource(id = R.string.s_delete_mode_three)
-                    DeleteImage.WEEK -> stringResource(id = R.string.s_delete_mode_week)
-                    DeleteImage.WEEK2 -> stringResource(id = R.string.s_delete_mode_week2)
-                    DeleteImage.MONTH -> stringResource(id = R.string.s_delete_mode_month)
-                    DeleteImage.MONTH6 -> stringResource(id = R.string.s_delete_mode_month6)
-                    DeleteImage.NEVER -> stringResource(id = R.string.s_delete_mode_never)
-                },
-            ) {
-                when (it) {
-                    DeleteImage.ONE.name -> uiViewModel.onEvent(UIEvent.ChangeDeleteMode(DeleteImage.ONE))
-                    DeleteImage.THREE.name -> uiViewModel.onEvent(UIEvent.ChangeDeleteMode(DeleteImage.THREE))
-                    DeleteImage.WEEK.name -> uiViewModel.onEvent(UIEvent.ChangeDeleteMode(DeleteImage.WEEK))
-                    DeleteImage.WEEK2.name -> uiViewModel.onEvent(UIEvent.ChangeDeleteMode(DeleteImage.WEEK2))
-                    DeleteImage.MONTH.name -> uiViewModel.onEvent(UIEvent.ChangeDeleteMode(DeleteImage.MONTH))
-                    DeleteImage.MONTH6.name -> uiViewModel.onEvent(UIEvent.ChangeDeleteMode(DeleteImage.MONTH6))
-                    DeleteImage.NEVER.name -> uiViewModel.onEvent(UIEvent.ChangeDeleteMode(DeleteImage.NEVER))
-                }
-            }
-        }
-        Divider(color = Color.LightGray, thickness = 1.dp)
-        Row(
-            modifier = Modifier
-                .padding(vertical = 8.dp)
-                .fillMaxWidth()
-                .height(dimensionResource(id = R.dimen.s_normal_height)),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
             SettingTitle(name = stringResource(id = R.string.s_save_cap_img))
             SettingSwitch(
                 modifier = Modifier.size(DpSize(42.dp, 36.dp)),

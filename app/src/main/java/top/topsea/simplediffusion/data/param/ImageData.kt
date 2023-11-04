@@ -85,6 +85,16 @@ interface ImageDataDao {
     @Query("DELETE FROM ImageData WHERE julianday('now') - julianday(gen_date / 1000, 'unixepoch') >= (:days)")
     suspend fun delete(days: Int)
     @Query("SELECT imageName FROM ImageData WHERE julianday('now') - julianday(gen_date / 1000, 'unixepoch') >= (:days)")
-    fun getDeleteImages(days: Int): List<String>
+    suspend fun getDeleteImages(days: Int): List<String>
 
+
+    @Query("SELECT `index` FROM ImageData WHERE datetime(gen_date / 1000, 'unixepoch', 'localtime') BETWEEN " +
+            "datetime((:day), 'unixepoch', 'localtime','start of day','+1 seconds') AND datetime((:day), 'unixepoch', 'localtime', '+1 days','-1 seconds')")
+    suspend fun getIDsByDay(day: Long): List<Int>
+    @Query("SELECT imageName FROM ImageData WHERE `index` in (:selectedID)")
+    suspend fun queryNameByIDs(selectedID: List<Int>): List<String>
+    @Query("SELECT * FROM ImageData WHERE `index` in (:selectedID)")
+    suspend fun queryByIDs(selectedID: List<Int>): List<ImageData>
+    @Query("delete FROM ImageData WHERE `index` in (:selectedID)")
+    suspend fun deleteByIDs(selectedID: List<Int>)
 }
