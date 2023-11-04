@@ -1,10 +1,7 @@
 package top.topsea.simplediffusion.ui.component
 
-import android.util.Log
 import androidx.annotation.Keep
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.LocalContentColor
@@ -12,29 +9,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.onKeyEvent
-import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.input.getSelectedText
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import top.topsea.simplediffusion.R
-import top.topsea.simplediffusion.util.Constant
 import top.topsea.simplediffusion.util.Constant.addablePattern
-import top.topsea.simplediffusion.util.Constant.addablePrompt
 import top.topsea.simplediffusion.util.Constant.loraPattern
-import top.topsea.simplediffusion.util.TextUtil
 
 @Composable
 fun ClickableMessage(

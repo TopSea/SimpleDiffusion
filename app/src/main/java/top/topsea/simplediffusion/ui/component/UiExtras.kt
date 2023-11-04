@@ -246,7 +246,7 @@ fun ChangePromptPopup(
     onDismiss: () -> Unit,
     onConfirm: (UserPrompt) -> Unit,
 ) {
-    val truePrompt = userPrompt.alias.replace(Constant.addablePrompt, "")
+    val truePrompt = userPrompt.alias.replace(Constant.addableFirst, "").replace(Constant.addableSecond, "")
     val temp1 = remember { mutableStateOf(userPrompt.name) }
     val temp2 = remember { mutableStateOf(truePrompt) }
     var temp1TooLong by remember { mutableStateOf(false) }
@@ -329,7 +329,7 @@ fun ChangePromptPopup(
         },
         confirmButton = {
             TextButton(onClick = {
-                val addablePrompt = Constant.addablePrompt + temp2.value + Constant.addablePrompt
+                val addablePrompt = Constant.addableFirst + temp2.value + Constant.addableSecond
                 if (!temp1TooLong && !temp2TooLong)
                     onConfirm(UserPrompt(id = userPrompt.id, name = temp1.value, alias = addablePrompt))
             }) {

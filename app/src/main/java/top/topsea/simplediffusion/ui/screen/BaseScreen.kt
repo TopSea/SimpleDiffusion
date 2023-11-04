@@ -181,6 +181,7 @@ fun BaseScreen(
                 .rotate(rotation.value),
             shape = RoundedCornerShape(10.dp),
             color = MaterialTheme.colorScheme.primary,
+            shadowElevation = 16.dp
         ) {
             Box {
                 if (refreshing) {
@@ -278,7 +279,7 @@ fun BaseBottomBar(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                BottomFuncIcon(modifier = Modifier.padding(horizontal = 16.dp), icon = {
+                BottomFuncIcon(modifier = Modifier, icon = {
                     Icon(
                         painter = painterResource(id = R.drawable.camera_gen),
                         contentDescription = "item",
@@ -320,7 +321,7 @@ fun BaseBottomBar(
                         })
                     }
                 }
-                BottomFuncIcon(modifier = Modifier.padding(horizontal = 16.dp), icon = {
+                BottomFuncIcon(modifier = Modifier, icon = {
                     Icon(
                         painter = painterResource(id = R.drawable.photo_gen),
                         contentDescription = "item",
@@ -356,7 +357,7 @@ fun BaseBottomBar(
                         }
                     }
                 }
-                BottomFuncIcon(modifier = Modifier.padding(horizontal = 16.dp), icon = {
+                BottomFuncIcon(modifier = Modifier, icon = {
                     Icon(
                         painter = painterResource(id = R.drawable.edit),
                         contentDescription = "item",

@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.compose.runtime.toMutableStateList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -421,7 +420,7 @@ class TaskQueue(
     }
 
     private fun getImgParam(param: ImgParam): String {
-        val truePrompt = param.defaultPrompt.replace(Constant.addablePrompt, "")
+        val truePrompt = param.defaultPrompt.replace(Constant.addableFirst, "").replace(Constant.addableSecond, "")
         val img2Img =  Img2Img(
             init_images = arrayOf(param.image.value),
             denoising_strength = param.denoising_strength,
@@ -456,7 +455,7 @@ class TaskQueue(
     }
 
     private fun getTxtParam(param: TxtParam): String {
-        val truePrompt = param.defaultPrompt.replace(Constant.addablePrompt, "")
+        val truePrompt = param.defaultPrompt.replace(Constant.addableFirst, "").replace(Constant.addableSecond, "")
         val txt2Img =  Txt2Img(
             prompt = truePrompt,
             refiner_checkpoint = param.refinerModel,

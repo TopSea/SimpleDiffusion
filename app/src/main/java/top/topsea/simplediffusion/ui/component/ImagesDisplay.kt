@@ -187,9 +187,9 @@ fun DisplayInGrid(
                                         imageEvent(ImageEvent.Select(image.index, image.genDate) {
                                             val label = image.genDate.toString()
                                             if (it)
-                                                uiViewModel.fullSelected.remove(label)
-                                            else
                                                 uiViewModel.fullSelected.add(label)
+                                            else
+                                                uiViewModel.fullSelected.remove(label)
                                         })
                                     } else {
                                         uiViewModel.onEvent(UIEvent.DisplayImg(index))
@@ -205,9 +205,9 @@ fun DisplayInGrid(
                                         imageEvent(ImageEvent.Select(image.index, image.genDate) {
                                             val label = image.genDate.toString()
                                             if (it)
-                                                uiViewModel.fullSelected.remove(label)
-                                            else
                                                 uiViewModel.fullSelected.add(label)
+                                            else
+                                                uiViewModel.fullSelected.remove(label)
                                         })
                                     }
                                 }

@@ -101,13 +101,13 @@ class ImgDataViewModel @Inject constructor(
                     else
                         selectedID.add(event.imageID)
                     val ids = dao.getIDsByDay(day)
-                    event.afterSelect(ids.size != selectedID.size)
+                    event.afterSelect(selectedID.containsAll(ids) && selectedID.isNotEmpty())
                 }
             }
             is ImageEvent.SelectByDay -> {
                 viewModelScope.launch {
                     val ids = dao.getIDsByDay(event.day)
-                    val selected = selectedID.containsAll(ids)
+                    val selected = selectedID.containsAll(ids) && selectedID.isNotEmpty()
                     if (selected) {
                         selectedID.removeAll(ids)
                     } else {

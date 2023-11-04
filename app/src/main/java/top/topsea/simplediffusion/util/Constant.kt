@@ -7,10 +7,13 @@ object Constant {
     }
     // AddablePrompt 格式
     val addablePattern by lazy {
-        Regex("""(巜)([\s\S]*)(巜)""")
+        Regex("""(罒)([^罓]*)(罓)""")
     }
-    val addablePrompt by lazy {
-        "巜"
+    val addableFirst by lazy {
+        "罒"
+    }
+    val addableSecond by lazy {
+        "罓"
     }
     const val date_format = "yyyy-MM-dd HH:mm:ss"
     const val default_date = "1997-01-01 00:00:00"
