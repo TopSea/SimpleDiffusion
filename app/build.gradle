@@ -35,12 +35,27 @@ android {
     buildTypes {
         debug {
             buildConfigField 'boolean', 'debug', 'true'
+            //为debug版本的包名添加.debug后缀
+            applicationIdSuffix ".debug"
+            manifestPlaceholders = [
+                app_id : "top.topsea.simplediffusion.debug",
+                app_icon: "@drawable/app_icon_debug",
+                app_name: "@string/app_name_debug"
+            ]
+
 //            minifyEnabled true
 //            shrinkResources true
 //            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         release {
             buildConfigField 'boolean', 'debug', 'false'
+
+            manifestPlaceholders = [
+                app_id : "top.topsea.simplediffusion",
+                app_icon: "@drawable/app_icon",
+                app_name: "@string/app_name"
+            ]
+
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
