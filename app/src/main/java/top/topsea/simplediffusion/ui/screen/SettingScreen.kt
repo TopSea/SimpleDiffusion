@@ -84,9 +84,9 @@ fun SettingScreen(
 
     LazyColumn(
         modifier = Modifier
-            .background(color = Color.LightGray)
+            .background(color = Color.LightGray),
+        contentPadding = PaddingValues(vertical = 4.dp)
     ) {
-        item { Spacer(modifier = Modifier.size(4.dp)) }
         item {
             BasicSettingBlock(
                 modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
@@ -120,7 +120,6 @@ fun SettingScreen(
 
             }
         }
-        item { Spacer(modifier = Modifier.size(4.dp)) }
     }
 }
 

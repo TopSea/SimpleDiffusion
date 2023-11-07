@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -71,7 +72,9 @@ fun ParamTab(
 
     Column(modifier = modifier) {
         SearchRequest(paramEvent = paramEvent, modifying = modifying)
-        LazyColumn() {
+        LazyColumn(
+            contentPadding = PaddingValues(top = 6.dp),
+        ) {
             item { Spacer(modifier = Modifier.size(6.dp)) }
             items(
                 items = params,
@@ -112,7 +115,9 @@ fun CNParamTab(
 
     Column(modifier = modifier) {
         SearchRequest(paramEvent = paramEvent, modifying = modifying)
-        LazyColumn() {
+        LazyColumn(
+            contentPadding = PaddingValues(top = 6.dp),
+        ) {
             item { Spacer(modifier = Modifier.size(6.dp)) }
             items(
                 items = cnModels,
