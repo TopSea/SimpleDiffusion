@@ -8,6 +8,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.Insert
 import androidx.room.PrimaryKey
 import androidx.room.Query
@@ -26,6 +27,8 @@ import top.topsea.simplediffusion.util.TextUtil
 data class TxtParam(
     @PrimaryKey(autoGenerate = true)
     override var id: Int = 0,
+    @ColumnInfo(name = "priority_order")
+    override var priority_order: Int = 0,
     @ColumnInfo(name = "name")
     override val name: String = "Name",
     @ColumnInfo(name = "activate")
@@ -149,9 +152,9 @@ data class SavableTxtParam(
 @Dao
 interface TxtParamDao {
 //    @Query("SELECT * FROM TxtParam order by `id` desc limit 20")
-    @Query("SELECT * FROM TxtParam order by `id` desc")
+    @Query("SELECT * FROM TxtParam ORDER BY priority_order DESC")
     fun getTxtParams(): Flow<List<TxtParam>>
-    @Query("SELECT * FROM TxtParam WHERE name LIKE '%' || :searchTxt || '%' order by `id` desc")
+    @Query("SELECT * FROM TxtParam WHERE name LIKE '%' || :searchTxt || '%' ORDER BY priority_order DESC")
     fun getSearchParams(searchTxt: String): Flow<List<TxtParam>>
 
     @Update(TxtParam::class)

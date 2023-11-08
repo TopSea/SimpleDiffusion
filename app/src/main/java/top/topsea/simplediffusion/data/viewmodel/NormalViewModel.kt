@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -19,7 +20,9 @@ import top.topsea.simplediffusion.api.dto.LoraModel
 import top.topsea.simplediffusion.api.dto.VaeModel
 import top.topsea.simplediffusion.api.impl.NormalApiImp
 import top.topsea.simplediffusion.data.param.AddablePrompt
+import top.topsea.simplediffusion.data.param.CNParam
 import top.topsea.simplediffusion.data.param.CNParamDao
+import top.topsea.simplediffusion.data.param.TxtParam
 import top.topsea.simplediffusion.data.param.UserPromptDao
 import top.topsea.simplediffusion.data.state.ControlNetState
 import top.topsea.simplediffusion.data.state.NormalState
@@ -35,6 +38,7 @@ class NormalViewModel @Inject constructor(
     private val dao: CNParamDao,
     private val promptDao: UserPromptDao,
 ): ViewModel() {
+    private val searchTxt = MutableStateFlow("")
 
     // 模型状态
     private val _baseState = MutableStateFlow(NormalState<BaseModel>())
@@ -104,8 +108,13 @@ class NormalViewModel @Inject constructor(
 
     // ControlNet
     private val _cnState = MutableStateFlow(ControlNetState())
-    private val _cnParams = dao.getParams()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
+    private val _cnParams: StateFlow<List<CNParam>> = searchTxt.flatMapLatest { txt ->
+        if (txt.isEmpty()) {
+            dao.getParams()
+        } else {
+            dao.getSearchParams(txt)
+        }
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
     private val _cnTypes = normalApiImp.getCNTypes()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
     val cnState = combine(_cnState, _cnParams, _cnTypes)  { cnState, cnParams, cnTypes ->
@@ -168,6 +177,9 @@ class NormalViewModel @Inject constructor(
                         editParam = event.cnModel
                     )
                 }
+            }
+            is ControlNetEvent.SearchCNParam -> {
+                searchTxt.value = event.txt
             }
             is ControlNetEvent.UpdateCNParam -> {
                 val cnParam = event.cnModel

@@ -3,6 +3,8 @@ package top.topsea.simplediffusion.di
 import android.content.Context
 import android.util.Log
 import androidx.room.Room
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.tencent.mmkv.MMKV
 import dagger.Module
 import dagger.Provides
@@ -144,11 +146,24 @@ object AppModule {
     @Provides
     @Singleton
     fun provideAppDatabase(@ApplicationContext appContext: Context): DiffusionDatabase {
+        val MIGRATION_1_2 = object : Migration(1, 2) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE TxtParam" +
+                        " ADD COLUMN priority_order INTEGER NOT NULL DEFAULT 0")
+
+                database.execSQL("ALTER TABLE ImgParam" +
+                        " ADD COLUMN priority_order INTEGER NOT NULL DEFAULT 0")
+
+                database.execSQL("ALTER TABLE CNParam" +
+                        " ADD COLUMN priority_order INTEGER NOT NULL DEFAULT 0")
+            }
+        }
         return Room.databaseBuilder(
             appContext,
             DiffusionDatabase::class.java,
             "SimpleDiffusion.db"
         )
+            .addMigrations(MIGRATION_1_2)
 //            .createFromAsset("SimpleDiffusion.db")
 //            .allowMainThreadQueries()
             .build()

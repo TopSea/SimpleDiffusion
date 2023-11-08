@@ -11,6 +11,7 @@ sealed class ControlNetEvent {
     data class CloseImage(val index: Int) : ControlNetEvent()
     data class DeleteCNParam(val cnModel: CNParam) : ControlNetEvent()
     data class EditCNParam(val cnModel: CNParam?, val editing: Boolean) : ControlNetEvent()
+    data class SearchCNParam(val txt: String, ) : ControlNetEvent()
     data class UpdateCNParam(val cnModel: CNParam, val afterUpdate: () -> Unit) : ControlNetEvent()
     data class UpdateConfig<T>(val simpleSdConfig: SimpleSdConfig<T>, val onFailure: () -> Unit,
                                val onSuccess: () -> Unit) : ControlNetEvent()

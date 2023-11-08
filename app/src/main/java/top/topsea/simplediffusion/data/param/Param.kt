@@ -27,6 +27,7 @@ data class ParamControlNet(
 abstract class BasicParam() {
     abstract var id: Int
     abstract val name: String
+    abstract val priority_order: Int
     abstract val activate: Boolean
     abstract val baseModel: String
     abstract val refinerModel: String

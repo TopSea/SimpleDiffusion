@@ -10,6 +10,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.Insert
 import androidx.room.PrimaryKey
 import androidx.room.Query
@@ -29,6 +30,8 @@ import top.topsea.simplediffusion.util.TextUtil.script2String
 data class ImgParam(
     @PrimaryKey(autoGenerate = true)
     override var id: Int = 0,
+    @ColumnInfo(name = "priority_order")
+    override val priority_order: Int = 0,
     @ColumnInfo(name = "name")
     override val name: String = "Name",
     @ColumnInfo(name = "activate")
@@ -170,9 +173,9 @@ data class SavableImgParam(
 @Dao
 interface ImgParamDao {
 //    @Query("SELECT * FROM ImgParam order by `id` desc limit 20")
-    @Query("SELECT * FROM ImgParam order by `id` desc")
+    @Query("SELECT * FROM ImgParam ORDER BY priority_order DESC")
     fun getImgParams(): Flow<List<ImgParam>>
-    @Query("SELECT * FROM ImgParam WHERE name LIKE '%' || :searchTxt || '%' order by `id` desc")
+    @Query("SELECT * FROM ImgParam WHERE name LIKE '%' || :searchTxt || '%' ORDER BY priority_order DESC")
     fun getSearchParams(searchTxt: String): Flow<List<ImgParam>>
 
     @Update(ImgParam::class)

@@ -16,7 +16,7 @@ import top.topsea.simplediffusion.data.param.UserPrompt
 import top.topsea.simplediffusion.data.param.UserPromptDao
 
 @Database(entities = [ImageData::class, UserPrompt::class, TaskParam::class,
-    TxtParam::class, ImgParam::class, CNParam::class], version = 1,)
+    TxtParam::class, ImgParam::class, CNParam::class], version = 2,)
 abstract class DiffusionDatabase: RoomDatabase() {
     abstract fun userPromptDao(): UserPromptDao
     abstract fun imageDataDao(): ImageDataDao

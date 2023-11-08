@@ -19,7 +19,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -56,22 +55,22 @@ import top.topsea.simplediffusion.ui.component.AddParam
 import top.topsea.simplediffusion.ui.component.SearchRequest
 import top.topsea.simplediffusion.util.Constant
 import top.topsea.simplediffusion.util.TextUtil
-import top.topsea.simplediffusion.util.getWidthDp
 
 @Composable
 fun ParamTab(
     navController: NavController,
     modifier: Modifier = Modifier,
+    isi2i: Boolean = false,
     params: List<BasicParam>,
     uiViewModel: UIViewModel,
     paramEvent: (ParamEvent) -> Unit,
     cnEvent: (ControlNetEvent) -> Unit,
     addParam: () -> Unit,
 ) {
-    val modifying = remember { mutableStateOf(false) }
-
     Column(modifier = modifier) {
-        SearchRequest(paramEvent = paramEvent, modifying = modifying)
+        SearchRequest {
+            paramEvent(ParamEvent.SearchParam(it, isi2i))
+        }
         LazyColumn(
             contentPadding = PaddingValues(top = 6.dp),
         ) {
@@ -85,7 +84,6 @@ fun ParamTab(
                 ParamItem(
                     navController = navController,
                     param = it,
-                    modifying = modifying.value,
                     uiViewModel = uiViewModel,
                     paramEvent = paramEvent,
                     cnEvent = cnEvent,
@@ -111,10 +109,10 @@ fun CNParamTab(
     cnEvent: (ControlNetEvent) -> Unit,
     addParam: () -> Unit,
 ) {
-    val modifying = remember { mutableStateOf(false) }
-
     Column(modifier = modifier) {
-        SearchRequest(paramEvent = paramEvent, modifying = modifying)
+        SearchRequest {
+            cnEvent(ControlNetEvent.SearchCNParam(it))
+        }
         LazyColumn(
             contentPadding = PaddingValues(top = 6.dp),
         ) {
@@ -129,7 +127,6 @@ fun CNParamTab(
                     navController = navController,
                     cnModel = it,
                     paramState = paramState,
-                    modifying = modifying.value,
                     paramEvent = paramEvent,
                     uiEvent = uiViewModel::onEvent,
                     cnEvent = cnEvent,
@@ -149,7 +146,6 @@ fun ParamItem(
     navController: NavController,
     param: BasicParam,
     uiViewModel: UIViewModel,
-    modifying: Boolean,
     paramEvent: (ParamEvent) -> Unit,
     cnEvent: (ControlNetEvent) -> Unit,
 ) {
@@ -213,63 +209,48 @@ fun ParamItem(
             maxLines = 1
         )
 
-        if (modifying) {
-            Row(
-                modifier = Modifier
-                    .padding(end = 16.dp)
-            ) {
-                IconButton(onClick = {
-                    paramEvent(ParamEvent.DeleteParam(bp = param))
-                }) {
-                    Icon(
-                        imageVector = Icons.Default.Delete,
-                        contentDescription = "",
-                        modifier = Modifier.size(28.dp)
-                    )
-                }
+        Row(
+            modifier = Modifier
+                .padding(end = 16.dp)
+        ) {
+            IconButton(onClick = {
+                paramEvent(ParamEvent.DeleteParam(bp = param))
+            }) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "",
+                    modifier = Modifier.size(28.dp)
+                )
             }
-        } else {
-            Row(
-                modifier = Modifier
-                    .padding(end = 16.dp)
-            ) {
-                IconButton(onClick = { /*TODO*/ }) {
-                    Icon(
-                        imageVector = Icons.Default.Share,
-                        contentDescription = "",
-                        modifier = Modifier.size(28.dp)
-                    )
-                }
-                IconButton(onClick = {
-                    paramEvent(ParamEvent.AddParam(param))
-                }) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = "",
-                        modifier = Modifier.size(34.dp)
-                    )
-                }
-                IconButton(onClick = {
+            IconButton(onClick = {
+                paramEvent(ParamEvent.AddParam(param))
+            }) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "",
+                    modifier = Modifier.size(34.dp)
+                )
+            }
+            IconButton(onClick = {
 //                    if (uiState.serverConnected) {
 
 //                    if (wdp < 450.dp) {
-                    paramEvent(ParamEvent.EditParam(bp = param, editing = false))
-                    uiViewModel.onEvent(UIEvent.Navigate(EditScreen) {
-                        navController.navigate("param_edit")
-                    })
+                paramEvent(ParamEvent.EditParam(bp = param, editing = false))
+                uiViewModel.onEvent(UIEvent.Navigate(EditScreen) {
+                    navController.navigate("param_edit")
+                })
 //                    } else {
 //                        paramEvent(ParamEvent.EditParam(bp = param, editing = true))
 //                    }
 //                    } else {
 //                        Toast.makeText(context, context.getText(R.string.t_sd_not_connected), Toast.LENGTH_SHORT).show()
 //                    }
-                }) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.edit),
-                        contentDescription = "",
-                        modifier = Modifier.size(28.dp)
-                    )
-                }
+            }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.edit),
+                    contentDescription = "",
+                    modifier = Modifier.size(28.dp)
+                )
             }
         }
     }
@@ -313,7 +294,6 @@ fun CNParamItem(
     navController: NavController,
     cnModel: CNParam,
     paramState: ParamLocalState,
-    modifying: Boolean,
     paramEvent: (ParamEvent) -> Unit,
     uiEvent: (UIEvent) -> Unit,
     cnEvent: (ControlNetEvent) -> Unit,
@@ -358,86 +338,83 @@ fun CNParamItem(
                 .padding(end = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            if (modifying) {
-                IconButton(onClick = {
-                    paramEvent(ParamEvent.CloseControlNet(cnModel.id))
-                    cnEvent(ControlNetEvent.DeleteCNParam(cnModel))
-                }) {
-                    Icon(
-                        imageVector = Icons.Default.Delete,
-                        contentDescription = "",
-                        modifier = Modifier.size(28.dp)
-                    )
-                }
-            } else {
-                Checkbox(
-                    checked = checkState.value,
-                    onCheckedChange = {
-                        if (ap == null) {
+            IconButton(onClick = {
+                paramEvent(ParamEvent.CloseControlNet(cnModel.id))
+                cnEvent(ControlNetEvent.DeleteCNParam(cnModel))
+            }) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "",
+                    modifier = Modifier.size(28.dp)
+                )
+            }
+            Checkbox(
+                checked = checkState.value,
+                onCheckedChange = {
+                    if (ap == null) {
 
-                            Toast
-                                .makeText(
-                                    context,
-                                    context.getString(R.string.t_no_param_selected),
-                                    Toast.LENGTH_SHORT
-                                )
-                                .show()
-                        } else {
-                            checkState.value = it
-                            if (it)     // 加入到Request
-                                paramEvent(ParamEvent.AddControlNet(cnModel.id))
-                            else
-                                paramEvent(ParamEvent.CloseControlNet(cnModel.id))
-                        }
-                    },
+                        Toast
+                            .makeText(
+                                context,
+                                context.getString(R.string.t_no_param_selected),
+                                Toast.LENGTH_SHORT
+                            )
+                            .show()
+                    } else {
+                        checkState.value = it
+                        if (it)     // 加入到Request
+                            paramEvent(ParamEvent.AddControlNet(cnModel.id))
+                        else
+                            paramEvent(ParamEvent.CloseControlNet(cnModel.id))
+                    }
+                },
+                modifier = Modifier.size(34.dp)
+            )
+            IconButton(onClick = {
+                val model = CNParam(
+                    input_image = cnModel.input_image,
+                    mask = cnModel.mask,
+                    module = cnModel.module,
+                    model = cnModel.model,
+                    weight = cnModel.weight,
+                    resize_mode = cnModel.resize_mode,
+                    lowvram = cnModel.lowvram,
+                    processor_res = cnModel.processor_res,
+                    threshold_a = cnModel.threshold_a,
+                    threshold_b = cnModel.threshold_b,
+                    guidance_start = cnModel.guidance_start,
+                    guidance_end = cnModel.guidance_end,
+                    control_mode = cnModel.control_mode,
+                    pixel_perfect = cnModel.pixel_perfect,
+                )
+                cnEvent(ControlNetEvent.AddCNParam(model))
+            }) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "",
                     modifier = Modifier.size(34.dp)
                 )
-                IconButton(onClick = {
-                    val model = CNParam(
-                        input_image = cnModel.input_image,
-                        mask = cnModel.mask,
-                        module = cnModel.module,
-                        model = cnModel.model,
-                        weight = cnModel.weight,
-                        resize_mode = cnModel.resize_mode,
-                        lowvram = cnModel.lowvram,
-                        processor_res = cnModel.processor_res,
-                        threshold_a = cnModel.threshold_a,
-                        threshold_b = cnModel.threshold_b,
-                        guidance_start = cnModel.guidance_start,
-                        guidance_end = cnModel.guidance_end,
-                        control_mode = cnModel.control_mode,
-                        pixel_perfect = cnModel.pixel_perfect,
-                    )
-                    cnEvent(ControlNetEvent.AddCNParam(model))
-                }) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = "",
-                        modifier = Modifier.size(34.dp)
-                    )
-                }
-                IconButton(onClick = {
+            }
+            IconButton(onClick = {
 //                    if (serverState.value) {
 
 //                    if (wdp < 450.dp) {
-                    cnEvent(ControlNetEvent.EditCNParam(cnModel, editing = false))
-                    uiEvent(UIEvent.Navigate(EditCNScreen) {
-                        navController.navigate("cnparam_edit")
-                    })
+                cnEvent(ControlNetEvent.EditCNParam(cnModel, editing = false))
+                uiEvent(UIEvent.Navigate(EditCNScreen) {
+                    navController.navigate("cnparam_edit")
+                })
 //                    } else {
 //                        cnEvent(ControlNetEvent.EditCNParam(cnModel, editing = true))
 //                    }
 //                    } else {
 //                        Toast.makeText(context, context.getText(R.string.t_sd_not_connected), Toast.LENGTH_SHORT).show()
 //                    }
-                }) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.edit),
-                        contentDescription = "",
-                        modifier = Modifier.size(28.dp)
-                    )
-                }
+            }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.edit),
+                    contentDescription = "",
+                    modifier = Modifier.size(28.dp)
+                )
             }
         }
     }

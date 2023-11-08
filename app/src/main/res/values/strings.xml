@@ -108,6 +108,7 @@
     <string name="r_refiner_at">Refiner At:</string>
     <string name="r_control_net">ControlNet:</string>
     <string name="r_gen_steps">Steps:</string>
+    <string name="r_sort_order">Display Priority:</string>
     <string name="r_cfg_scales">CFG Scales:</string>
     <string name="r_choose_sampler">Sampler:</string>
     <string name="r_batch_size">Batch Size:</string>

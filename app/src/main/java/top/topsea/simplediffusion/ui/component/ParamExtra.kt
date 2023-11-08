@@ -106,9 +106,7 @@ import top.topsea.simplediffusion.util.getWidthDp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchRequest(
-    paramEvent: (ParamEvent) -> Unit,
-    isi2i: Boolean = false,
-    modifying: MutableState<Boolean>
+    onSearch: (String) -> Unit,
 ) {
     var sInput by remember { mutableStateOf("") }
 
@@ -124,19 +122,15 @@ fun SearchRequest(
             trailingIcon = {
                 Icon(
                     imageVector = Icons.Default.Search, contentDescription = "",
-                    modifier = Modifier.clickable { paramEvent(ParamEvent.SearchParam(sInput, isi2i)) }
+                    modifier = Modifier.clickable { onSearch(sInput) }
                 )
             },
             modifier = Modifier
-                .padding(start = 16.dp)
+                .padding(horizontal = 16.dp)
                 .weight(1f),
             shape = RoundedCornerShape(16.dp),
             singleLine = true,
         )
-        Icon(painter = painterResource(id = R.drawable.list_numbers), contentDescription = "", modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .size(dimensionResource(id = R.dimen.icon_mini))
-            .clickable { modifying.value = !modifying.value })
     }
 }
 

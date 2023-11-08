@@ -8,6 +8,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.Insert
 import androidx.room.PrimaryKey
 import androidx.room.Query
@@ -39,6 +40,8 @@ fun getCNResizeMode(context: Context): List<Pair<Int, String>>{
 data class CNParam(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
+    @ColumnInfo(name = "priority_order")
+    var priority_order: Int = 0,
     @ColumnInfo(name = "cn_name")
     val cn_name: String = "Name",
     @ColumnInfo(name = "enabled")
@@ -129,11 +132,11 @@ data class CNParam(
 @Dao
 interface CNParamDao {
 //    @Query("SELECT * FROM CNParam order by `id` desc limit 20")
-    @Query("SELECT * FROM CNParam order by `id` desc")
+    @Query("SELECT * FROM CNParam ORDER BY priority_order DESC")
     fun getParams(): Flow<List<CNParam>>
 
-    @Query("SELECT * FROM CNParam WHERE `id` < (:before)  order by `id` desc")
-    fun getSearchParams(before: Int): List<CNParam>
+    @Query("SELECT * FROM CNParam WHERE cn_name LIKE '%' || :searchTxt || '%' ORDER BY priority_order DESC")
+    fun getSearchParams(searchTxt: String): Flow<List<CNParam>>
 
     @Update(CNParam::class)
     suspend fun update(cnParam: CNParam)

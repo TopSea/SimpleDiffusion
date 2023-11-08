@@ -65,6 +65,7 @@ fun ParamScreen(
             1 -> {
                 ParamTab(
                     navController = navController,
+                    isi2i = true,
                     params = paramState.iParams,
                     uiViewModel = uiViewModel,
                     paramEvent = paramEvent,

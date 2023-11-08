@@ -47,6 +47,7 @@ class ParamViewModel @Inject constructor(
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     private val _iparams: StateFlow<List<ImgParam>> = searchImg.flatMapLatest { txt ->
         if (txt.isEmpty()) {
             aImgDao.getImgParams()

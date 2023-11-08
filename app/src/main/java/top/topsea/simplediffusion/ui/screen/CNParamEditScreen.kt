@@ -89,6 +89,7 @@ fun CNParamEditContent(
     val isCamera = navController.previousBackStackEntry?.destination?.route == CameraSettingScreen.route
     val context = LocalContext.current
     val name = remember { mutableStateOf(cnModel.cn_name) }
+    val order = remember { mutableStateOf(cnModel.priority_order) }
 
     val module = remember { mutableStateOf(cnModel.module) }
     val model = remember { mutableStateOf(cnModel.model) }
@@ -119,6 +120,16 @@ fun CNParamEditContent(
                     ParamRowChangeName(
                         title = stringResource(id = R.string.r_param_name),
                         name = name
+                    )
+                    Divider(
+                        thickness = 2.dp,
+                        color = cardColor
+                    )
+                    SettingRowInt(
+                        name = stringResource(id = R.string.r_sort_order),
+                        int = order,
+                        step = 1,
+                        max = Int.MAX_VALUE
                     )
                     Divider(
                         thickness = 2.dp,
@@ -243,6 +254,7 @@ fun CNParamEditContent(
             val param = CNParam(
                 id = cnModel.id,
                 cn_name = name.value,
+                priority_order = order.value,
                 module = module.value,
                 model = model.value,
                 lowvram = lowvram.value,

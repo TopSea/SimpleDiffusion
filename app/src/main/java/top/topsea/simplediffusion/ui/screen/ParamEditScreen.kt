@@ -25,7 +25,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -124,6 +123,7 @@ fun ParamEditContent(
 ) {
     val isCamera = navController.previousBackStackEntry?.destination?.route == top.topsea.simplediffusion.CameraSettingScreen.route
     val name = remember { mutableStateOf(currParam.name) }
+    val order = remember { mutableStateOf(currParam.priority_order) }
 
     val cnState by normalViewModel.cnState.collectAsState()
     val baseState by normalViewModel.baseState.collectAsState()
@@ -185,6 +185,16 @@ fun ParamEditContent(
                     ParamRowChangeName(
                         title = stringResource(id = R.string.r_param_name),
                         name = name
+                    )
+                    Divider(
+                        thickness = 2.dp,
+                        color = cardColor
+                    )
+                    SettingRowInt(
+                        name = stringResource(id = R.string.r_sort_order),
+                        int = order,
+                        step = 1,
+                        max = Int.MAX_VALUE
                     )
                     Divider(
                         thickness = 2.dp,
@@ -384,6 +394,7 @@ fun ParamEditContent(
                     TxtParam(
                         id = currParam.id,
                         name = name.value,
+                        priority_order = order.value,
                         activate = currParam.activate,
                         refinerModel = refinerModel.value,
                         refinerAt = refinerAt.value,
@@ -406,6 +417,7 @@ fun ParamEditContent(
                     ImgParam(
                         id = currParam.id,
                         name = name.value,
+                        priority_order = order.value,
                         activate = currParam.activate,
                         refinerModel = refinerModel.value,
                         refinerAt = refinerAt.value,

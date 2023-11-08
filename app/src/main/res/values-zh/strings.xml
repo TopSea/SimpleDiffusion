@@ -69,6 +69,7 @@
     <string name="r_refiner_at">Refiner 时机：</string>
     <string name="r_control_net">ControlNet：</string>
     <string name="r_gen_steps">迭代步数：</string>
+    <string name="r_sort_order">展示优先级：</string>
     <string name="r_cfg_scales">提示词引导系数：</string>
     <string name="r_choose_sampler">采样器：</string>
     <string name="r_batch_size">每批次生成图片数：</string>
