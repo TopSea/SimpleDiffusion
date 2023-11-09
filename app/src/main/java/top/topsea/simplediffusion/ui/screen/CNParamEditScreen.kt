@@ -37,6 +37,7 @@ import top.topsea.simplediffusion.data.param.getCNResizeMode
 import top.topsea.simplediffusion.data.state.ControlNetState
 import top.topsea.simplediffusion.data.state.UIEvent
 import top.topsea.simplediffusion.event.ControlNetEvent
+import top.topsea.simplediffusion.navUp
 import top.topsea.simplediffusion.ui.component.ParamRowChangeName
 import top.topsea.simplediffusion.ui.component.ParamRowCheck
 import top.topsea.simplediffusion.ui.component.ParamRowChoice
@@ -241,14 +242,8 @@ fun CNParamEditContent(
             modifier = Modifier.align(Alignment.BottomStart),
             onDismiss = {
                 cnEvent(ControlNetEvent.EditCNParam(cnModel, false))
-                if (isCamera)
-                    uiEvent(UIEvent.Navigate(CameraSettingScreen){
-                        navController.popBackStack()
-                    })
-                else
-                    uiEvent(UIEvent.Navigate(BaseScreen){
-                        navController.popBackStack()
-                    })
+
+                navUp(navController)
             },
         ) {
             val param = CNParam(
@@ -271,14 +266,7 @@ fun CNParamEditContent(
             TextUtil.topsea("ControlNets: $param", Log.ERROR)
 
             cnEvent(ControlNetEvent.UpdateCNParam(param){
-                if (isCamera)
-                    uiEvent(UIEvent.Navigate(CameraSettingScreen){
-                        navController.popBackStack()
-                    })
-                else
-                    uiEvent(UIEvent.Navigate(BaseScreen){
-                        navController.popBackStack()
-                    })
+                navUp(navController)
             })
         }
     }

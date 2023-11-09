@@ -46,9 +46,8 @@ object BaseScreen : SimpleDestination {
         TopBar(navController = navController, title = stringResource(id = R.string.app_name), screen = Screen.BASE) {
             if (uiViewModel.displaying) {
                 uiViewModel.onEvent(UIEvent.DisplayImg(-1))
-            } else {
-                uiViewModel.onEvent(it)
             }
+            uiViewModel.onEvent(it)
         }
     }
     override val route: String = "base_screen"
@@ -95,9 +94,8 @@ object CameraScreen : SimpleDestination {
         TopBar(navController = navController, title = stringResource(R.string.s_top_bar), screen = Screen.CAMERA) {
             if (uiViewModel.displaying) {
                 uiViewModel.onEvent(UIEvent.DisplayImg(-1))
-            } else {
-                uiViewModel.onEvent(it)
             }
+            uiViewModel.onEvent(it)
         }
     }
     override val route: String = "camera"

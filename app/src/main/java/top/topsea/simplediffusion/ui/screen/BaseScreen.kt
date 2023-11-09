@@ -270,7 +270,12 @@ fun BaseBottomBar(
                 },
                 label = { Text("图片") },
                 selected = selectedItem.value == Bottom.PHOTO,
-                onClick = { selectedItem.value = Bottom.PHOTO },
+                onClick = {
+                    if (uiViewModel.displaying) {
+                        uiViewModel.onEvent(UIEvent.DisplayImg(-1))
+                    }
+                    selectedItem.value = Bottom.PHOTO
+                },
                 modifier = Modifier.weight(1f)
             )
             Row(
@@ -290,36 +295,36 @@ fun BaseBottomBar(
                 }) {
                     if (uiViewModel.displaying) {
                         uiViewModel.onEvent(UIEvent.DisplayImg(-1))
-                    } else {
-                        paramEvent(ParamEvent.CheckCapture(
-                            notInI2I = {
-                                Toast
-                                    .makeText(
-                                        context,
-                                        context.getText(R.string.t_incorrect_param),
-                                        Toast.LENGTH_SHORT
-                                    )
-                                    .show()
-                            }
-                        ) {
-                            if (uiViewModel.serverConnected)
-                                if (!permissionCamera.status.isGranted) {
-                                    permissionCamera.launchPermissionRequest()
-                                } else {
-                                    uiViewModel.onEvent(UIEvent.Navigate(CameraScreen) {
-                                        navController.navigate(CameraScreen.route)
-                                    })
-                                }
-                            else
-                                Toast
-                                    .makeText(
-                                        context,
-                                        context.getText(R.string.t_sd_not_connected),
-                                        Toast.LENGTH_SHORT
-                                    )
-                                    .show()
-                        })
                     }
+                    paramEvent(ParamEvent.CheckCapture(
+                        notInI2I = {
+                            Toast
+                                .makeText(
+                                    context,
+                                    context.getText(R.string.t_incorrect_param),
+                                    Toast.LENGTH_SHORT
+                                )
+                                .show()
+                        }
+                    ) {
+                        if (uiViewModel.serverConnected)
+                            if (!permissionCamera.status.isGranted) {
+                                permissionCamera.launchPermissionRequest()
+                            } else {
+                                uiViewModel.onEvent(UIEvent.Navigate(CameraScreen) {
+                                    navController.navigate(CameraScreen.route)
+                                })
+                            }
+                        else
+                            Toast
+                                .makeText(
+                                    context,
+                                    context.getText(R.string.t_sd_not_connected),
+                                    Toast.LENGTH_SHORT
+                                )
+                                .show()
+                    })
+
                 }
                 BottomFuncIcon(modifier = Modifier, icon = {
                     Icon(
@@ -332,30 +337,30 @@ fun BaseBottomBar(
                 }) {
                     if (uiViewModel.displaying) {
                         uiViewModel.onEvent(UIEvent.DisplayImg(-1))
-                    } else {
-                        if (uiViewModel.serverConnected) {
-                            val currParam = paramState.currParam
-                            if (currParam != null) {
-                                taskListEvent(TaskListEvent.AddTaskImage(null to currParam) {
-                                    Toast
-                                        .makeText(
-                                            context,
-                                            context.getString(R.string.t_too_many_gen),
-                                            Toast.LENGTH_SHORT
-                                        )
-                                        .show()
-                                })
-                            }
-                        } else {
-                            Toast
-                                .makeText(
-                                    context,
-                                    context.getText(R.string.t_sd_not_connected),
-                                    Toast.LENGTH_SHORT
-                                )
-                                .show()
-                        }
                     }
+                    if (uiViewModel.serverConnected) {
+                        val currParam = paramState.currParam
+                        if (currParam != null) {
+                            taskListEvent(TaskListEvent.AddTaskImage(null to currParam) {
+                                Toast
+                                    .makeText(
+                                        context,
+                                        context.getString(R.string.t_too_many_gen),
+                                        Toast.LENGTH_SHORT
+                                    )
+                                    .show()
+                            })
+                        }
+                    } else {
+                        Toast
+                            .makeText(
+                                context,
+                                context.getText(R.string.t_sd_not_connected),
+                                Toast.LENGTH_SHORT
+                            )
+                            .show()
+                    }
+
                 }
                 BottomFuncIcon(modifier = Modifier, icon = {
                     Icon(
@@ -368,26 +373,26 @@ fun BaseBottomBar(
                 }) {
                     if (uiViewModel.displaying) {
                         uiViewModel.onEvent(UIEvent.DisplayImg(-1))
-                    } else {
-                        paramEvent(
-                            ParamEvent.EditActivate(
-                                editingActivate = true,
-                                editing = false
-                            ) {
-                                Toast
-                                    .makeText(
-                                        context,
-                                        context.getString(R.string.t_no_param_selected),
-                                        Toast.LENGTH_SHORT
-                                    )
-                                    .show()
-                            })
-                        if (paramState.currParam != null) {
-                            uiViewModel.onEvent(UIEvent.Navigate(EditScreen) {
-                                navController.navigate(EditScreen.route)
-                            })
-                        }
                     }
+                    paramEvent(
+                        ParamEvent.EditActivate(
+                            editingActivate = true,
+                            editing = false
+                        ) {
+                            Toast
+                                .makeText(
+                                    context,
+                                    context.getString(R.string.t_no_param_selected),
+                                    Toast.LENGTH_SHORT
+                                )
+                                .show()
+                        })
+                    if (paramState.currParam != null) {
+                        uiViewModel.onEvent(UIEvent.Navigate(EditScreen) {
+                            navController.navigate(EditScreen.route)
+                        })
+                    }
+
                 }
             }
             NavigationBarItem(

@@ -122,7 +122,7 @@ fun SearchRequest(
             trailingIcon = {
                 Icon(
                     imageVector = Icons.Default.Search, contentDescription = "",
-                    modifier = Modifier.clickable { onSearch(sInput) }
+                    modifier = Modifier.clickable(enabled = sInput.isNotEmpty()) { onSearch(sInput) }
                 )
             },
             modifier = Modifier

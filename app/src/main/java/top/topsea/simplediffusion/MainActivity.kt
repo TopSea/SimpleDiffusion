@@ -274,16 +274,14 @@ class MainActivity : ComponentActivity() {
                                 uiViewModel.onEvent(UIEvent.LongPressImage(false))
                                 uiViewModel.fullSelected.clear()
                                 imgDataViewModel.selectedID.clear()
-                            } else {
-                                if (uiViewModel.displaying) {
-                                    uiViewModel.onEvent(UIEvent.DisplayImg(-1))
-                                } else {
-                                    if (!navController.popBackStack())
-                                        this.finish()
-                                    else
-                                        updateCurrScreen(navController.currentDestination!!.route!!)
-                                }
                             }
+                            if (uiViewModel.displaying) {
+                                uiViewModel.onEvent(UIEvent.DisplayImg(-1))
+                            }
+                            if (!navController.popBackStack())
+                                this.finish()
+                            else
+                                updateCurrScreen(navController.currentDestination!!.route!!)
                         }
                     }
                 }

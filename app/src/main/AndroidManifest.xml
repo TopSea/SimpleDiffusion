@@ -12,9 +12,6 @@
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
     <uses-permission android:name="android.permission.CAMERA"/>
 
-    <!-- 应用内安装 -->
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-
 <!--    android:windowSoftInputMode="adjustResize"-->
     <application
         android:name=".SimpleApplication"

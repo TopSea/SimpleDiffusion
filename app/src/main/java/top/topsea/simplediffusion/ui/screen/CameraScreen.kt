@@ -312,9 +312,8 @@ fun CamBottomBar(
                     modifier = Modifier
                         .size(54.dp)
                         .background(Color.Black)
-                        .clickable {
-                            if (imageList.isNotEmpty() || taskQueue.tasks.isNotEmpty())
-                                uiViewModel.onEvent(UIEvent.DisplayImg(-1))
+                        .clickable(enabled = imageList.isNotEmpty() || taskQueue.tasks.isNotEmpty()) {
+                            uiViewModel.onEvent(UIEvent.DisplayImg(-1))
                         },
                 )
                 // 待生成的图片

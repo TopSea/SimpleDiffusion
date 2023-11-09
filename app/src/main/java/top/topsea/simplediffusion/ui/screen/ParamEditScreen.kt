@@ -45,6 +45,7 @@ import top.topsea.simplediffusion.data.state.UIEvent
 import top.topsea.simplediffusion.data.viewmodel.NormalViewModel
 import top.topsea.simplediffusion.event.ControlNetEvent
 import top.topsea.simplediffusion.event.ParamEvent
+import top.topsea.simplediffusion.navUp
 import top.topsea.simplediffusion.ui.component.ParamRowChangeName
 import top.topsea.simplediffusion.ui.component.ParamRowChoice
 import top.topsea.simplediffusion.ui.component.ParamRowChooseSampler
@@ -373,14 +374,7 @@ fun ParamEditContent(
             onDismiss = {
                 paramEvent(ParamEvent.EditParam(currParam, false))
 
-                if (isCamera)
-                    uiEvent(UIEvent.Navigate(top.topsea.simplediffusion.CameraSettingScreen){
-                        navController.popBackStack()
-                    })
-                else
-                    uiEvent(UIEvent.Navigate(BaseScreen){
-                        navController.popBackStack()
-                    })
+                navUp(navController)
             },
         ) {
             TextUtil.topsea("ParamEditScreen currParam: ${currParam}")
@@ -448,15 +442,7 @@ fun ParamEditContent(
 
             paramEvent(ParamEvent.UpdateParam(param))
 
-
-            if (isCamera)
-                uiEvent(UIEvent.Navigate(top.topsea.simplediffusion.CameraSettingScreen){
-                    navController.popBackStack()
-                })
-            else
-                uiEvent(UIEvent.Navigate(BaseScreen){
-                    navController.popBackStack()
-                })
+            navUp(navController)
         }
     }
 }
