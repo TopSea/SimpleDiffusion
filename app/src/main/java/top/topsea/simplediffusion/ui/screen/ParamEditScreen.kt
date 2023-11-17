@@ -53,10 +53,10 @@ import top.topsea.simplediffusion.ui.component.ParamRowChooseSampler
 import top.topsea.simplediffusion.ui.component.ParamRowControlNet
 import top.topsea.simplediffusion.ui.component.ParamRowFloat
 import top.topsea.simplediffusion.ui.component.ParamRowImgChoose
-import top.topsea.simplediffusion.ui.component.ParamRowImgSize
 import top.topsea.simplediffusion.ui.component.SettingRowInt
 import top.topsea.simplediffusion.ui.component.ParamRowNegPrompt
 import top.topsea.simplediffusion.ui.component.ParamRowPrompt
+import top.topsea.simplediffusion.ui.component.SwipeInt
 import top.topsea.simplediffusion.ui.scripts.USDUpscaleScript
 import top.topsea.simplediffusion.ui.scripts.XYZPlotScript
 import top.topsea.simplediffusion.util.TextUtil
@@ -237,9 +237,21 @@ fun ParamEditContent(
                         thickness = 2.dp,
                         color = cardColor
                     )
-                    ParamRowImgSize(
-                        width = width,
-                        height = height
+                    SwipeInt(
+                        boldTitle = true,
+                        name = stringResource(id = R.string.r_img_width),
+                        int = width,
+                        max = 2048
+                    )
+                    Divider(
+                        thickness = 2.dp,
+                        color = cardColor
+                    )
+                    SwipeInt(
+                        boldTitle = true,
+                        name = stringResource(id = R.string.r_img_height),
+                        int = height,
+                        max = 2048
                     )
                     Divider(
                         thickness = 2.dp,

@@ -227,7 +227,7 @@ fun USDUpscaleScript(
                 }
             }
         }
-
+        DividerOfScript()
         when (target_size_type.value) {
             0 -> { }
             1 -> {
@@ -237,12 +237,14 @@ fun USDUpscaleScript(
                     int = custom_width,
                     max = 8192
                 )
+                DividerOfScript()
                 SwipeInt(
                     boldTitle = false,
                     name = stringResource(id = R.string.custom_height),
                     int = custom_height,
                     max = 8192
                 )
+                DividerOfScript()
             }
             2 -> {
                 ParamRowFloat(
@@ -252,6 +254,7 @@ fun USDUpscaleScript(
                     step = 0.01f,
                     max = 16f
                 )
+                DividerOfScript()
             }
         }
         
@@ -259,6 +262,7 @@ fun USDUpscaleScript(
         UpscalersChoose(chosen = upscaler_index.value, choices = upscalers) {
             upscaler_index.value = it
         }
+        DividerOfScript()
         FitScreen(
             titleComp = {
                 ParamTitle(
@@ -318,30 +322,35 @@ fun USDUpscaleScript(
                 }
             }
         }
+        DividerOfScript()
         SwipeInt(
             boldTitle = false,
             name = stringResource(id = R.string.upscale_func_width),
             int = tile_width,
             max = 2048
         )
+        DividerOfScript()
         SwipeInt(
             boldTitle = false,
             name = stringResource(id = R.string.upscale_func_height),
             int = tile_height,
             max = 2048
         )
+        DividerOfScript()
         SettingRowInt(
             boldTitle = false,
             name = stringResource(id = R.string.upscale_func_blur),
             int = mask_blur,
             max = 64
         )
+        DividerOfScript()
         SettingRowInt(
             boldTitle = false,
             name = stringResource(id = R.string.upscale_func_padding),
             int = padding,
             max = 128
         )
+        DividerOfScript()
         FitScreen(
             titleComp = {
                 ParamTitle(
@@ -403,6 +412,7 @@ fun USDUpscaleScript(
             }
         }
         if (seams_fix_type.value != 0) {
+            DividerOfScript()
             ParamRowFloat(
                 boldTitle = false,
                 name = stringResource(id = R.string.seams_func_denoise),
@@ -410,12 +420,14 @@ fun USDUpscaleScript(
                 step = 0.01f,
                 max = 16f
             )
+            DividerOfScript()
             SettingRowInt(
                 boldTitle = false,
                 name = stringResource(id = R.string.seams_func_blur),
                 int = seams_fix_width,
                 max = 64
             )
+            DividerOfScript()
             SettingRowInt(
                 boldTitle = false,
                 name = stringResource(id = R.string.seams_func_padding),

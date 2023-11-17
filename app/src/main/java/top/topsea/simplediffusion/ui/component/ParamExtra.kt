@@ -350,7 +350,8 @@ fun SwipeInt(
     var longMinus = false
     var longPlus = false
 
-    val width = 240.dp
+    val wdp = getWidthDp()
+    val width = if (wdp > 420.dp) wdp / 2 else wdp / 3
     val sizePx = with(LocalDensity.current) { width.toPx() }
     var offsetX by remember { mutableStateOf(int.value / max.toFloat() * sizePx) }
     val trueStep = step / max.toFloat() * sizePx
@@ -408,10 +409,13 @@ fun SwipeInt(
             )
             Row(
                 modifier = Modifier
-                    .padding(vertical = 8.dp)
+                    .padding(vertical = 12.dp)
                     .fillMaxHeight()
                     .width(width)
-                    .background(brush = Brush.horizontalGradient(colorStops = bmChangingColors), RoundedCornerShape(16.dp)),
+                    .background(
+                        brush = Brush.horizontalGradient(colorStops = bmChangingColors),
+                        RoundedCornerShape(16.dp)
+                    ),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Box(
@@ -439,7 +443,7 @@ fun SwipeInt(
                     Text(text = "$num", color =  Color.White, modifier = Modifier.padding(horizontal = 8.dp))
                 }
             }
-            Text(text = "          ", color =  Color.White, modifier = Modifier.padding(horizontal = 8.dp))
+            Text(text = "         ", color =  Color.White, modifier = Modifier.padding(horizontal = 8.dp))
             Icon(
                 painter = painterResource(id = R.drawable.circle_plus),
                 contentDescription = "",
@@ -815,53 +819,6 @@ fun ParamRowChangeName(
                 modifier = Modifier
                     .height(28.dp),
                 value = name,
-                textStyle = TextStyle(fontWeight = FontWeight.Bold, fontSize = 18.sp)
-            )
-        }
-    }
-}
-
-@Composable
-fun ParamRowImgSize(
-    width: MutableState<Int>,
-    height: MutableState<Int>,
-) {
-    Row(
-        modifier = Modifier
-            .padding(start = 4.dp, end = 8.dp)
-            .height(dimensionResource(id = R.dimen.param_pad_item_height))
-            .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Row(
-            modifier = Modifier.fillMaxHeight(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            ParamTitle(title = stringResource(id = R.string.r_img_width), isPad = true)
-
-            IntInput(
-                modifier = Modifier
-                    .width(64.dp)
-                    .height(28.dp),
-                value = width,
-                textStyle = TextStyle(fontWeight = FontWeight.Bold, fontSize = 18.sp)
-            )
-        }
-
-        Row(
-            modifier = Modifier
-                .fillMaxHeight()
-                .padding(start = 32.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-
-            ParamTitle(title = stringResource(id = R.string.r_img_height), isPad = true)
-
-            IntInput(
-                modifier = Modifier
-                    .width(64.dp)
-                    .height(28.dp),
-                value = height,
                 textStyle = TextStyle(fontWeight = FontWeight.Bold, fontSize = 18.sp)
             )
         }

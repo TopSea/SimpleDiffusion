@@ -45,6 +45,7 @@ import top.topsea.simplediffusion.ui.component.ParamRowFloat
 import top.topsea.simplediffusion.ui.component.ParamRowImgChoose
 import top.topsea.simplediffusion.ui.component.SettingRowInt
 import top.topsea.simplediffusion.ui.component.ParamRowRadio
+import top.topsea.simplediffusion.ui.component.SwipeInt
 import top.topsea.simplediffusion.ui.component.TypeChoose
 import top.topsea.simplediffusion.util.TextUtil
 
@@ -202,7 +203,8 @@ fun CNParamEditContent(
                         color = cardColor
                     )
                     if (!pixel_perfect.value) {
-                        SettingRowInt(
+                        SwipeInt(
+                            boldTitle = true,
                             name = stringResource(id = R.string.rs_cn_pre_res),
                             int = processor_res,
                             max = 2048

@@ -54,6 +54,7 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import top.topsea.simplediffusion.R
 import top.topsea.simplediffusion.ui.component.FitScreen
+import top.topsea.simplediffusion.ui.component.ParamTitle
 import top.topsea.simplediffusion.ui.theme.Pink80
 import top.topsea.simplediffusion.util.TextUtil
 
@@ -435,7 +436,10 @@ fun XYZPlotChooseRow(
             .fillMaxWidth()
     ) {
         FitScreen(
-            titleComp = { ScriptsTitle(title = title1, isPad = it) }) { modifier ->
+            titleComp = {
+                ParamTitle(
+                    boldTitle = false,title = title1, isPad = it) }
+        ) { modifier ->
 
             Box(
                 modifier = modifier
@@ -491,7 +495,9 @@ fun XYZPlotChooseRow(
         }
         FitScreen(
             modifier = Modifier,
-            titleComp = { ScriptsTitle(title = title2, isPad = it) }
+            titleComp = {
+                ParamTitle(
+                    boldTitle = false,title = title2, isPad = it) }
         ) { modifier ->
             Row(
                 modifier = modifier,
@@ -552,6 +558,7 @@ fun XYZPlotCheckRow(
 ) {
     Column(
         modifier = Modifier
+            .padding(bottom = 8.dp)
             .fillMaxWidth()
     ) {
         Row(
@@ -567,7 +574,7 @@ fun XYZPlotCheckRow(
                     .weight(.5f),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                ScriptsTitle(title = title1, isPad = false)
+                ParamTitle(boldTitle = false, title = title1, isPad = false)
                 Checkbox(checked = value1.value, onCheckedChange = { value1.value = it })
             }
             Row(
@@ -576,7 +583,7 @@ fun XYZPlotCheckRow(
                     .weight(.5f),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                ScriptsTitle(title = title2, isPad = false)
+                ParamTitle(boldTitle = false, title = title2, isPad = false)
                 Checkbox(checked = value2.value, onCheckedChange = { value2.value = it })
             }
         }
@@ -593,7 +600,7 @@ fun XYZPlotCheckRow(
                     .weight(.5f),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                ScriptsTitle(title = title3, isPad = false)
+                ParamTitle(boldTitle = false, title = title3, isPad = false)
                 Checkbox(checked = value3.value, onCheckedChange = { value3.value = it })
             }
             Row(
@@ -602,7 +609,7 @@ fun XYZPlotCheckRow(
                     .weight(.5f),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                ScriptsTitle(title = title4, isPad = false)
+                ParamTitle(boldTitle = false, title = title4, isPad = false)
                 Checkbox(checked = value4.value, onCheckedChange = { value4.value = it })
             }
         }
@@ -630,24 +637,6 @@ fun XYZPlotChanges(
             PlotExchange(stringResource(id = R.string.rs_xyz_changexz))
         }
     }
-}
-
-@Composable
-fun ScriptsTitle(
-    title: String,
-    isPad: Boolean,
-) {
-    Text(
-        text = title,
-        modifier = Modifier
-            .width(
-                if (isPad) dimensionResource(id = R.dimen.param_title_width) else dimensionResource(
-                    id = R.dimen.param_title_width_max
-                )
-            ),
-        fontSize = 15.sp,
-        maxLines = 1
-    )
 }
 
 @Composable

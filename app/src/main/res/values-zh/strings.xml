@@ -270,7 +270,7 @@
     <string name="seams_fix_type_4">Half tile offset pass + intersections</string>
     <string name="seams_func_title">缝合算法：</string>
     <string name="seams_func_denoise">降噪：</string>
-    <string name="seams_func_blur">Mask blur: </string>
+    <string name="seams_func_blur">蒙版边缘模糊度：</string>
     <string name="seams_func_padding">padding: </string>
 
     <!-- 关于中的字符串 -->
