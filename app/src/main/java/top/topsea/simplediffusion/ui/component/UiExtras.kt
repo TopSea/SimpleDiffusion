@@ -534,6 +534,20 @@ fun RoundedCheck(
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
+fun UpscalersChoose(
+    chosen: Int,
+    choices: List<Int>,
+    onChoose: (Int) -> Unit,
+) {
+    FlowRow(modifier = Modifier.padding(horizontal = 8.dp)) {
+        choices.forEachIndexed { index, it ->
+            TypeChooseItem(title = stringResource(id = it), index = index, isChosen = index == chosen, onChoose = onChoose)
+        }
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
 fun TypeChoose(
     chosen: String,
     choices: List<Pair<String, Int>>,
@@ -568,10 +582,47 @@ fun TypeChooseItem(
                 .padding(horizontal = 4.dp)
                 .size(16.dp)
                 .border(1.dp, MaterialTheme.colorScheme.primary, CircleShape)
-                .background(if (isChosen) MaterialTheme.colorScheme.primary else Color.White, CircleShape)
+                .background(
+                    if (isChosen) MaterialTheme.colorScheme.primary else Color.White,
+                    CircleShape
+                )
                 .clip(CircleShape)
         )
         Text(text = choice,modifier = Modifier
+            .padding(end = 4.dp))
+    }
+}
+
+@Composable
+fun TypeChooseItem(
+    title: String,
+    index: Int,
+    isChosen: Boolean,
+    onChoose: (Int) -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .padding(4.dp)
+            .height(28.dp)
+            .border(1.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(8.dp))
+            .clickable {
+                onChoose(index)
+            },
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(
+            modifier = Modifier
+                .padding(horizontal = 4.dp)
+                .size(16.dp)
+                .border(1.dp, MaterialTheme.colorScheme.primary, CircleShape)
+                .background(
+                    if (isChosen) MaterialTheme.colorScheme.primary else Color.White,
+                    CircleShape
+                )
+                .clip(CircleShape)
+        )
+        Text(text = title, modifier = Modifier
             .padding(end = 4.dp))
     }
 }

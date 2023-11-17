@@ -39,7 +39,8 @@ import top.topsea.simplediffusion.R
 import top.topsea.simplediffusion.data.param.BasicParam
 import top.topsea.simplediffusion.data.param.ImgParam
 import top.topsea.simplediffusion.data.param.TxtParam
-import top.topsea.simplediffusion.data.param.scripts
+import top.topsea.simplediffusion.data.param.scriptsImg
+import top.topsea.simplediffusion.data.param.scriptsTxt
 import top.topsea.simplediffusion.data.state.ParamLocalState
 import top.topsea.simplediffusion.data.state.UIEvent
 import top.topsea.simplediffusion.data.viewmodel.NormalViewModel
@@ -56,6 +57,7 @@ import top.topsea.simplediffusion.ui.component.ParamRowImgSize
 import top.topsea.simplediffusion.ui.component.SettingRowInt
 import top.topsea.simplediffusion.ui.component.ParamRowNegPrompt
 import top.topsea.simplediffusion.ui.component.ParamRowPrompt
+import top.topsea.simplediffusion.ui.scripts.USDUpscaleScript
 import top.topsea.simplediffusion.ui.scripts.XYZPlotScript
 import top.topsea.simplediffusion.util.TextUtil
 
@@ -349,11 +351,13 @@ fun ParamEditContent(
                     ParamRowChoice(
                         name = stringResource(id = R.string.r_scripts),
                         currChoice = script_name,
-                        content = scripts
+                        content = if (currParam is TxtParam) scriptsTxt else scriptsImg
                     )
                     // 脚本参数
                     if (script_name.value == "X/Y/Z plot") {
                         XYZPlotScript(script_args)
+                    } else if (script_name.value == "Ultimate SD upscale") {
+                        USDUpscaleScript(script_args)
                     }
                     Divider(
                         thickness = 2.dp,

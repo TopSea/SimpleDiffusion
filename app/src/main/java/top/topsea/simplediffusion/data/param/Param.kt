@@ -5,10 +5,19 @@ import androidx.room.TypeConverters
 import top.topsea.simplediffusion.data.SnapshotStateListConverter
 import top.topsea.simplediffusion.ui.scripts.Script
 
-val scripts by lazy {
+val scriptsImg by lazy {
     listOf(
+        "None",
         "X/Y/Z plot",
-//        "SD upscale",
+        "Ultimate SD upscale",
+//        "Prompts from file or textbox",
+    )
+}
+
+val scriptsTxt by lazy {
+    listOf(
+        "None",
+        "X/Y/Z plot",
 //        "Prompts from file or textbox",
     )
 }

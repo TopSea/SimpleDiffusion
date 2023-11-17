@@ -286,6 +286,43 @@
     <string name="xyz_33">Token merging ratio high-res</string>
     <string name="xyz_34">Always discard next-to-last sigma</string>
 
+    <!-- Ultimate SD upscale 中的字符串 -->
+    <string name="upscale_choose_1">Target size type: </string>
+    <string name="upscale_choose_1_1">From img2img2 settings</string>
+    <string name="upscale_choose_1_2">Custom size</string>
+    <string name="upscale_choose_1_3">Scale from image size</string>
+    <string name="upscale_times">Upscale times: </string>
+    <string name="custom_width">Custom width: </string>
+    <string name="custom_height">Custom height: </string>
+    <string name="upscalers_title">Upscalers: </string>
+    <string name="upscalers_1">None</string>
+    <string name="upscalers_2">Lanczos</string>
+    <string name="upscalers_3">Nearest</string>
+    <string name="upscalers_4">4x-UltraSharp</string>
+    <string name="upscalers_5">LDSR</string>
+    <string name="upscalers_6">R-ESRGAN 4x+</string>
+    <string name="upscalers_7">R-ESRGAN 4x+ Anime6B</string>
+    <string name="upscalers_8">ScuNET GAN</string>
+    <string name="upscalers_9">ScuNet PSNR</string>
+    <string name="upscalers_10">SwinIR 4x</string>
+    <string name="upscale_func">Types: </string>
+    <string name="upscale_func_1">Linear</string>
+    <string name="upscale_func_2">Chess</string>
+    <string name="upscale_func_3">None</string>
+    <string name="upscale_func_width">Tile width: </string>
+    <string name="upscale_func_height">Tile height: </string>
+    <string name="upscale_func_blur">Mask blur: </string>
+    <string name="upscale_func_padding">Padding: </string>
+    <string name="seams_fix_title">Types</string>
+    <string name="seams_fix_type_1">None</string>
+    <string name="seams_fix_type_2">Band pass</string>
+    <string name="seams_fix_type_3">Half tile offset pass</string>
+    <string name="seams_fix_type_4">Half tile offset pass + intersections</string>
+    <string name="seams_func_title">Seams fix types: </string>
+    <string name="seams_func_denoise">Denoise: </string>
+    <string name="seams_func_blur">Mask blur: </string>
+    <string name="seams_func_padding">padding: </string>
+
     <!-- 关于中的字符串 -->
     <string name="a_top_bar">About SimpleDiffusion</string>
     <string name="a_curr_version">Current version: %1$s</string>

@@ -165,34 +165,36 @@ class ImageDataConverter {
 class BasicParamConverter {
     @TypeConverter
     fun convertContent(content: BasicParam): String {
+        val gson = Gson()
         return when(content) {
             is TxtParam -> {
-                val saveTxtParam = content.toSavable()
-                Gson().toJson(saveTxtParam) + "&+SavableTxtParam+&"
+                val saveTxtParam = content.toSavable(gson)
+                gson.toJson(saveTxtParam) + "&+SavableTxtParam+&"
             }
 
             is ImgParam -> {
-                val savableImgParam = content.toSavable()
-                Gson().toJson(savableImgParam) + "&+SavableImgParam+&"
+                val savableImgParam = content.toSavable(gson)
+                gson.toJson(savableImgParam) + "&+SavableImgParam+&"
             }
 
-            else -> Gson().toJson(null)
+            else -> gson.toJson(null)
         }
     }
 
     @TypeConverter
     fun revertData(value: String): BasicParam {
+        val gson = Gson()
         if (value.endsWith("&+SavableTxtParam+&")) {
             val trueStr = value.replace("&+SavableTxtParam+&", "")
-            val param =  Gson().fromJson(trueStr, SavableTxtParam::class.java)
-            return param.toTxtParam()
+            val param =  gson.fromJson(trueStr, SavableTxtParam::class.java)
+            return param.toTxtParam(gson)
         }
         if (value.endsWith("&+SavableImgParam+&")) {
             val trueStr = value.replace("&+SavableImgParam+&", "")
-            val param =  Gson().fromJson(trueStr, SavableImgParam::class.java)
-            return param.toImgParam()
+            val param =  gson.fromJson(trueStr, SavableImgParam::class.java)
+            return param.toImgParam(gson)
         }
-        return Gson().fromJson(value, BasicParam::class.java)
+        return gson.fromJson(value, BasicParam::class.java)
     }
 }
 

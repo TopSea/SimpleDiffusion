@@ -1,10 +1,12 @@
 package top.topsea.simplediffusion.ui.component
 
+import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -69,10 +71,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -82,6 +86,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
@@ -102,6 +107,7 @@ import top.topsea.simplediffusion.util.Constant
 import top.topsea.simplediffusion.util.FileUtil
 import top.topsea.simplediffusion.util.TextUtil
 import top.topsea.simplediffusion.util.getWidthDp
+import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -136,6 +142,7 @@ fun SearchRequest(
 
 @Composable
 fun SettingRowInt(
+    boldTitle: Boolean = true,
     name: String,
     int: MutableState<Int>,
     max: Int = 100,
@@ -153,7 +160,7 @@ fun SettingRowInt(
             .height(dimensionResource(id = R.dimen.param_pad_item_height)),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        ParamTitle(title = name, isPad = true)
+        ParamTitle(boldTitle = boldTitle, title = name, isPad = true)
 
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
@@ -234,6 +241,7 @@ fun SettingRowInt(
  */
 @Composable
 fun ParamRowFloat(
+    boldTitle: Boolean = true,
     name: String,
     float: MutableState<Float>,
     max: Float = 100f,
@@ -252,7 +260,7 @@ fun ParamRowFloat(
             .height(dimensionResource(id = R.dimen.param_pad_item_height)),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        ParamTitle(title = name, isPad = true)
+        ParamTitle(boldTitle = boldTitle, title = name, isPad = true)
 
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
@@ -315,6 +323,145 @@ fun ParamRowFloat(
                                         delay(100)
                                         float.value = value
                                         value = float.value + step
+                                    }
+                                }
+                            },
+                            onDragEnd = { longPlus = false },
+                            onDragCancel = { longPlus = false }
+                        )
+                    },
+                tint = MaterialTheme.colorScheme.primary
+            )
+        }
+    }
+}
+
+@Composable
+fun SwipeInt(
+    boldTitle: Boolean = true,
+    modifier: Modifier = Modifier,
+    name: String,
+    int: MutableState<Int>,
+    max: Int = 100,
+    min: Int = 0,
+    step: Int = 1,
+) {
+    val scope = rememberCoroutineScope()
+    var longMinus = false
+    var longPlus = false
+
+    val width = 240.dp
+    val sizePx = with(LocalDensity.current) { width.toPx() }
+    var offsetX by remember { mutableStateOf(int.value / max.toFloat() * sizePx) }
+    val trueStep = step / max.toFloat() * sizePx
+    val percentage = offsetX / sizePx
+    val num = (percentage * max).toInt()
+    int.value = num
+
+    val bmChangingColors = arrayOf(
+        percentage to MaterialTheme.colorScheme.primary,
+        percentage + 0.001F to MaterialTheme.colorScheme.inverseOnSurface,
+        1f to MaterialTheme.colorScheme.inverseOnSurface
+    )
+
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = modifier
+            .padding(start = 4.dp)
+            .fillMaxWidth()
+            .height(dimensionResource(id = R.dimen.param_pad_item_height)),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        ParamTitle(boldTitle = boldTitle, title = name, isPad = true)
+
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                painter = painterResource(id = R.drawable.circle_minus),
+                contentDescription = "",
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .clickable {
+                        val value = offsetX - trueStep
+                        if (value >= min) {
+                            offsetX = value
+                        }
+                    }
+                    .pointerInput(Unit) {
+                        detectDragGesturesAfterLongPress(
+                            onDrag = { _, _ -> },
+                            onDragStart = {
+                                longMinus = true
+                                var value = offsetX - trueStep
+                                scope.launch {
+                                    while (value >= min && longMinus) {
+                                        delay(100)
+                                        offsetX = value
+                                        value = offsetX - trueStep
+                                    }
+                                }
+                            },
+                            onDragEnd = { longMinus = false },
+                            onDragCancel = { longMinus = false }
+                        )
+                    },
+                tint = MaterialTheme.colorScheme.primary
+            )
+            Row(
+                modifier = Modifier
+                    .padding(vertical = 8.dp)
+                    .fillMaxHeight()
+                    .width(width)
+                    .background(brush = Brush.horizontalGradient(colorStops = bmChangingColors), RoundedCornerShape(16.dp)),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    Modifier
+                        .offset { IntOffset(offsetX.roundToInt(), 0) }
+                        .background(
+                            MaterialTheme.colorScheme.primary,
+                            RoundedCornerShape(8.dp)
+                        )
+                        .pointerInput(Unit) {
+                            detectDragGestures { change, dragAmount ->
+                                change.consume()
+                                val x = offsetX + dragAmount.x
+                                offsetX = if (x < sizePx) {
+                                    if (x < 0)
+                                        0f
+                                    else
+                                        x
+                                } else
+                                    sizePx
+                            }
+                        },
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(text = "$num", color =  Color.White, modifier = Modifier.padding(horizontal = 8.dp))
+                }
+            }
+            Text(text = "          ", color =  Color.White, modifier = Modifier.padding(horizontal = 8.dp))
+            Icon(
+                painter = painterResource(id = R.drawable.circle_plus),
+                contentDescription = "",
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .clickable {
+                        val value = offsetX + trueStep
+                        if (value <= max) {
+                            offsetX = value
+                        }
+                    }
+                    .pointerInput(Unit) {
+                        detectDragGesturesAfterLongPress(
+                            onDrag = { _, _ -> },
+                            onDragStart = {
+                                longPlus = true
+                                var value = offsetX + trueStep
+                                scope.launch {
+                                    while (value <= max && longPlus) {
+                                        delay(100)
+                                        offsetX = value
+                                        value = offsetX + trueStep
                                     }
                                 }
                             },
@@ -1470,6 +1617,7 @@ fun ControlNetItem(
 
 @Composable
 fun ParamTitle(
+    boldTitle: Boolean = true,
     title: String,
     isPad: Boolean,
 ) {
@@ -1482,7 +1630,7 @@ fun ParamTitle(
                     id = R.dimen.param_title_width_max
                 )
             ),
-        fontWeight = FontWeight.Bold,
+        fontWeight = if (boldTitle) FontWeight.Bold else FontWeight.Thin,
         fontSize = 16.sp,
         maxLines = 2
     )

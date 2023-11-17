@@ -7,6 +7,7 @@ import com.google.gson.JsonParser
 import top.topsea.simplediffusion.BuildConfig
 import top.topsea.simplediffusion.data.param.CNParam
 import top.topsea.simplediffusion.ui.scripts.Script
+import top.topsea.simplediffusion.ui.scripts.UltimateSDUpscale
 import top.topsea.simplediffusion.ui.scripts.XYZ
 import java.lang.reflect.Type
 
@@ -73,6 +74,12 @@ object TextUtil {
     fun script2String(ans: Script?): String {
         return when (ans) {
             is XYZ -> "[${ans.xType}, \"${ans.xValue}\", \"\", ${ans.yType}, \"${ans.yValue}\", \"\", ${ans.zType}, \"${ans.zValue}\", \"\", ${ans.value1}, ${ans.value2}, ${ans.value3}, ${ans.value4}, ${ans.margin}]"
+            is UltimateSDUpscale -> "[0, ${ans.tile_width}, ${ans.tile_height}, ${ans.mask_blur}, ${ans.padding}, " +
+                    "${ans.seams_fix_width}, ${ans.seams_fix_denoise}, ${ans.seams_fix_padding}, ${ans.upscaler_index}, " +
+                    "${ans.save_upscaled_image}, ${ans.redraw_mode}, ${ans.save_seams_fix_image}, " +
+                    "${ans.seams_fix_mask_blur}, ${ans.seams_fix_type}, ${ans.target_size_type}, " +
+                    "${ans.custom_width}, ${ans.custom_height}, ${ans.custom_scale}" +
+                    "]"
             else -> ""
         }
     }

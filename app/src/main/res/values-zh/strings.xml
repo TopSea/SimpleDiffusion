@@ -236,6 +236,43 @@
     <string name="xyz_33">Token merging ratio high-res</string>
     <string name="xyz_34">Always discard next-to-last sigma</string>
 
+    <!-- Ultimate SD upscale 中的字符串 -->
+    <string name="upscale_choose_1">放大方式：</string>
+    <string name="upscale_choose_1_1">沿用图生图的设置</string>
+    <string name="upscale_choose_1_2">自定义大小</string>
+    <string name="upscale_choose_1_3">根据图片大小放大</string>
+    <string name="upscale_times">放大倍数：</string>
+    <string name="custom_width">自定义宽度：</string>
+    <string name="custom_height">自定义高度：</string>
+    <string name="upscalers_title">放大算法：</string>
+    <string name="upscalers_1">None</string>
+    <string name="upscalers_2">Lanczos</string>
+    <string name="upscalers_3">Nearest</string>
+    <string name="upscalers_4">4x-UltraSharp</string>
+    <string name="upscalers_5">LDSR</string>
+    <string name="upscalers_6">R-ESRGAN 4x+</string>
+    <string name="upscalers_7">R-ESRGAN 4x+ Anime6B</string>
+    <string name="upscalers_8">ScuNET GAN</string>
+    <string name="upscalers_9">ScuNet PSNR</string>
+    <string name="upscalers_10">SwinIR 4x</string>
+    <string name="upscale_func">算法使用方式：</string>
+    <string name="upscale_func_1">线性</string>
+    <string name="upscale_func_2">分块</string>
+    <string name="upscale_func_3">无</string>
+    <string name="upscale_func_width">分块宽度：</string>
+    <string name="upscale_func_height">分块高度：</string>
+    <string name="upscale_func_blur">蒙版边缘模糊度：</string>
+    <string name="upscale_func_padding">Padding: </string>
+    <string name="seams_fix_title">类型：</string>
+    <string name="seams_fix_type_1">None</string>
+    <string name="seams_fix_type_2">Band pass</string>
+    <string name="seams_fix_type_3">Half tile offset pass</string>
+    <string name="seams_fix_type_4">Half tile offset pass + intersections</string>
+    <string name="seams_func_title">缝合算法：</string>
+    <string name="seams_func_denoise">降噪：</string>
+    <string name="seams_func_blur">Mask blur: </string>
+    <string name="seams_func_padding">padding: </string>
+
     <!-- 关于中的字符串 -->
     <string name="a_top_bar">关于 SimpleDiffusion</string>
     <string name="a_curr_version">当前版本：%1$s</string>

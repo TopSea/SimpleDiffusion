@@ -16,11 +16,15 @@ import androidx.room.PrimaryKey
 import androidx.room.Query
 import androidx.room.TypeConverters
 import androidx.room.Update
+import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
 import top.topsea.simplediffusion.data.SerialConverter
 import top.topsea.simplediffusion.data.SnapshotStateListConverter
 import top.topsea.simplediffusion.data.StringConverter
 import top.topsea.simplediffusion.ui.scripts.Script
+import top.topsea.simplediffusion.ui.scripts.UltimateSDUpscale
+import top.topsea.simplediffusion.ui.scripts.XYZ
+import top.topsea.simplediffusion.util.Constant
 import top.topsea.simplediffusion.util.TextUtil.script2String
 
 
@@ -99,7 +103,15 @@ data class ImgParam(
                 "}"
     }
 
-    fun toSavable(): SavableImgParam {
+    fun toSavable(gson: Gson): SavableImgParam {
+        val script = if (script_args != null) {
+            when (script_args) {
+                is XYZ ->
+                    gson.toJson(script_args) + Constant.addableFirst + "XYZ" + Constant.addableSecond
+                else ->
+                    gson.toJson(script_args) + Constant.addableFirst + "UltimateSDUpscale" + Constant.addableSecond
+            }
+        } else ""
         return SavableImgParam(
             id = id,
             name = name,
@@ -117,7 +129,7 @@ data class ImgParam(
             resize_mode = resize_mode,
             batch_size = batch_size,
             script_name = script_name,
-            script_args = script_args,
+            script_args = script,
             control_net = control_net,
         )
     }
@@ -143,10 +155,19 @@ data class SavableImgParam(
     val resize_mode: Int = 0,
     val batch_size: Int = 1,
     val script_name: String = "",
-    val script_args: Script? = null,
+    val script_args: String = "",
     val control_net: SnapshotStateList<Int> = mutableStateListOf(),
 ){
-    fun toImgParam(): ImgParam {
+    fun toImgParam(gson: Gson): ImgParam {
+        val script = if (script_args.isNotEmpty()) {
+            if (script_args.endsWith(Constant.addableFirst + "XYZ" + Constant.addableSecond)) {
+                val trueStr = script_args.replace(Constant.addableFirst + "XYZ" + Constant.addableSecond, "")
+                gson.fromJson(trueStr, XYZ::class.java)
+            } else {
+                val trueStr = script_args.replace(Constant.addableFirst + "UltimateSDUpscale" + Constant.addableSecond, "")
+                gson.fromJson(trueStr, UltimateSDUpscale::class.java)
+            }
+        } else null
         return ImgParam(
             id = id,
             name = name,
@@ -164,7 +185,7 @@ data class SavableImgParam(
             resize_mode = resize_mode,
             batch_size = batch_size,
             script_name = script_name,
-            script_args = script_args,
+            script_args = script,
             control_net = control_net,
         )
     }
