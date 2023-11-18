@@ -112,7 +112,7 @@ data class Txt2Img(
 
     fun requestWithCN(cnModels: List<CNParam>): String {
         // 脚本
-        val scriptName = if (script_name.isEmpty())
+        val scriptName = if (script_name.isEmpty() || script_name == "None")
             ""
         else
             "  \"script_name\": \"$script_name\",\n"
@@ -292,7 +292,7 @@ data class Img2Img(
 
     fun requestWithCN(cnModels: List<CNParam>): String {
         // 脚本
-        val scriptName = if (script_name.isEmpty())
+        val scriptName = if (script_name.isEmpty() || script_name == "None")
             ""
         else
             "  \"script_name\": \"$script_name\",\n"
