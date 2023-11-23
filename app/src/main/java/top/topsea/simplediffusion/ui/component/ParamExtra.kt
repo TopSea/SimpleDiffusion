@@ -1,6 +1,5 @@
 package top.topsea.simplediffusion.ui.component
 
-import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -32,7 +31,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.TextDelegate
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
@@ -54,7 +52,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -84,7 +81,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.TextUnit
@@ -100,10 +96,8 @@ import top.topsea.simplediffusion.api.dto.Sampler
 import top.topsea.simplediffusion.data.param.AddablePrompt
 import top.topsea.simplediffusion.data.param.CNParam
 import top.topsea.simplediffusion.data.param.UserPrompt
-import top.topsea.simplediffusion.event.ParamEvent
 import top.topsea.simplediffusion.pickingImg
 import top.topsea.simplediffusion.ui.theme.Pink80
-import top.topsea.simplediffusion.util.Constant
 import top.topsea.simplediffusion.util.FileUtil
 import top.topsea.simplediffusion.util.TextUtil
 import top.topsea.simplediffusion.util.getWidthDp
@@ -141,7 +135,7 @@ fun SearchRequest(
 }
 
 @Composable
-fun SettingRowInt(
+fun StepRowInt(
     boldTitle: Boolean = true,
     name: String,
     int: MutableState<Int>,
@@ -160,7 +154,7 @@ fun SettingRowInt(
             .height(dimensionResource(id = R.dimen.param_pad_item_height)),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        ParamTitle(boldTitle = boldTitle, title = name, isPad = true)
+        ParamTitle(modifier = Modifier.weight(1f), boldTitle = boldTitle, title = name, isPad = true)
 
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
@@ -240,7 +234,7 @@ fun SettingRowInt(
  * @param ff: float print format.
  */
 @Composable
-fun ParamRowFloat(
+fun StepRowFloat(
     boldTitle: Boolean = true,
     name: String,
     float: MutableState<Float>,
@@ -260,7 +254,7 @@ fun ParamRowFloat(
             .height(dimensionResource(id = R.dimen.param_pad_item_height)),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        ParamTitle(boldTitle = boldTitle, title = name, isPad = true)
+        ParamTitle(modifier = Modifier.weight(1f), boldTitle = boldTitle, title = name, isPad = true)
 
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
@@ -632,7 +626,7 @@ fun ParamRowChoice(
                 Icon(
                     imageVector = Icons.Default.Refresh,
                     contentDescription = "Refresh Choices",
-                    tint = Color.Blue
+                    tint = MaterialTheme.colorScheme.primary
                 )
             }
         }
@@ -1173,7 +1167,7 @@ fun ParamRowPrompt(
                     Icon(
                         imageVector = Icons.Default.Refresh,
                         contentDescription = "Refresh Choices",
-                        tint = Color.Blue
+                        tint = MaterialTheme.colorScheme.primary
                     )
                 }
             }
@@ -1574,19 +1568,15 @@ fun ControlNetItem(
 
 @Composable
 fun ParamTitle(
+    modifier: Modifier = Modifier,
     boldTitle: Boolean = true,
     title: String,
     isPad: Boolean,
 ) {
     Text(
         text = title,
-        modifier = Modifier
-            .padding(start = 4.dp)
-            .width(
-                if (isPad) dimensionResource(id = R.dimen.param_title_width) else dimensionResource(
-                    id = R.dimen.param_title_width_max
-                )
-            ),
+        modifier = modifier
+            .padding(start = 4.dp),
         fontWeight = if (boldTitle) FontWeight.Bold else FontWeight.Thin,
         fontSize = 16.sp,
         maxLines = 2

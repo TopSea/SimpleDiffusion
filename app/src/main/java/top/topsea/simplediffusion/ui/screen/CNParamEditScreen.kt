@@ -27,7 +27,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import top.topsea.simplediffusion.BaseScreen
 import top.topsea.simplediffusion.CameraSettingScreen
 import top.topsea.simplediffusion.R
 import top.topsea.simplediffusion.api.dto.listTypes
@@ -41,9 +40,9 @@ import top.topsea.simplediffusion.navUp
 import top.topsea.simplediffusion.ui.component.ParamRowChangeName
 import top.topsea.simplediffusion.ui.component.ParamRowCheck
 import top.topsea.simplediffusion.ui.component.ParamRowChoice
-import top.topsea.simplediffusion.ui.component.ParamRowFloat
+import top.topsea.simplediffusion.ui.component.StepRowFloat
 import top.topsea.simplediffusion.ui.component.ParamRowImgChoose
-import top.topsea.simplediffusion.ui.component.SettingRowInt
+import top.topsea.simplediffusion.ui.component.StepRowInt
 import top.topsea.simplediffusion.ui.component.ParamRowRadio
 import top.topsea.simplediffusion.ui.component.SwipeInt
 import top.topsea.simplediffusion.ui.component.TypeChoose
@@ -127,7 +126,7 @@ fun CNParamEditContent(
                         thickness = 2.dp,
                         color = cardColor
                     )
-                    SettingRowInt(
+                    StepRowInt(
                         name = stringResource(id = R.string.r_sort_order),
                         int = order,
                         step = 1,
@@ -169,7 +168,7 @@ fun CNParamEditContent(
                         thickness = 2.dp,
                         color = cardColor
                     )
-                    ParamRowFloat(
+                    StepRowFloat(
                         name = stringResource(id = R.string.rs_cn_weight),
                         float = weight,
                         max = 2f,
@@ -180,7 +179,7 @@ fun CNParamEditContent(
                         thickness = 2.dp,
                         color = cardColor
                     )
-                    ParamRowFloat(
+                    StepRowFloat(
                         name = stringResource(id = R.string.rs_cn_guid_start),
                         float = guidance_start,
                         max = 1f,
@@ -191,7 +190,7 @@ fun CNParamEditContent(
                         thickness = 2.dp,
                         color = cardColor
                     )
-                    ParamRowFloat(
+                    StepRowFloat(
                         name = stringResource(id = R.string.rs_cn_guid_end),
                         float = guidance_end,
                         max = 1f,

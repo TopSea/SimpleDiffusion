@@ -34,7 +34,6 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import top.topsea.simplediffusion.BaseScreen
 import top.topsea.simplediffusion.R
 import top.topsea.simplediffusion.data.param.BasicParam
 import top.topsea.simplediffusion.data.param.ImgParam
@@ -51,9 +50,9 @@ import top.topsea.simplediffusion.ui.component.ParamRowChangeName
 import top.topsea.simplediffusion.ui.component.ParamRowChoice
 import top.topsea.simplediffusion.ui.component.ParamRowChooseSampler
 import top.topsea.simplediffusion.ui.component.ParamRowControlNet
-import top.topsea.simplediffusion.ui.component.ParamRowFloat
+import top.topsea.simplediffusion.ui.component.StepRowFloat
 import top.topsea.simplediffusion.ui.component.ParamRowImgChoose
-import top.topsea.simplediffusion.ui.component.SettingRowInt
+import top.topsea.simplediffusion.ui.component.StepRowInt
 import top.topsea.simplediffusion.ui.component.ParamRowNegPrompt
 import top.topsea.simplediffusion.ui.component.ParamRowPrompt
 import top.topsea.simplediffusion.ui.component.SwipeInt
@@ -193,7 +192,7 @@ fun ParamEditContent(
                         thickness = 2.dp,
                         color = cardColor
                     )
-                    SettingRowInt(
+                    StepRowInt(
                         name = stringResource(id = R.string.r_sort_order),
                         int = order,
                         step = 1,
@@ -227,7 +226,7 @@ fun ParamEditContent(
                         thickness = 2.dp,
                         color = cardColor
                     )
-                    ParamRowFloat(
+                    StepRowFloat(
                         name = stringResource(id = R.string.r_refiner_at),
                         float = refinerAt,
                         step = 0.1f,
@@ -257,7 +256,7 @@ fun ParamEditContent(
                         thickness = 2.dp,
                         color = cardColor
                     )
-                    SettingRowInt(
+                    StepRowInt(
                         name = stringResource(id = R.string.r_gen_steps),
                         int = steps,
                         step = 1,
@@ -267,7 +266,7 @@ fun ParamEditContent(
                         thickness = 2.dp,
                         color = cardColor
                     )
-                    ParamRowFloat(
+                    StepRowFloat(
                         name = stringResource(id = R.string.r_cfg_scales),
                         float = cfgScale,
                         step = 0.1f,
@@ -288,7 +287,7 @@ fun ParamEditContent(
                         thickness = 2.dp,
                         color = cardColor
                     )
-                    SettingRowInt(
+                    StepRowInt(
                         name = stringResource(id = R.string.r_batch_size),
                         int = batch_size,
                         max = 5
@@ -342,7 +341,7 @@ fun ParamEditContent(
                             thickness = 2.dp,
                             color = cardColor
                         )
-                        ParamRowFloat(
+                        StepRowFloat(
                             name = stringResource(id = R.string.r_denoising_strength),
                             float = denoising_strength,
                             max = 1f,

@@ -31,18 +31,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.topsea.simplediffusion.R
-import top.topsea.simplediffusion.api.dto.listTypes
-import top.topsea.simplediffusion.event.ControlNetEvent
 import top.topsea.simplediffusion.ui.component.FitScreen
-import top.topsea.simplediffusion.ui.component.ParamRowFloat
+import top.topsea.simplediffusion.ui.component.StepRowFloat
 import top.topsea.simplediffusion.ui.component.ParamTitle
-import top.topsea.simplediffusion.ui.component.SettingRowInt
+import top.topsea.simplediffusion.ui.component.StepRowInt
 import top.topsea.simplediffusion.ui.component.SwipeInt
-import top.topsea.simplediffusion.ui.component.TypeChoose
 import top.topsea.simplediffusion.ui.component.UpscalersChoose
 import top.topsea.simplediffusion.util.TextUtil
 
@@ -247,7 +243,7 @@ fun USDUpscaleScript(
                 DividerOfScript()
             }
             2 -> {
-                ParamRowFloat(
+                StepRowFloat(
                     boldTitle = false,
                     name = stringResource(id = R.string.upscale_times),
                     float = custom_scale,
@@ -337,14 +333,14 @@ fun USDUpscaleScript(
             max = 2048
         )
         DividerOfScript()
-        SettingRowInt(
+        StepRowInt(
             boldTitle = false,
             name = stringResource(id = R.string.upscale_func_blur),
             int = mask_blur,
             max = 64
         )
         DividerOfScript()
-        SettingRowInt(
+        StepRowInt(
             boldTitle = false,
             name = stringResource(id = R.string.upscale_func_padding),
             int = padding,
@@ -413,7 +409,7 @@ fun USDUpscaleScript(
         }
         if (seams_fix_type.value != 0) {
             DividerOfScript()
-            ParamRowFloat(
+            StepRowFloat(
                 boldTitle = false,
                 name = stringResource(id = R.string.seams_func_denoise),
                 float = seams_fix_denoise,
@@ -421,14 +417,14 @@ fun USDUpscaleScript(
                 max = 16f
             )
             DividerOfScript()
-            SettingRowInt(
+            StepRowInt(
                 boldTitle = false,
                 name = stringResource(id = R.string.seams_func_blur),
                 int = seams_fix_width,
                 max = 64
             )
             DividerOfScript()
-            SettingRowInt(
+            StepRowInt(
                 boldTitle = false,
                 name = stringResource(id = R.string.seams_func_padding),
                 int = seams_fix_padding,

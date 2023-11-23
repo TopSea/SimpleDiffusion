@@ -33,7 +33,7 @@ import top.topsea.simplediffusion.ui.screen.SettingTitle
 
 
 @Composable
-fun SettingRowInt(
+fun StepRowInt(
     name: String,
     value: Int,
     onMinus: () -> Unit,

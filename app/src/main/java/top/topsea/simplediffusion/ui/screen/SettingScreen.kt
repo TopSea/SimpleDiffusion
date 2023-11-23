@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -32,7 +31,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -65,9 +63,8 @@ import top.topsea.simplediffusion.event.PromptEvent
 import top.topsea.simplediffusion.ui.component.ChangePromptPopup
 import top.topsea.simplediffusion.ui.component.PromptField
 import top.topsea.simplediffusion.ui.component.RequestErrorPopup
-import top.topsea.simplediffusion.ui.component.SettingRowInt
+import top.topsea.simplediffusion.ui.component.StepRowInt
 import top.topsea.simplediffusion.ui.component.SettingSwitch
-import top.topsea.simplediffusion.util.DeleteImage
 import top.topsea.simplediffusion.util.TextUtil
 
 @Composable
@@ -366,7 +363,7 @@ fun DefaultSettings(
             }
         }
         Divider(color = Color.LightGray, thickness = 1.dp)
-        SettingRowInt(
+        StepRowInt(
             name = stringResource(id = R.string.s_gen_size),
             value = uiViewModel.taskQueueSize,
             onMinus = {
