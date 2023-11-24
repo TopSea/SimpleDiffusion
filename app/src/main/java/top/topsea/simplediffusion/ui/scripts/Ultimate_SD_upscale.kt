@@ -247,7 +247,7 @@ fun USDUpscaleScript(
                     boldTitle = false,
                     name = stringResource(id = R.string.upscale_times),
                     float = custom_scale,
-                    step = 0.01f,
+                    step = 0.1f,
                     max = 16f
                 )
                 DividerOfScript()
