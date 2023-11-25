@@ -26,6 +26,7 @@ object Constant {
     const val k_save_on_server = "save_on_server"
     const val k_show_gen_on_1 = "show_gen_on_1"
     const val k_ex_agent_scheduler = "ex_gen_scheduler"
+    const val k_ex_sd_prompt = "ex_sd_prompt"
 
     var TAG_RECEIPT_HEADER = "\${HZ}$:"
     var SERVER_PORT = 10086

@@ -91,11 +91,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import top.topsea.simplediffusion.R
 import top.topsea.simplediffusion.api.dto.BaseModel
-import top.topsea.simplediffusion.api.dto.LoraModel
 import top.topsea.simplediffusion.api.dto.Sampler
-import top.topsea.simplediffusion.data.param.AddablePrompt
 import top.topsea.simplediffusion.data.param.CNParam
 import top.topsea.simplediffusion.data.param.UserPrompt
+import top.topsea.simplediffusion.data.state.PromptFile
 import top.topsea.simplediffusion.pickingImg
 import top.topsea.simplediffusion.ui.theme.Pink80
 import top.topsea.simplediffusion.util.FileUtil
@@ -983,19 +982,16 @@ fun ParamRowImgChoose(
 @Composable
 fun ParamRowPrompt(
     name: String,
-    models: List<Pair<String, MutableList<AddablePrompt>>>,
-    prompts: List<AddablePrompt>,
+    loras: PromptFile,
+    local: PromptFile,
+    promptSets: List<PromptFile> = emptyList(),
     prompt: MutableState<String>,
     onRefresh: suspend () -> Unit
 ) {
-    var menuExpanded by remember { mutableStateOf(false) }
     val onEditPrompt = remember { mutableStateOf(false) }
-    var currLoraDir by remember { mutableStateOf("Simple") }
 
     val focusRequester = remember { FocusRequester() } //焦点
     val softKeyboard = LocalSoftwareKeyboardController.current //软键盘
-
-    val scope = rememberCoroutineScope()
 
     val onAddLora = { value: String ->
         prompt.value += value
@@ -1086,30 +1082,54 @@ fun ParamRowPrompt(
                 }
             }
         }
-        Column {
+        RowAddablePrompt(
+            loras = loras,
+            local = local,
+            promptSets = promptSets,
+            onAddLora = onAddLora,
+        )
+    }
+}
+
+@Composable
+fun RowAddablePrompt(
+    loras: PromptFile = PromptFile(),
+    local: PromptFile = PromptFile(),
+    promptSets: List<PromptFile> = emptyList(),
+    onAddLora: (String) -> Unit,
+) {
+    var fileExpanded by remember { mutableStateOf(false) }
+    var categoryExpanded by remember { mutableStateOf(false) }
+
+    var currFile by remember { mutableStateOf(local) }
+    var currCategory by remember { mutableStateOf(currFile.categories.first()) }
+    var currPrompts by remember { mutableStateOf(currCategory.prompts) }
+
+    Column {
+        Row(modifier = Modifier.fillMaxWidth()) {
             Box(
                 modifier = Modifier
                     .padding(top = 8.dp, start = 8.dp)
-                    .width(dimensionResource(id = R.dimen.param_title_width_max))
+                    .weight(1f)
             ) {
                 Row(
                     modifier = Modifier
-                        .width(dimensionResource(id = R.dimen.param_title_width_max))
+                        .fillMaxWidth()
                         .height(dimensionResource(id = R.dimen.param_drop_menu))
                         .border(2.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(4.dp))
-                        .clickable { menuExpanded = true },
+                        .clickable { fileExpanded = true },
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = currLoraDir,
+                        text = currFile.filename,
                         modifier = Modifier
                             .padding(start = 8.dp)
-                            .widthIn(max = 64.dp)
+                            .weight(1f)
                             .align(Alignment.CenterVertically),
                         fontSize = 18.sp
                     )
                     Icon(
-                        imageVector = if (menuExpanded) Icons.Default.KeyboardArrowDown else Icons.Default.KeyboardArrowLeft,
+                        imageVector = if (fileExpanded) Icons.Default.KeyboardArrowDown else Icons.Default.KeyboardArrowLeft,
                         contentDescription = "",
                         modifier = Modifier
                             .padding(start = 8.dp)
@@ -1118,58 +1138,125 @@ fun ParamRowPrompt(
                 }
 
                 DropdownMenu(
-                    expanded = menuExpanded, onDismissRequest = { menuExpanded = false },
+                    expanded = fileExpanded, onDismissRequest = { fileExpanded = false },
                     modifier = Modifier
                         .fillMaxWidth(0.6F)
                 ) {
                     DropdownMenuItem(text = {
                         Text(
-                            text = "Simple",
+                            text = local.filename,
                             modifier = Modifier
                                 .widthIn(min = 72.dp)
                         )
                     }, onClick = {
-                        currLoraDir = "Simple"
-                        menuExpanded = false
+                        currFile = local
+                        currCategory = local.categories.first()
+                        currPrompts = currCategory.prompts
+                        fileExpanded = false
                     })
-                    models.forEach {
+                    DropdownMenuItem(text = {
+                        Text(
+                            text = loras.filename,
+                            modifier = Modifier
+                                .widthIn(min = 72.dp)
+                        )
+                    }, onClick = {
+                        currFile = loras
+                        currCategory = loras.categories.first()
+                        currPrompts = currCategory.prompts
+                        fileExpanded = false
+                    })
+                    promptSets.forEach {
                         DropdownMenuItem(text = {
                             Text(
-                                text = it.first,
+                                text = it.filename,
                                 modifier = Modifier
                                     .widthIn(min = 72.dp)
                             )
                         }, onClick = {
-                            currLoraDir = it.first
-                            menuExpanded = false
+                            currFile = it
+                            currCategory = it.categories.first()
+                            currPrompts = currCategory.prompts
+                            fileExpanded = false
                         })
                     }
                 }
             }
 
-            Row(
+            Box(
                 modifier = Modifier
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+                    .padding(top = 8.dp, start = 8.dp)
+                    .weight(1f)
             ) {
-                LoraField(
+                Row(
                     modifier = Modifier
-                        .padding(start = 8.dp, top = 8.dp, bottom = 8.dp)
-                        .weight(1F)
-                        .height(dimensionResource(id = R.dimen.param_prompt_height))
-                        .border(2.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(8.dp)),
-                    onClickAdd = onAddLora,
-                    models = if (currLoraDir == "Simple") prompts else models.find { it.first == currLoraDir }!!.second
-                )
-                IconButton(
-                    onClick = { scope.launch { onRefresh() } },
+                        .fillMaxWidth()
+                        .height(dimensionResource(id = R.dimen.param_drop_menu))
+                        .border(2.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(4.dp))
+                        .clickable { categoryExpanded = true },
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
+                    Text(
+                        text = currCategory.category,
+                        modifier = Modifier
+                            .padding(start = 8.dp)
+                            .weight(1f)
+                            .align(Alignment.CenterVertically),
+                        fontSize = 18.sp
+                    )
                     Icon(
-                        imageVector = Icons.Default.Refresh,
-                        contentDescription = "Refresh Choices",
-                        tint = MaterialTheme.colorScheme.primary
+                        imageVector = if (categoryExpanded) Icons.Default.KeyboardArrowDown else Icons.Default.KeyboardArrowLeft,
+                        contentDescription = "",
+                        modifier = Modifier
+                            .padding(start = 8.dp)
+                            .align(Alignment.CenterVertically),
                     )
                 }
+
+                DropdownMenu(
+                    expanded = categoryExpanded, onDismissRequest = { categoryExpanded = false },
+                    modifier = Modifier
+                        .fillMaxWidth(0.6F)
+                ) {
+                    currFile.categories.forEach {
+                        DropdownMenuItem(text = {
+                            Text(
+                                text = it.category,
+                                modifier = Modifier
+                                    .widthIn(min = 72.dp)
+                            )
+                        }, onClick = {
+                            currCategory = it
+                            currPrompts = it.prompts
+                            categoryExpanded = false
+                        })
+                    }
+                }
+            }
+        }
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            LoraField(
+                modifier = Modifier
+                    .padding(start = 8.dp, top = 8.dp, bottom = 8.dp)
+                    .weight(1F)
+                    .height(dimensionResource(id = R.dimen.param_prompt_height))
+                    .border(2.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(8.dp)),
+                onClickAdd = onAddLora,
+                models = currPrompts
+            )
+            IconButton(
+                onClick = { /*scope.launch { onRefresh() }*/ },
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Refresh,
+                    contentDescription = "Refresh Choices",
+                    tint = MaterialTheme.colorScheme.primary
+                )
             }
         }
     }
@@ -1298,7 +1385,7 @@ fun ParamRowControlNet(
 fun LoraField(
     modifier: Modifier = Modifier,
     onClickAdd: (value: String) -> Unit,
-    models: List<AddablePrompt>
+    models: List<Pair<String, String>>
 ) {
     LazyColumn(
         modifier = modifier
@@ -1308,81 +1395,75 @@ fun LoraField(
                 .padding(bottom = 4.dp, end = 4.dp)
                 .fillMaxWidth()) {
                 models.forEach {
-                    if (it is LoraModel)
-                        LoraItem(lora = it, onClickAdd)
-                    else
-                        PromptItem(
-                            userPrompt = it as UserPrompt,
-                            onClickAdd = onClickAdd,
-                            onDelete = {},
-                            onUpdate = {}
-                        )
+                    RowPromptItem(
+                        prompt = it,
+                        onClickAdd = onClickAdd,
+                    )
                 }
             }
         }
     }
-
 }
 
 @Composable
-fun LoraItem(
-    lora: AddablePrompt,
+fun RowPromptItem(
+    prompt: Pair<String, String>,
     onClickAdd: (value: String) -> Unit,
 ) {
     val max = if (getWidthDp() > 400.dp) 320.dp else 240.dp
     val tmax = if (getWidthDp() > 400.dp) 170.dp else 190.dp
-    if (lora is LoraModel) {
-        Row(
+
+    Row(
+        modifier = Modifier
+            .padding(start = 4.dp, top = 4.dp)
+            .widthIn(max = max)
+            .height(dimensionResource(id = R.dimen.param_model_item))
+            .border(2.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(4.dp))
+    ) {
+        Text(
+            text = prompt.first,
             modifier = Modifier
-                .padding(start = 4.dp, top = 4.dp)
-                .widthIn(max = max)
-                .height(dimensionResource(id = R.dimen.param_model_item))
-                .border(2.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(4.dp))
-        ) {
-            Text(
-                text = lora.name,
-                modifier = Modifier
-                    .padding(horizontal = 4.dp)
-                    .widthIn(max = tmax)
-                    .align(Alignment.CenterVertically),
-                fontSize = TextUnit(value = 16F, type = TextUnitType.Sp),
-                fontWeight = FontWeight.Bold,
-                maxLines = 1
+                .padding(horizontal = 4.dp)
+                .widthIn(max = tmax)
+                .align(Alignment.CenterVertically),
+            fontSize = TextUnit(value = 16F, type = TextUnitType.Sp),
+            fontWeight = FontWeight.Bold,
+            maxLines = 1
+        )
+        Box(
+            modifier = Modifier
+                .fillMaxHeight()
+                .width(1.5.dp)
+                .background(Color.Gray)
+        )
+        Box(modifier = Modifier
+            .size(dimensionResource(id = R.dimen.param_model_item))
+            .background(
+                color = MaterialTheme.colorScheme.inversePrimary,
+                shape = RoundedCornerShape(topEnd = 4.dp, bottomEnd = 4.dp)
             )
-            Box(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .width(1.5.dp)
-                    .background(Color.Gray)
-            )
-            Box(modifier = Modifier
-                .size(dimensionResource(id = R.dimen.param_model_item))
-                .background(
-                    color = MaterialTheme.colorScheme.inversePrimary,
-                    shape = RoundedCornerShape(topEnd = 4.dp, bottomEnd = 4.dp)
-                )
-                .clickable {
-                    onClickAdd("<lora:${lora.alias}:1>,")
-                }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = "Add a Lora to prompt.",
-                    modifier = Modifier
-                        .size(30.dp)
-                        .align(Alignment.Center),
-                    tint = Color.White
-                )
+            .clickable {
+                onClickAdd(prompt.second)
             }
+        ) {
+            Icon(
+                imageVector = Icons.Default.Add,
+                contentDescription = "Add a Lora to prompt.",
+                modifier = Modifier
+                    .size(30.dp)
+                    .align(Alignment.Center),
+                tint = Color.White
+            )
         }
     }
+
 }
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun PromptField(
     modifier: Modifier = Modifier,
-    models: List<AddablePrompt>,
+    models: List<UserPrompt>,
     onDelete: (UserPrompt) -> Unit,
     onUpdate: (UserPrompt) -> Unit,
 ) {
@@ -1395,7 +1476,7 @@ fun PromptField(
                 .fillMaxWidth()) {
 
                 models.forEach {
-                    PromptItem(userPrompt = it as UserPrompt, inSettings = true, onClickAdd = {}, onDelete, onUpdate)
+                    PromptItem(userPrompt = it, inSettings = true, onClickAdd = {}, onDelete, onUpdate)
                 }
             }
         }

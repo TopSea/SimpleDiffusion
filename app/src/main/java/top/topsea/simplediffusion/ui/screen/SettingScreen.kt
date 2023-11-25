@@ -117,6 +117,13 @@ fun SettingScreen(
 
             }
         }
+        item {
+            SdPromptBlock(
+                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                uiViewModel = uiViewModel,
+                normalViewModel = normalViewModel,
+            )
+        }
     }
 }
 
@@ -229,11 +236,10 @@ fun AgentSchedulerBlock(
             ) {
                 // 先检查 SD 服务器的连接，再检查生成队列是否为空，再检查 SD 服务器是否有这个插件，然后再更改
                 if (uiViewModel.serverConnected) {
-                    uiViewModel.onEvent(UIEvent.IsSaveControl(it))
                     if (tasks.isNotEmpty()) {
                         uiViewModel.onEvent(UIEvent.UIWarning(context.getString(R.string.s_agent_set_later)))
                     } else {
-                        uiViewModel.onEvent(UIEvent.ExSettingChange("AgentScheduler", context))
+                        uiViewModel.onEvent(UIEvent.ExSettingChange("AgentScheduler", context){})
                     }
                 }
                 else
@@ -246,10 +252,51 @@ fun AgentSchedulerBlock(
                         .show()
             }
         }
-        if (uiViewModel.exAgentScheduler) {
-            Divider(color = MaterialTheme.colorScheme.secondary, thickness = 1.5.dp)
-            Column(modifier = Modifier.padding(horizontal = 8.dp)) {
-                setting(uiViewModel, normalViewModel)
+    }
+}
+
+@Composable
+fun SdPromptBlock(
+    modifier: Modifier,
+    uiViewModel: UIViewModel,
+    normalViewModel: NormalViewModel
+) {
+    val context = LocalContext.current
+    Column(modifier = modifier.background(color = MaterialTheme.colorScheme.background, shape = RoundedCornerShape(12.dp))) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 4.dp)
+                .height(dimensionResource(id = R.dimen.s_normal_height)),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = stringResource(id = R.string.s_sd_prompt_set),
+                fontSize = 16.sp,
+                modifier = Modifier
+                    .padding(horizontal = 8.dp),
+                fontWeight = FontWeight.Bold
+            )
+
+            SettingSwitch(
+                modifier = Modifier.size(DpSize(42.dp, 36.dp)),
+                isOn = uiViewModel.exSdPrompt,
+            ) {
+                // 先检查 SD 服务器的连接，再检查是否有这个插件
+                if (uiViewModel.serverConnected) {
+                    uiViewModel.onEvent(UIEvent.ExSettingChange("SdPrompt", context){
+                        normalViewModel.exSdPrompt(it)
+                    })
+                }
+                else
+                    Toast
+                        .makeText(
+                            context,
+                            context.getText(R.string.t_sd_not_connected),
+                            Toast.LENGTH_SHORT
+                        )
+                        .show()
             }
         }
     }
@@ -280,9 +327,8 @@ fun DefaultSettings(
     }
 
     var changePrompt by remember { mutableStateOf(false) }
-    val loraState = normalViewModel.loraState.collectAsState()
     val vaes = normalViewModel.vaeState.collectAsState()
-    val prompts = loraState.value.prompts
+    val prompts by normalViewModel.localPrompts.collectAsState()
     var chosenPrompt by remember { mutableStateOf(UserPrompt()) }
 
     if (changePrompt) {

@@ -1,15 +1,14 @@
 package top.topsea.simplediffusion.util
 
 import android.util.Log
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
 import top.topsea.simplediffusion.BuildConfig
 import top.topsea.simplediffusion.data.param.CNParam
+import top.topsea.simplediffusion.data.param.UserPrompt
 import top.topsea.simplediffusion.ui.scripts.Script
 import top.topsea.simplediffusion.ui.scripts.UltimateSDUpscale
 import top.topsea.simplediffusion.ui.scripts.XYZ
-import java.lang.reflect.Type
 
 object TextUtil {
     fun toPrintJsonView(txt: String): String {
@@ -46,6 +45,18 @@ object TextUtil {
             }
         }
         return sb.toString()
+    }
+
+    fun addable2SD(prompts: List<UserPrompt>, isLora: Boolean = false): List<Pair<String, String>> {
+        val sd = ArrayList<Pair<String, String>>()
+        prompts.forEach {
+            if (isLora) {
+                sd.add(it.name to "<lora:${it.alias}:1>,")
+            } else {
+                sd.add(it.name to it.alias)
+            }
+        }
+        return sd
     }
 
 //    inline fun <reified T> ArrayList?.toObject(type: Type? = null): T? {

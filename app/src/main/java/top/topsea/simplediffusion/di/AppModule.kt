@@ -20,9 +20,11 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import top.topsea.simplediffusion.api.GenImgApi
 import top.topsea.simplediffusion.api.NormalApi
+import top.topsea.simplediffusion.api.PromptApi
 import top.topsea.simplediffusion.api.SocketClient
 import top.topsea.simplediffusion.api.impl.GenImgApiImp
 import top.topsea.simplediffusion.api.impl.NormalApiImp
+import top.topsea.simplediffusion.api.impl.PromptApiImp
 import top.topsea.simplediffusion.data.DiffusionDatabase
 import top.topsea.simplediffusion.data.param.CNParamDao
 import top.topsea.simplediffusion.data.param.ImageDataDao
@@ -141,6 +143,16 @@ object AppModule {
     @Singleton
     fun provideNormalApiImp(normalApi: NormalApi): NormalApiImp {
         return NormalApiImp(normalApi)
+    }
+
+    @Provides
+    @Singleton
+    fun providePromptApi(retrofit: Retrofit): PromptApi = retrofit.create(PromptApi::class.java)
+
+    @Provides
+    @Singleton
+    fun providePromptApiImp(promptApi: PromptApi): PromptApiImp {
+        return PromptApiImp(promptApi)
     }
 
     @Provides

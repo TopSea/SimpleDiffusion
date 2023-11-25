@@ -134,7 +134,8 @@ fun ParamEditContent(
     val models = baseState.models
     val cnModels = cnState.cnParams
     val loras = loraState.loras
-    val prompts = loraState.prompts
+    val prompts = loraState.local
+    val promptSets = loraState.promptSets
 
     val width = remember { mutableStateOf(currParam.width) }
     val height = remember { mutableStateOf(currParam.height) }
@@ -320,8 +321,9 @@ fun ParamEditContent(
                     )
                     ParamRowPrompt(
                         name = stringResource(id = R.string.r_prompt),
-                        models = loras,
-                        prompts = prompts,
+                        loras = loras,
+                        local = prompts,
+                        promptSets = promptSets,
                         prompt = defaultPrompt,
                         onRefresh = suspend {
                             normalViewModel.refreshLoras()

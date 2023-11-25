@@ -20,11 +20,11 @@ import top.topsea.simplediffusion.api.SocketClient
 import top.topsea.simplediffusion.api.dto.SimpleSdConfig
 import top.topsea.simplediffusion.api.dto.VaeModel
 import top.topsea.simplediffusion.api.impl.NormalApiImp
+import top.topsea.simplediffusion.api.impl.PromptApiImp
 import top.topsea.simplediffusion.currentScreen
 import top.topsea.simplediffusion.data.state.UIEvent
 import top.topsea.simplediffusion.event.ExecuteState
 import top.topsea.simplediffusion.util.Constant
-import top.topsea.simplediffusion.util.DeleteImage
 import top.topsea.simplediffusion.util.TextUtil
 import javax.inject.Inject
 
@@ -33,6 +33,7 @@ import javax.inject.Inject
 class UIViewModel @Inject constructor(
     private val kv: MMKV,
     private val normalApiImp: NormalApiImp,
+    private val promptApi: PromptApiImp,
     private val socketClient: SocketClient,
     @ApplicationContext context: Context
 ): ViewModel() {
@@ -80,6 +81,10 @@ class UIViewModel @Inject constructor(
         private set     // 是否开启 ControlNet 插件，默认开启不可修改
     var exAgentScheduler by mutableStateOf(
         kv.decodeBool(Constant.k_ex_agent_scheduler, false)
+    )
+        private set     // 是否开启 GenScheduler 插件
+    var exSdPrompt by mutableStateOf(
+        kv.decodeBool(Constant.k_ex_sd_prompt, false)
     )
         private set     // 是否开启 GenScheduler 插件
 
@@ -145,14 +150,36 @@ class UIViewModel @Inject constructor(
                             // 关闭直接关
                             exAgentScheduler = false
                             kv.encode(Constant.k_ex_agent_scheduler, false)
+                            event.onChangeSuccess(false)
                         } else {
                             // 打开需要检查
                             viewModelScope.launch {
                                 normalApiImp.checkAgentScheduler({
                                     exAgentScheduler = true
                                     kv.encode(Constant.k_ex_agent_scheduler, true)
+                                    event.onChangeSuccess(true)
                                 }){
                                     warningStr = event.context.getString(R.string.t_no_ex)
+                                }
+                            }
+                        }
+                    }
+                    "SdPrompt" -> {
+                        if (exSdPrompt) {
+                            // 关闭直接关
+                            exSdPrompt = false
+                            kv.encode(Constant.k_ex_sd_prompt, false)
+                            event.onChangeSuccess(false)
+                        } else {
+                            // 打开需要检查
+                            viewModelScope.launch {
+                                val sdPromptVersion = promptApi.checkSdPrompt()
+                                if (sdPromptVersion) {
+                                    warningStr = event.context.getString(R.string.t_no_ex)
+                                } else {
+                                    exSdPrompt = true
+                                    kv.encode(Constant.k_ex_sd_prompt, true)
+                                    event.onChangeSuccess(true)
                                 }
                             }
                         }

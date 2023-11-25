@@ -6,7 +6,6 @@ import com.google.gson.GsonBuilder
 import com.google.gson.JsonArray
 import com.google.gson.JsonParser
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -15,17 +14,15 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
 import top.topsea.simplediffusion.api.NormalApi
 import top.topsea.simplediffusion.api.dto.ControlTypes
-import top.topsea.simplediffusion.api.dto.LoraModel
 import top.topsea.simplediffusion.api.dto.SDPrompt
 import top.topsea.simplediffusion.api.dto.Sampler
-import top.topsea.simplediffusion.api.dto.VaeModel
-import top.topsea.simplediffusion.api.dto.listTypes
 import top.topsea.simplediffusion.api.dto.SimpleSdConfig
 import top.topsea.simplediffusion.api.dto.TaskPgRequest
+import top.topsea.simplediffusion.api.dto.VaeModel
+import top.topsea.simplediffusion.api.dto.listTypes
+import top.topsea.simplediffusion.data.param.UserPrompt
 import top.topsea.simplediffusion.event.ExecuteState
 import top.topsea.simplediffusion.util.TextUtil
-import javax.inject.Inject
-import javax.inject.Singleton
 
 
 class NormalApiImp(
@@ -135,7 +132,7 @@ class NormalApiImp(
         return flow {
             val result = kotlin.runCatching {
                 when (classOfT) {
-                    LoraModel::class.java -> {
+                    UserPrompt::class.java -> {
                         normalApi.getLoras().execute()
                     }
 
@@ -264,7 +261,7 @@ class NormalApiImp(
         return withContext(Dispatchers.IO) {
             val result = kotlin.runCatching {
                 when (classOfT) {
-                    LoraModel::class.java -> {
+                    UserPrompt::class.java -> {
                         normalApi.getLoras().execute()
                     }
 

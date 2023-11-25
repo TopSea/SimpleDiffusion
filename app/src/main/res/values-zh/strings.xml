@@ -192,6 +192,7 @@
     <string name="s_default_set">默认设置</string>
     <string name="s_control_net_set">ControlNet 设置</string>
     <string name="s_gen_scheduler_set">AgentScheduler 设置</string>
+    <string name="s_sd_prompt_set">老六提示词设置</string>
     <string name="s_control_net_max">ControlNet 最大模型使用数量：</string>
     <string name="s_control_net_version">ControlNet 版本：</string>
     <string name="s_server_ip">SD服务器地址： </string>

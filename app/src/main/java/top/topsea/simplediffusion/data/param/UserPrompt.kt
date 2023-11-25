@@ -21,8 +21,8 @@ data class UserPrompt (
     @ColumnInfo(name = "prompt_value")
     var alias: String = "",
     @ColumnInfo(name = "prompt_path")
-    override val path: String = "Simple",
-): AddablePrompt()
+    val path: String = "Simple",
+)
 
 @Dao
 interface UserPromptDao {
@@ -35,9 +35,4 @@ interface UserPromptDao {
     suspend fun insert(vararg prompt: UserPrompt)
     @Delete(UserPrompt::class)
     suspend fun delete(prompt: UserPrompt): Int
-}
-
-
-abstract class AddablePrompt() {
-    abstract val path: String
 }

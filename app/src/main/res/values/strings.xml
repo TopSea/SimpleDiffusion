@@ -242,6 +242,7 @@
     <string name="s_default_set">Default settings</string>
     <string name="s_control_net_set">ControlNet settings</string>
     <string name="s_gen_scheduler_set">AgentScheduler settings</string>
+    <string name="s_sd_prompt_set">OldSixPrompt settings</string>
     <string name="s_control_net_max">ControlNet Max Models Num: </string>
     <string name="s_control_net_version">ControlNet Version: </string>
     <string name="s_server_ip">SD Server Dress: </string>

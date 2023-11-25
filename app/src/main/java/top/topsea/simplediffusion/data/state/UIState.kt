@@ -32,7 +32,7 @@ sealed class UIEvent {
     data class ModelChanging(val modelChanging: Boolean) : UIEvent()
 
     // 是否启用 SD 插件
-    data class ExSettingChange(val whichOne: String, val context: Context) : UIEvent()
+    data class ExSettingChange(val whichOne: String, val context: Context, val onChangeSuccess: (isOn: Boolean) -> Unit) : UIEvent()
 
     // SimpleDiffusion Desktop 相关
     data class ConnectDesktop(val connectDesktop: Boolean): UIEvent()
