@@ -1,10 +1,6 @@
 package top.topsea.simplediffusion.util
 
 object Constant {
-    // Lora 格式
-    val loraPattern by lazy {
-        Regex("""(<lora:)([^>]+)(:)(\d+)([.]?)(\d*)(>)(,)""")
-    }
     // AddablePrompt 格式
     val addablePattern by lazy {
         Regex("""(罒)([^罓]*)(罓)""")

@@ -51,7 +51,8 @@ object TextUtil {
         val sd = ArrayList<Pair<String, String>>()
         prompts.forEach {
             if (isLora) {
-                sd.add(it.name to "<lora:${it.alias}:1>,")
+                val addableLora = Constant.addableFirst + "<lora:${it.alias}:1>," + Constant.addableSecond
+                sd.add(it.name to addableLora)
             } else {
                 sd.add(it.name to it.alias)
             }
