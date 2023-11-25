@@ -1,5 +1,6 @@
 package top.topsea.simplediffusion.data.param
 
+import androidx.annotation.Keep
 import androidx.compose.runtime.Immutable
 import androidx.room.ColumnInfo
 import androidx.room.Dao
@@ -11,6 +12,7 @@ import androidx.room.Query
 import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
 
+@Keep
 @Immutable
 @Entity
 data class UserPrompt (
