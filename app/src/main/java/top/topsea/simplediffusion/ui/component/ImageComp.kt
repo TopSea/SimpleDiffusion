@@ -175,8 +175,9 @@ fun ImageInDisplay(
                             ShowingIcon(
                                 icon = painterResource(id = R.drawable.photo_plus),
                                 onclick = {
-                                    paramViewModel.paramEvent(ParamEvent.AddImage(FileUtil.imageName2Base64(context, image.imageName)))
-                                    Toast.makeText(context, context.getString(R.string.t_image_added), Toast.LENGTH_SHORT).show()
+                                    paramViewModel.paramEvent(ParamEvent.AddToParam(context, image.imageName){
+                                        Toast.makeText(context, context.getString(R.string.t_image_added), Toast.LENGTH_SHORT).show()
+                                    })
                                 },
                             )
                     }

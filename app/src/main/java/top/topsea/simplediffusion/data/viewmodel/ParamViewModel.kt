@@ -19,11 +19,13 @@ import top.topsea.simplediffusion.data.param.ImgParam
 import top.topsea.simplediffusion.data.param.ImgParamDao
 import top.topsea.simplediffusion.data.param.ParamActivate
 import top.topsea.simplediffusion.data.param.ParamControlNet
+import top.topsea.simplediffusion.data.param.ParamImage
 import top.topsea.simplediffusion.data.param.TxtParam
 import top.topsea.simplediffusion.data.param.TxtParamDao
 import top.topsea.simplediffusion.data.state.ParamLocalState
 import top.topsea.simplediffusion.event.ParamEvent
 import top.topsea.simplediffusion.event.RequestState
+import top.topsea.simplediffusion.util.FileUtil
 import top.topsea.simplediffusion.util.TextUtil
 import javax.inject.Inject
 
@@ -154,6 +156,15 @@ class ParamViewModel @Inject constructor(
                 else {
                     val cParam = paramState.value.currParam as ImgParam
                     cParam.image.value = event.base64Str
+                }
+            }
+            is ParamEvent.AddToParam -> {
+                val param = paramState.value.currParam as ImgParam
+                viewModelScope.launch {
+                    val base64Str = FileUtil.imageName2Base64(event.context, event.imageName)
+                    param.image.value = base64Str
+                    aImgDao.update(pi = ParamImage(param.id, param.image))
+                    event.afterAdd()
                 }
             }
             is ParamEvent.AddParam -> {

@@ -204,9 +204,17 @@ interface ImgParamDao {
     @Update(ImgParam::class)
     suspend fun update(pa: ParamActivate)
     @Update(ImgParam::class)
+    suspend fun update(pi: ParamImage)
+    @Update(ImgParam::class)
     suspend fun update(pcn: ParamControlNet)
     @Insert
     suspend fun insert(vararg imgParam: ImgParam)
     @Delete(ImgParam::class)
     suspend fun delete(imgParam: ImgParam): Int
 }
+
+@TypeConverters(StringConverter::class)
+data class ParamImage(
+    val id: Int,
+    val image: MutableState<String>,
+)

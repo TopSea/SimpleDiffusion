@@ -1,5 +1,6 @@
 package top.topsea.simplediffusion.event
 
+import android.content.Context
 import top.topsea.simplediffusion.data.param.BasicParam
 import top.topsea.simplediffusion.data.param.CNParam
 import android.util.Size
@@ -21,6 +22,7 @@ sealed class ParamEvent {
     data class EditActivate(val editing: Boolean = true, val editingActivate: Boolean = true, val onNoAct: () -> Unit) : ParamEvent()
     data class EditParam(val bp: BasicParam?, val editing: Boolean = true) : ParamEvent()
     data class AddImage(val base64Str: String): ParamEvent()
+    data class AddToParam(val context: Context, val imageName: String, val afterAdd: () -> Unit): ParamEvent()
     object CloseImage: ParamEvent()
     data class AddControlNet(val index: Int): ParamEvent()
     data class CloseControlNet(val index: Int): ParamEvent()
