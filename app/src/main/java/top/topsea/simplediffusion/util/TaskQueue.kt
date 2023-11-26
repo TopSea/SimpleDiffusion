@@ -234,9 +234,19 @@ class TaskQueue(
             val images: MutableList<ImageData?> = mutableListOf()
 
             data.forEachIndexed { index, queueData ->
-                if (index < batchSize) {
+                if (uiViewModel!!.saveGridImage) {
                     val image = FileUtil.saveQueueImage(queueData, context)
                     images.add(image)
+                } else {
+                    if (batchSize > 1) {
+                        if (index > 0) {
+                            val image = FileUtil.saveQueueImage(queueData, context)
+                            images.add(image)
+                        }
+                    } else {
+                        val image = FileUtil.saveQueueImage(queueData, context)
+                        images.add(image)
+                    }
                 }
             }
             saveImages(images, task.image, batchSize = batchSize)
@@ -328,37 +338,71 @@ class TaskQueue(
                 }
             }
             // 添加生成的图片
-            if (uiViewModel!!.saveControlNet) {
+            if (uiViewModel!!.exAgentScheduler) {
                 images.forEach { image ->
                     image?.let {
                         imgViewModel!!.onEvent(ImageEvent.AddImages(it))
                         capGenImgList.add(it)
                     }
                 }
-            } else {
-                // AgentScheduler 的图片顺序不同
-                if (uiViewModel!!.exAgentScheduler) {
-                    val imageSubList = if (batchSize < images.lastIndex) {
-                        images.subList(1, batchSize + 1)
+            }
+            else
+                if (batchSize > 1) {
+                    if (uiViewModel!!.saveControlNet) {
+                        if (uiViewModel!!.saveGridImage)
+                            images.forEach { image ->
+                                image?.let {
+                                    imgViewModel!!.onEvent(ImageEvent.AddImages(it))
+                                    capGenImgList.add(it)
+                                }
+                            }
+                        else {
+                            images.forEachIndexed { index, image ->
+                                if (index > 0) {
+                                    image?.let {
+                                        imgViewModel!!.onEvent(ImageEvent.AddImages(it))
+                                        capGenImgList.add(it)
+                                    }
+                                }
+                            }
+                        }
                     } else {
-                        images.subList(0, batchSize)
-                    }
-                    imageSubList.forEach { image ->
-                        image?.let {
-                            imgViewModel!!.onEvent(ImageEvent.AddImages(it))
-                            capGenImgList.add(it)
+                        if (uiViewModel!!.saveGridImage) {
+                            val imageSubList = images.subList(0, batchSize + 1)
+                            imageSubList.forEach { image ->
+                                image?.let {
+                                    imgViewModel!!.onEvent(ImageEvent.AddImages(it))
+                                    capGenImgList.add(it)
+                                }
+                            }
+                        } else {
+                            val imageSubList = images.subList(1, batchSize + 1)
+                            imageSubList.forEach { image ->
+                                image?.let {
+                                    imgViewModel!!.onEvent(ImageEvent.AddImages(it))
+                                    capGenImgList.add(it)
+                                }
+                            }
                         }
                     }
                 } else {
-                    val imageSubList = images.subList(0, batchSize)
-                    imageSubList.forEach { image ->
-                        image?.let {
-                            imgViewModel!!.onEvent(ImageEvent.AddImages(it))
-                            capGenImgList.add(it)
+                    if (uiViewModel!!.saveControlNet) {
+                        images.forEach { image ->
+                            image?.let {
+                                imgViewModel!!.onEvent(ImageEvent.AddImages(it))
+                                capGenImgList.add(it)
+                            }
+                        }
+                    } else {
+                        images.forEachIndexed { index, image ->
+                            if (index == 0)
+                                image?.let {
+                                    imgViewModel!!.onEvent(ImageEvent.AddImages(it))
+                                    capGenImgList.add(it)
+                                }
                         }
                     }
                 }
-            }
             generateEvent(GenerateEvent.IsGeneratingImages(false))
         }
     }

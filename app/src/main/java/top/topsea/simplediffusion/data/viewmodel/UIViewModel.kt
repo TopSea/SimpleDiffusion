@@ -59,6 +59,10 @@ class UIViewModel @Inject constructor(
         kv.decodeBool(Constant.k_save_cap_img, true)
     )
         private set     // 是否保存拍摄的照片
+    var saveGridImage by mutableStateOf(
+        kv.decodeBool(Constant.k_save_grid_img, true)
+    )
+        private set     // 是否保存拍摄的照片
     var saveControlNet by mutableStateOf(
         kv.decodeBool(Constant.k_save_control, true)
     )
@@ -125,11 +129,15 @@ class UIViewModel @Inject constructor(
             }
             is UIEvent.IsSaveCapImg -> {
                 saveCapImage = event.saveCapImage
-                kv.encode(Constant.k_save_cap_img, event.saveCapImage)
+                kv.encode(Constant.k_save_cap_img, saveCapImage)
+            }
+            is UIEvent.IsSaveGridImg -> {
+                saveGridImage = event.saveGridImage
+                kv.encode(Constant.k_save_grid_img, saveGridImage)
             }
             is UIEvent.IsSaveControl -> {
                 saveControlNet = event.saveControlNet
-                kv.encode(Constant.k_save_control, event.saveControlNet)
+                kv.encode(Constant.k_save_control, saveControlNet)
             }
 
             // SD 服务器相关
@@ -138,7 +146,7 @@ class UIViewModel @Inject constructor(
             }
             is UIEvent.SaveOnServer -> {
                 saveOnServer = event.saveOnServer
-                kv.encode(Constant.k_save_on_server, event.saveOnServer)
+                kv.encode(Constant.k_save_on_server, saveOnServer)
             }
             is UIEvent.ModelChanging -> {
                 modelChanging = event.modelChanging

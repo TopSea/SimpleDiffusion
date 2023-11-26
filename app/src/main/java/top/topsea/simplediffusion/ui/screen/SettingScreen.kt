@@ -502,6 +502,23 @@ fun DefaultSettings(
             }
         }
         Divider(color = Color.LightGray, thickness = 1.dp)
+        Row(
+            modifier = Modifier
+                .padding(vertical = 8.dp)
+                .fillMaxWidth()
+                .height(dimensionResource(id = R.dimen.s_normal_height)),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            SettingTitle(name = stringResource(id = R.string.s_save_grid_img))
+            SettingSwitch(
+                modifier = Modifier.size(DpSize(42.dp, 36.dp)),
+                isOn = uiViewModel.saveGridImage,
+            ) {
+                uiViewModel.onEvent(UIEvent.IsSaveGridImg(it))
+            }
+        }
+        Divider(color = Color.LightGray, thickness = 1.dp)
         Column(
             modifier = Modifier
                 .padding(vertical = 8.dp)

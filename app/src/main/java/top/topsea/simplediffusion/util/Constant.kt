@@ -18,6 +18,7 @@ object Constant {
     const val k_delete_mode = "delete_mode"
     const val k_use_mode = "Use_Mode"
     const val k_save_cap_img = "save_cap_img"
+    const val k_save_grid_img = "k_save_grid_img"
     const val k_save_control = "save_control"
     const val k_save_on_server = "save_on_server"
     const val k_show_gen_on_1 = "show_gen_on_1"

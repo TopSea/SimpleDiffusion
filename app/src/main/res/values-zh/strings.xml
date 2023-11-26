@@ -192,6 +192,7 @@
     <string name="s_sd_dress">SD 服务器地址：</string>
     <string name="s_card_position">参数卡片位置：</string>
     <string name="s_save_cap_img">保存拍摄的照片：</string>
+    <string name="s_save_grid_img">保存网格图片：</string>
     <string name="s_save_control">保存 ControlNet 的图片：</string>
     <string name="s_use_mode">模式： </string>
     <string name="s_vae">Vae：</string>

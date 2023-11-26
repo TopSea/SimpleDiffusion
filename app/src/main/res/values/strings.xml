@@ -241,6 +241,7 @@
     <string name="s_sd_dress">SD Server Dress: </string>
     <string name="s_card_position">Param card position: </string>
     <string name="s_save_cap_img">Save captured image: </string>
+    <string name="s_save_grid_img">Save grid image: </string>
     <string name="s_save_control">Save control image: </string>
     <string name="s_use_mode">Mode: </string>
     <string name="s_vae">Vae: </string>

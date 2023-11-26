@@ -18,6 +18,7 @@ sealed class UIEvent {
     data class DisplayImg(val index: Int) : UIEvent()
     data class LongPressImage(val longPressImage: Boolean) : UIEvent()
     data class IsSaveCapImg(val saveCapImage: Boolean = true) : UIEvent()
+    data class IsSaveGridImg(val saveGridImage: Boolean = true) : UIEvent()
     data class IsSaveControl(val saveControlNet: Boolean = true) : UIEvent()
     data class AddGenSize(val context: Context): UIEvent()
     data class MinusGenSize(val context: Context): UIEvent()
