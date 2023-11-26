@@ -72,7 +72,7 @@
     <string name="r_sort_order">展示优先级：</string>
     <string name="r_cfg_scales">提示词引导系数：</string>
     <string name="r_choose_sampler">采样器：</string>
-    <string name="r_batch_size">每批次生成图片数：</string>
+    <string name="r_batch_size">生成批次数：</string>
     <string name="r_sd_prompt">SD Style：</string>
     <string name="r_prompt">正面提示词：</string>
     <string name="r_neg_prompt">负面提示词：</string>
@@ -211,7 +211,7 @@
     <string name="s_default_set">默认设置</string>
     <string name="s_control_net_set">ControlNet 设置</string>
     <string name="s_gen_scheduler_set">AgentScheduler 设置</string>
-    <string name="s_sd_prompt_set">老六提示词设置</string>
+    <string name="s_sd_prompt_set">六神提示词设置</string>
     <string name="s_control_net_max">ControlNet 最大模型使用数量：</string>
     <string name="s_control_net_version">ControlNet 版本：</string>
     <string name="s_server_ip">SD服务器地址： </string>
