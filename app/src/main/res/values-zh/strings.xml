@@ -72,7 +72,7 @@
     <string name="r_sort_order">展示优先级：</string>
     <string name="r_cfg_scales">提示词引导系数：</string>
     <string name="r_choose_sampler">采样器：</string>
-    <string name="r_batch_size">生成批次数：</string>
+    <string name="r_batch_size">每批次生成数：</string>
     <string name="r_sd_prompt">SD Style：</string>
     <string name="r_prompt">正面提示词：</string>
     <string name="r_neg_prompt">负面提示词：</string>

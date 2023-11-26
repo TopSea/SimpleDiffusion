@@ -291,7 +291,7 @@ fun ParamEditContent(
                     StepRowInt(
                         name = stringResource(id = R.string.r_batch_size),
                         int = batch_size,
-                        max = 100,
+                        max = 20,
                         min = 1
                     )
                     Divider(
