@@ -116,6 +116,25 @@
     <string name="rs_cn_resize_m1">仅调整大小</string>
     <string name="rs_cn_resize_m2">裁剪后缩放</string>
     <string name="rs_cn_resize_m3">缩放后填充空白</string>
+    <string name="rs_cn_control_type_1">All（全部）</string>
+    <string name="rs_cn_control_type_2">Canny（硬边缘）</string>
+    <string name="rs_cn_control_type_3">Depth（深度）</string>
+    <string name="rs_cn_control_type_4">NormalMap（法线贴图）</string>
+    <string name="rs_cn_control_type_5">OpenPose（姿态）</string>
+    <string name="rs_cn_control_type_6">MLSD（直线）</string>
+    <string name="rs_cn_control_type_7">Lineart（线稿）</string>
+    <string name="rs_cn_control_type_8">SoftEdge（软边缘）</string>
+    <string name="rs_cn_control_type_9">Scribble/Sketch（涂鸦/草图）</string>
+    <string name="rs_cn_control_type_10">Segmentation（语义分割）</string>
+    <string name="rs_cn_control_type_11">Shuffle（随机洗牌）</string>
+    <string name="rs_cn_control_type_12">Tile/Blur（分块模糊）</string>
+    <string name="rs_cn_control_type_13">Inpaint（局部重绘）</string>
+    <string name="rs_cn_control_type_14">InstructP2P</string>
+    <string name="rs_cn_control_type_15">Reference（参考）</string>
+    <string name="rs_cn_control_type_16">Recolor（重上色）</string>
+    <string name="rs_cn_control_type_17">Revision</string>
+    <string name="rs_cn_control_type_18">T2I-Adapter</string>
+    <string name="rs_cn_control_type_19">IP-Adapter</string>
 
     <!-- Popup 字符串 -->
     <string name="p_btn_dismiss">取消</string>

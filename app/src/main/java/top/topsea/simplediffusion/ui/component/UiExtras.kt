@@ -555,13 +555,14 @@ fun TypeChoose(
 ) {
     FlowRow(modifier = Modifier.padding(vertical = 8.dp)) {
         choices.forEach {
-            TypeChooseItem(choice = it.first, isChosen = it.first == chosen, onChoose = onChoose)
+            TypeChooseItem(title = stringResource(id = it.second), choice = it.first, isChosen = it.first == chosen, onChoose = onChoose)
         }
     }
 }
 
 @Composable
 fun TypeChooseItem(
+    title: String,
     choice: String,
     isChosen: Boolean,
     onChoose: (String) -> Unit,
@@ -588,7 +589,7 @@ fun TypeChooseItem(
                 )
                 .clip(CircleShape)
         )
-        Text(text = choice,modifier = Modifier
+        Text(text = title,modifier = Modifier
             .padding(end = 4.dp))
     }
 }

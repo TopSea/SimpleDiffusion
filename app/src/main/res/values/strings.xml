@@ -155,7 +155,25 @@
     <string name="rs_cn_resize_m1">Just Resize</string>
     <string name="rs_cn_resize_m2">Scale to Fit (Inner Fit)</string>
     <string name="rs_cn_resize_m3">Envelope (Outer Fit)</string>
-
+    <string name="rs_cn_control_type_1">All</string>
+    <string name="rs_cn_control_type_2">Canny</string>
+    <string name="rs_cn_control_type_3">Depth</string>
+    <string name="rs_cn_control_type_4">NormalMap</string>
+    <string name="rs_cn_control_type_5">OpenPose</string>
+    <string name="rs_cn_control_type_6">MLSD</string>
+    <string name="rs_cn_control_type_7">Lineart</string>
+    <string name="rs_cn_control_type_8">SoftEdge</string>
+    <string name="rs_cn_control_type_9">Scribble/Sketch</string>
+    <string name="rs_cn_control_type_10">Segmentation</string>
+    <string name="rs_cn_control_type_11">Shuffle</string>
+    <string name="rs_cn_control_type_12">Tile/Blur</string>
+    <string name="rs_cn_control_type_13">Inpaint</string>
+    <string name="rs_cn_control_type_14">InstructP2P</string>
+    <string name="rs_cn_control_type_15">Reference</string>
+    <string name="rs_cn_control_type_16">Recolor</string>
+    <string name="rs_cn_control_type_17">Revision</string>
+    <string name="rs_cn_control_type_18">T2I-Adapter</string>
+    <string name="rs_cn_control_type_19">IP-Adapter</string>
 
     <!-- Popup 字符串 -->
     <string name="p_btn_dismiss">Dismiss</string>

@@ -2,6 +2,7 @@ package top.topsea.simplediffusion.api.dto
 
 import androidx.annotation.Keep
 import com.google.gson.JsonObject
+import top.topsea.simplediffusion.R
 
 
 @Keep
@@ -29,23 +30,23 @@ data class ControlTypes(
 
 @Keep
 val listTypes = listOf<Pair<String, Int>>(
-    "All" to 0,
-    "Canny" to 0,
-    "Depth" to 0,
-    "NormalMap" to 0,
-    "OpenPose" to 0,
-    "MLSD" to 0,
-    "Lineart" to 0,
-    "SoftEdge" to 0,
-    "Scribble/Sketch" to 0,
-    "Segmentation" to 0,
-    "Shuffle" to 0,
-    "Tile" to 0,
-    "Inpaint" to 0,
-    "InstructP2P" to 0,
-    "Reference" to 0,
-    "Recolor" to 0,
-    "Revision" to 0,
-    "T2I-Adapter" to 0,
-    "IP-Adapter" to 0,
+    "All" to R.string.rs_cn_control_type_1,
+    "Canny" to R.string.rs_cn_control_type_2,
+    "Depth" to R.string.rs_cn_control_type_3,
+    "NormalMap" to R.string.rs_cn_control_type_4,
+    "OpenPose" to R.string.rs_cn_control_type_5,
+    "MLSD" to R.string.rs_cn_control_type_6,
+    "Lineart" to R.string.rs_cn_control_type_7,
+    "SoftEdge" to R.string.rs_cn_control_type_8,
+    "Scribble/Sketch" to R.string.rs_cn_control_type_9,
+    "Segmentation" to R.string.rs_cn_control_type_10,
+    "Shuffle" to R.string.rs_cn_control_type_11,
+    "Tile/Blur" to R.string.rs_cn_control_type_12,
+    "Inpaint" to R.string.rs_cn_control_type_13,
+    "InstructP2P" to R.string.rs_cn_control_type_14,
+    "Reference" to R.string.rs_cn_control_type_15,
+    "Recolor" to R.string.rs_cn_control_type_16,
+    "Revision" to R.string.rs_cn_control_type_17,
+    "T2I-Adapter" to R.string.rs_cn_control_type_18,
+    "IP-Adapter" to R.string.rs_cn_control_type_19,
 )
