@@ -49,6 +49,10 @@ class UIViewModel @Inject constructor(
         private set     // 当前展示的图片
     var warningStr by mutableStateOf("")
         private set     // 弹窗警告字符串
+    var paramTab by mutableStateOf(0)
+        private set     // 主页 Tab 序号
+    var cameraTab by mutableStateOf(0)
+        private set     // 拍摄设置页面 Tab 序号
 
     // 设置相关
     var showGenOn1 by mutableStateOf(
@@ -198,6 +202,12 @@ class UIViewModel @Inject constructor(
             is UIEvent.Navigate -> {
                 currentScreen = event.screen
                 event.navOp()
+            }
+            is UIEvent.ChangeParamTab -> {
+                paramTab = event.tabIndex
+            }
+            is UIEvent.ChangeCameraTab -> {
+                cameraTab = event.tabIndex
             }
             is UIEvent.AddGenSize -> {
                 if (taskQueueSize < 10) {

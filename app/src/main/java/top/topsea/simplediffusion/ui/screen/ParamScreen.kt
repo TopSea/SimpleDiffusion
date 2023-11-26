@@ -7,10 +7,6 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -21,6 +17,7 @@ import top.topsea.simplediffusion.data.param.ImgParam
 import top.topsea.simplediffusion.data.param.TxtParam
 import top.topsea.simplediffusion.data.state.ControlNetState
 import top.topsea.simplediffusion.data.state.ParamLocalState
+import top.topsea.simplediffusion.data.state.UIEvent
 import top.topsea.simplediffusion.data.viewmodel.UIViewModel
 import top.topsea.simplediffusion.event.ControlNetEvent
 import top.topsea.simplediffusion.event.ParamEvent
@@ -37,20 +34,19 @@ fun ParamScreen(
     paramEvent: (ParamEvent) -> Unit,
     cnEvent: (ControlNetEvent) -> Unit,
 ) {
-    var state by remember { mutableStateOf(0) }
     val titles = listOf(stringResource(id = R.string.r_request_card_a1), stringResource(id = R.string.r_request_card_a2), stringResource(id = R.string.r_request_card_a3))
 
     Column(modifier = Modifier.fillMaxSize()) {
-        TabRow(selectedTabIndex = state, modifier = Modifier.fillMaxWidth()) {
+        TabRow(selectedTabIndex = uiViewModel.paramTab, modifier = Modifier.fillMaxWidth()) {
             titles.forEachIndexed { index, title ->
                 Tab(
-                    selected = state == index,
-                    onClick = { state = index },
+                    selected = uiViewModel.paramTab == index,
+                    onClick = { uiViewModel.onEvent(UIEvent.ChangeParamTab(index)) },
                     text = { Text(text = title, maxLines = 2, overflow = TextOverflow.Ellipsis) }
                 )
             }
         }
-        when (state) {
+        when (uiViewModel.paramTab) {
             0 -> {
                 ParamTab(
                     navController = navController,

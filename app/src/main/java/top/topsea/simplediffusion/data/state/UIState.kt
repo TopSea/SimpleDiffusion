@@ -1,17 +1,14 @@
 package top.topsea.simplediffusion.data.state
 
 import android.content.Context
-import androidx.annotation.Keep
-import top.topsea.simplediffusion.BaseScreen
 import top.topsea.simplediffusion.SimpleDestination
-import top.topsea.simplediffusion.api.dto.ActivateModel
 import top.topsea.simplediffusion.api.dto.VaeModel
-import top.topsea.simplediffusion.api.dto.VersionResponse
-import top.topsea.simplediffusion.util.DeleteImage
 
 
 sealed class UIEvent {
     data class Navigate(val screen: SimpleDestination, val navOp: () -> Unit) : UIEvent()
+    data class ChangeParamTab(val tabIndex: Int) : UIEvent()
+    data class ChangeCameraTab(val tabIndex: Int) : UIEvent()
     data class UpdateVae(val vae: VaeModel, val onFailure: () -> Unit,
                          val onSuccess: () -> Unit) : UIEvent()
     data class Display(val display: Boolean = false) : UIEvent()

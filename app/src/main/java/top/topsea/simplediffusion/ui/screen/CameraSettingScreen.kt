@@ -23,6 +23,7 @@ import top.topsea.simplediffusion.R
 import top.topsea.simplediffusion.data.param.CNParam
 import top.topsea.simplediffusion.data.param.ImgParam
 import top.topsea.simplediffusion.data.param.TaskParam
+import top.topsea.simplediffusion.data.state.UIEvent
 import top.topsea.simplediffusion.data.viewmodel.BasicViewModel
 import top.topsea.simplediffusion.data.viewmodel.NormalViewModel
 import top.topsea.simplediffusion.data.viewmodel.UIViewModel
@@ -50,22 +51,21 @@ fun CameraSettingScreen(
     val paramState by paramViewModel.paramState.collectAsState()
     val cnState by normalViewModel.cnState.collectAsState()
 
-    var state by remember { mutableStateOf(0) }
     val titles =
         listOf(stringResource(id = R.string.r_request_card_a2), stringResource(id = R.string.r_request_card_a3), stringResource(id = R.string.r_request_card_a4))
 
     Column(modifier = Modifier.fillMaxSize()) {
-        TabRow(selectedTabIndex = state, modifier = Modifier.fillMaxWidth()) {
+        TabRow(selectedTabIndex = uiViewModel.cameraTab, modifier = Modifier.fillMaxWidth()) {
             titles.forEachIndexed { index, title ->
                 Tab(
-                    selected = state == index,
-                    onClick = { state = index },
+                    selected = uiViewModel.cameraTab == index,
+                    onClick = { uiViewModel.onEvent(UIEvent.ChangeCameraTab(index)) },
                     text = { Text(text = title, maxLines = 2, overflow = TextOverflow.Ellipsis) }
                 )
             }
         }
 
-        when (state) {
+        when (uiViewModel.cameraTab) {
             0 -> {
                 ParamTab(
                     navController = navController,
