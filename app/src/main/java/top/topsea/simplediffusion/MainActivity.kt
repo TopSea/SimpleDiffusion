@@ -274,9 +274,11 @@ class MainActivity : ComponentActivity() {
                                 uiViewModel.onEvent(UIEvent.LongPressImage(false))
                                 uiViewModel.fullSelected.clear()
                                 imgDataViewModel.selectedID.clear()
+                                return@BackHandler
                             }
                             if (uiViewModel.displaying) {
-                                uiViewModel.onEvent(UIEvent.DisplayImg(-1))
+                                uiViewModel.onEvent(UIEvent.Display(false))
+                                return@BackHandler
                             }
                             if (!navController.popBackStack())
                                 this.finish()

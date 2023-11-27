@@ -126,13 +126,13 @@ class UIViewModel @Inject constructor(
                 displaying = event.display
             }
             is UIEvent.DisplayImg -> {
-                displaying = !displaying
                 displayingImg = event.index
+                displaying = !displaying
                 TextUtil.topsea("DisplayImg: ${event.index}", Log.ERROR)
             }
             is UIEvent.DisplayTask -> {
-                displaying = !displaying
                 displayingTask = event.index
+                displaying = !displaying
                 TextUtil.topsea("DisplayTask : ${event.index}", Log.ERROR)
             }
             is UIEvent.LongPressImage -> {

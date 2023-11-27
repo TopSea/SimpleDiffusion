@@ -1,8 +1,18 @@
 package top.topsea.simplediffusion
 
 import android.util.Log
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import top.topsea.simplediffusion.data.state.UIEvent
 import top.topsea.simplediffusion.data.viewmodel.UIViewModel
@@ -45,7 +55,7 @@ object BaseScreen : SimpleDestination {
     override val topBar: @Composable (UIViewModel, NavController) -> Unit = { uiViewModel, navController: NavController ->
         TopBar(navController = navController, title = stringResource(id = R.string.app_name), screen = Screen.BASE) {
             if (uiViewModel.displaying) {
-                uiViewModel.onEvent(UIEvent.DisplayImg(-1))
+                uiViewModel.onEvent(UIEvent.Display(false))
             }
             uiViewModel.onEvent(it)
         }
@@ -91,9 +101,26 @@ object AboutScreen : SimpleDestination {
 
 object CameraScreen : SimpleDestination {
     override val topBar: @Composable (UIViewModel, NavController) -> Unit = { uiViewModel, navController: NavController ->
-        TopBar(navController = navController, title = stringResource(R.string.s_top_bar), screen = Screen.CAMERA) {
+        TopBar(navController = navController, title = stringResource(R.string.s_top_bar), screen = Screen.CAMERA,
+            backIcon = {
+                Icon(
+                    imageVector = Icons.Rounded.Close, contentDescription = null,
+                    modifier = Modifier
+                        .align(Alignment.CenterStart)
+                        .padding(start = 16.dp)
+                        .size(32.dp)
+                        .clickable {
+                            if (uiViewModel.displaying) {
+                                uiViewModel.onEvent(UIEvent.Display(false))
+                            } else {
+                                navUp(navController)
+                            }
+                        },
+                    tint = Color.White
+                )
+            }) {
             if (uiViewModel.displaying) {
-                uiViewModel.onEvent(UIEvent.DisplayImg(-1))
+                uiViewModel.onEvent(UIEvent.Display(false))
             }
             uiViewModel.onEvent(it)
         }

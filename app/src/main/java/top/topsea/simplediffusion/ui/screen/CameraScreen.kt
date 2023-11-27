@@ -313,7 +313,7 @@ fun CamBottomBar(
                         .size(54.dp)
                         .background(Color.Black)
                         .clickable(enabled = imageList.isNotEmpty() || taskQueue.tasks.isNotEmpty()) {
-                            uiViewModel.onEvent(UIEvent.DisplayImg(-1))
+                            uiViewModel.onEvent(UIEvent.Display(false))
                         },
                 )
                 // 待生成的图片
@@ -415,7 +415,7 @@ fun CamBottomBar(
             IconButton(
                 onClick = {
                     if (uiViewModel.displaying) {
-                        uiViewModel.onEvent(UIEvent.DisplayImg(-1))
+                        uiViewModel.onEvent(UIEvent.Display(false))
                     }
                     camIndex.value = if (camIndex.value != CameraSelector.LENS_FACING_FRONT)
                         CameraSelector.LENS_FACING_FRONT

@@ -84,7 +84,7 @@ fun TopBar(
     navController: NavController,
     title: String,
     screen: Screen,
-    backIcon: @Composable() (BoxScope.(() -> Unit) -> Unit) = { nacOp ->
+    backIcon: @Composable() (BoxScope.(() -> Unit) -> Unit) = { navUp ->
         Icon(
             imageVector = Icons.Rounded.ArrowBack, contentDescription = null,
             modifier = Modifier
@@ -92,7 +92,7 @@ fun TopBar(
                 .padding(start = 16.dp)
                 .size(32.dp)
                 .clickable {
-                    nacOp()
+                    navUp()
                 },
             tint = Color.White
         )
@@ -163,17 +163,7 @@ fun TopBar(
                 modifier = Modifier.background(color = Color.Black),
                 title = "",
                 startIcon = {
-                    Icon(
-                        imageVector = Icons.Rounded.Close, contentDescription = null,
-                        modifier = Modifier
-                            .align(Alignment.CenterStart)
-                            .padding(start = 16.dp)
-                            .size(32.dp)
-                            .clickable {
-                                navUp(navController)
-                            },
-                        tint = Color.White
-                    )
+                    backIcon {  }
             }){
                 Icon(
                     imageVector = Icons.Rounded.Settings,
