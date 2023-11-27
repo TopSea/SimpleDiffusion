@@ -194,7 +194,7 @@ fun DisplayInGrid(
                                                 uiViewModel.fullSelected.remove(label)
                                         })
                                     } else {
-                                        uiViewModel.onEvent(UIEvent.DisplayImg(index))
+                                        uiViewModel.onEvent(UIEvent.DisplayImg(image.index))
                                     }
                                 },
                                 onDoubleTap = {
@@ -317,17 +317,16 @@ private fun RowScope.FuncHeaderLine(
 @Composable
 fun DisplayImages(
     modifier: Modifier,
-    uiViewModel: UIViewModel,
-    imgDataViewModel: ImgDataViewModel,
+    displayingIndex: Int,
+    images: List<ImageData>,
     paramViewModel: BasicViewModel,
+    imageEvent: (ImageEvent) -> Unit,
 ) {
     val context = LocalContext.current
     val wp = context.resources.displayMetrics.widthPixels
     val pdp = with(LocalDensity.current) { (wp * 0.04F).toDp() }
-    val imageState by imgDataViewModel.state.collectAsState()
-    val images = imageState.images
 
-    val state = rememberLazyListState(initialFirstVisibleItemIndex = uiViewModel.displayingImg)
+    val state = rememberLazyListState(initialFirstVisibleItemIndex = displayingIndex)
 
 // If you'd like to customize either the snap behavior or the layout provider
     val snappingLayout = remember(state) { SnapLayoutInfoProvider(state) }
@@ -348,7 +347,7 @@ fun DisplayImages(
                     img.index
                 }
             ) {img ->
-                ImageInDisplay(false, img, paramViewModel, onImgEvent = imgDataViewModel::onEvent)
+                ImageInDisplay(false, img, paramViewModel, onImgEvent = imageEvent)
             }
         }
     }

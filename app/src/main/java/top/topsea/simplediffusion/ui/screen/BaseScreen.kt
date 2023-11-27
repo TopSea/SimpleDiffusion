@@ -201,6 +201,11 @@ fun BaseScreen(
     AnimatedVisibility(
         visible = uiViewModel.displaying && uiViewModel.displayingImg >= 0,
     ) {
+        val images = imgState.images
+        val displayingImg = images.find {
+            it.index == uiViewModel.displayingImg
+        }
+
         DisplayImages(
             modifier = Modifier
                 .fillMaxSize(1F)
@@ -211,9 +216,10 @@ fun BaseScreen(
                 ) {
                     uiViewModel.onEvent(UIEvent.DisplayImg(-1))
                 },
-            uiViewModel = uiViewModel,
-            imgDataViewModel = imgDataViewModel,
+            displayingIndex = images.indexOf(displayingImg),
+            images = images,
             paramViewModel = paramViewModel,
+            imageEvent = imgDataViewModel::onEvent
         )
     }
 
