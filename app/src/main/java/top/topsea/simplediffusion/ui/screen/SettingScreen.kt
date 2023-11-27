@@ -53,6 +53,7 @@ import com.tencent.mmkv.MMKV
 import top.topsea.simplediffusion.AboutScreen
 import top.topsea.simplediffusion.DesktopScreen
 import top.topsea.simplediffusion.R
+import top.topsea.simplediffusion.SetParamEditScreen
 import top.topsea.simplediffusion.api.dto.VaeModel
 import top.topsea.simplediffusion.data.param.TaskParam
 import top.topsea.simplediffusion.data.param.UserPrompt
@@ -396,6 +397,12 @@ fun DefaultSettings(
             SettingGoTo(title = stringResource(id = R.string.a_top_bar)) {
                 uiViewModel.onEvent(UIEvent.Navigate(AboutScreen){
                     navController.navigate(AboutScreen.route)
+                })
+            }
+            Divider(color = Color.LightGray, thickness = 1.dp)
+            SettingGoTo(title = stringResource(id = R.string.sp_top_bar)) {
+                uiViewModel.onEvent(UIEvent.Navigate(SetParamEditScreen){
+                    navController.navigate(SetParamEditScreen.route)
                 })
             }
         }

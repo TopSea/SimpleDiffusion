@@ -51,6 +51,7 @@ import top.topsea.simplediffusion.ui.screen.CameraScreen
 import top.topsea.simplediffusion.ui.screen.CameraSettingScreen
 import top.topsea.simplediffusion.ui.screen.DesktopScreen
 import top.topsea.simplediffusion.ui.screen.ParamEditScreen
+import top.topsea.simplediffusion.ui.screen.SetParamEditScreen
 import top.topsea.simplediffusion.ui.screen.SettingScreen
 import top.topsea.simplediffusion.ui.theme.SimpleDiffusionTheme
 import top.topsea.simplediffusion.util.DeleteImage
@@ -218,8 +219,8 @@ class MainActivity : ComponentActivity() {
                                     navController = navController,
                                     cardColor = Color.Gray,
                                     paramState = paramState,
+                                    uiViewModel = uiViewModel,
                                     paramEvent = paramViewModel::paramEvent,
-                                    uiEvent = uiViewModel::onEvent,
                                     normalViewModel = normalViewModel,
                                 )
                             }
@@ -238,6 +239,13 @@ class MainActivity : ComponentActivity() {
                                     uiViewModel = uiViewModel,
                                     normalViewModel = normalViewModel,
                                     tasks = taskQueue.tasks,
+                                )
+                            }
+                            composable(SetParamEditScreen.route) {
+                                SetParamEditScreen(
+                                    navController = navController,
+                                    uiViewModel = uiViewModel,
+                                    normalViewModel = normalViewModel,
                                 )
                             }
                             composable(AboutScreen.route) {

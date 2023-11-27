@@ -361,6 +361,11 @@
     <string name="a_sponsor">Buy me a coffee</string>
     <string name="a_open_source">Open source project</string>
 
+    <!-- 编辑参数页面中的字符串 -->
+    <string name="sp_top_bar">Edit Generate Params</string>
+    <string name="sp_top_bar_txt">Txt2Img Screen</string>
+    <string name="sp_default_value">Default value: </string>
+
     <!-- SimpleDiffusion 桌面中的字符串 -->
     <string name="sd_top_bar">SimpleDiffusion Desktop</string>
 </resources>

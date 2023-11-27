@@ -71,6 +71,7 @@ import top.topsea.simplediffusion.util.Constant
 enum class Screen {
     BASE,
     SETTING,
+    SET_PARAM,
     EDIT,
     EDIT_CN,
     ABOUT,
@@ -134,6 +135,15 @@ fun TopBar(
                 backIcon {
                     navUp(navController)
                 }
+            })
+
+            Screen.SET_PARAM -> BaseTopBar(
+                modifier = Modifier.background(color = MaterialTheme.colorScheme.primary),
+                title = title,
+                startIcon = {
+                    backIcon {
+                        navUp(navController)
+                    }
             })
             Screen.EDIT -> BaseTopBar(
                 modifier = Modifier.background(color = MaterialTheme.colorScheme.primary),

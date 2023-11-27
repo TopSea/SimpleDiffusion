@@ -56,6 +56,120 @@ class UIViewModel @Inject constructor(
     var cameraTab by mutableStateOf(0)
         private set     // 拍摄设置页面 Tab 序号
 
+    var tDisplayPri by mutableStateOf(
+        kv.decodeInt(Constant.k_t_display_pri, 0)
+    )
+        private set     // 文生图显示优先级默认值
+    var tDisplayPriSwitch by mutableStateOf(
+        kv.decodeBool(Constant.k_t_display_pri_s, true)
+    )
+        private set     // 是否显示显示优先级
+    var tSDModel by mutableStateOf(
+        kv.decodeString(Constant.k_t_sdmodel, "")!!
+    )
+        private set     // 基础大模型默认值
+    var tSDModelSwitch by mutableStateOf(
+        kv.decodeBool(Constant.k_t_sdmodel_s, true)
+    )
+        private set     // 是否显示基础大模型
+    var tRefineModel by mutableStateOf(
+        kv.decodeString(Constant.k_t_refinermodel, "")!!
+    )
+        private set     // Refiner 大模型默认值
+    var tRefineModelSwitch by mutableStateOf(
+        kv.decodeBool(Constant.k_t_refinermodel_s, true)
+    )
+        private set     // 是否显示 Refiner 大模型
+    var tRefineAt by mutableStateOf(
+        kv.decodeFloat(Constant.k_t_refinerat, 0f)
+    )
+        private set     // Refiner 时机默认值
+    var tRefineAtSwitch by mutableStateOf(
+        kv.decodeBool(Constant.k_t_refinerat_s, true)
+    )
+        private set     // 是否显示Refiner 时机
+    var tPrompt by mutableStateOf(
+        kv.decodeString(Constant.k_t_prompt, "")!!
+    )
+        private set     // 正面提示词默认值
+    var tPromptSwitch by mutableStateOf(
+        kv.decodeBool(Constant.k_t_prompt_s, true)
+    )
+        private set     // 是否显示正面提示词
+    var tPromptAdSwitch by mutableStateOf(
+        kv.decodeBool(Constant.k_t_promptad_s, true)
+    )
+        private set     // 是否显示正面提示词的可添加项
+    var tNPrompt by mutableStateOf(
+        kv.decodeString(Constant.k_t_nprompt, "")!!
+    )
+        private set     // 负面提示词默认值
+    var tNPromptSwitch by mutableStateOf(
+        kv.decodeBool(Constant.k_t_nprompt_s, true)
+    )
+        private set     // 是否显示负面提示词
+    var tImgWidth by mutableStateOf(
+        kv.decodeInt(Constant.k_t_imgw, 512)
+    )
+        private set     // 图片宽度默认值
+    var tImgWidthSwitch by mutableStateOf(
+        kv.decodeBool(Constant.k_t_imgw_s, true)
+    )
+        private set     // 是否显示图片宽度
+    var tImgHeight by mutableStateOf(
+        kv.decodeInt(Constant.k_t_imgh, 512)
+    )
+        private set     // 图片高度默认值
+    var tImgHeightSwitch by mutableStateOf(
+        kv.decodeBool(Constant.k_t_imgh_s, true)
+    )
+        private set     // 是否显示图片高度
+    var tSteps by mutableStateOf(
+        kv.decodeInt(Constant.k_t_step, 30)
+    )
+        private set     // 生成步数默认值
+    var tStepsSwitch by mutableStateOf(
+        kv.decodeBool(Constant.k_t_step_s, true)
+    )
+        private set     // 是否显示生成步数
+    var tCFG by mutableStateOf(
+        kv.decodeFloat(Constant.k_t_cfg, 7f)
+    )
+        private set     // 提示词相关性默认值
+    var tCFGSwitch by mutableStateOf(
+        kv.decodeBool(Constant.k_t_cfg_s, true)
+    )
+        private set     // 是否显示提示词相关性
+    var tSampler by mutableStateOf(
+        kv.decodeString(Constant.k_t_sampler, "")!!
+    )
+        private set     // sampler 默认值
+    var tSamplerSwitch by mutableStateOf(
+        kv.decodeBool(Constant.k_t_sampler_s, true)
+    )
+        private set     // 是否显示 sampler
+    var tBatchSize by mutableStateOf(
+        kv.decodeInt(Constant.k_t_bsize, 1)
+    )
+        private set     // 每批次生成数默认值
+    var tBatchSizeSwitch by mutableStateOf(
+        kv.decodeBool(Constant.k_t_bsize_s, true)
+    )
+        private set     // 是否显示每批次生成数
+    var tSDPromptSwitch by mutableStateOf(
+        kv.decodeBool(Constant.k_t_sdprompt_s, true)
+    )
+        private set     // 是否显示脚本
+    var tScriptSwitch by mutableStateOf(
+        kv.decodeBool(Constant.k_t_script_s, true)
+    )
+        private set     // 是否显示脚本
+    var tCNSwitch by mutableStateOf(
+        kv.decodeBool(Constant.k_t_cn_s, true)
+    )
+        private set     // 是否显示 ControlNet
+
+
     // 设置相关
     var showGenOn1 by mutableStateOf(
         kv.decodeBool(Constant.k_show_gen_on_1, true)
@@ -276,6 +390,121 @@ class UIViewModel @Inject constructor(
                 socketClient.sendMsg(message) {
                     TextUtil.topsea("Socket send error: ${it?.message}")
                 }
+            }
+
+
+            is UIEvent.UpdateTDP -> {
+                tDisplayPri = event.value
+                kv.encode(Constant.k_t_display_pri, event.value)
+                TextUtil.topsea("onValueChange int: ${event.value}")
+            }
+            is UIEvent.UpdateTDPS -> {
+                tDisplayPriSwitch = event.switch
+                kv.encode(Constant.k_t_display_pri_s, event.switch)
+            }
+            is UIEvent.UpdateTSDM -> {
+                tSDModel = event.value
+                kv.encode(Constant.k_t_sdmodel, event.value)
+            }
+            is UIEvent.UpdateTSDMS -> {
+                tSDModelSwitch = event.switch
+                kv.encode(Constant.k_t_sdmodel_s, event.switch)
+            }
+            is UIEvent.UpdateTRM -> {
+                tRefineModel = event.value
+                kv.encode(Constant.k_t_refinermodel, event.value)
+            }
+            is UIEvent.UpdateTRMS -> {
+                tRefineModelSwitch = event.switch
+                kv.encode(Constant.k_t_refinermodel_s, event.switch)
+            }
+            is UIEvent.UpdateTRA -> {
+                tRefineAt = event.value
+                kv.encode(Constant.k_t_refinerat, event.value)
+            }
+            is UIEvent.UpdateTRAS -> {
+                tRefineAtSwitch = event.switch
+                kv.encode(Constant.k_t_refinerat_s, event.switch)
+            }
+            is UIEvent.UpdateTP -> {
+                tPrompt = event.value
+                kv.encode(Constant.k_t_prompt, event.value)
+            }
+            is UIEvent.UpdateTPS -> {
+                tPromptSwitch = event.switch
+                kv.encode(Constant.k_t_prompt_s, event.switch)
+            }
+            is UIEvent.UpdateTPAS -> {
+                tPromptAdSwitch = event.switch
+                kv.encode(Constant.k_t_promptad_s, event.switch)
+            }
+            is UIEvent.UpdateTNP -> {
+                tNPrompt = event.value
+                kv.encode(Constant.k_t_nprompt, event.value)
+            }
+            is UIEvent.UpdateTNPS -> {
+                tNPromptSwitch = event.switch
+                kv.encode(Constant.k_t_nprompt_s, event.switch)
+            }
+            is UIEvent.UpdateTIW -> {
+                tImgWidth = event.value
+                kv.encode(Constant.k_t_imgw, event.value)
+            }
+            is UIEvent.UpdateTIWS -> {
+                tImgWidthSwitch = event.switch
+                kv.encode(Constant.k_t_imgw_s, event.switch)
+            }
+            is UIEvent.UpdateTIH -> {
+                tImgHeight = event.value
+                kv.encode(Constant.k_t_imgh, event.value)
+            }
+            is UIEvent.UpdateTIHS -> {
+                tImgHeightSwitch = event.switch
+                kv.encode(Constant.k_t_imgh_s, event.switch)
+            }
+            is UIEvent.UpdateTS -> {
+                tSteps = event.value
+                kv.encode(Constant.k_t_step, event.value)
+            }
+            is UIEvent.UpdateTSS -> {
+                tStepsSwitch = event.switch
+                kv.encode(Constant.k_t_step_s, event.switch)
+            }
+            is UIEvent.UpdateTC -> {
+                tCFG = event.value
+                kv.encode(Constant.k_t_cfg, event.value)
+            }
+            is UIEvent.UpdateTCS -> {
+                tCFGSwitch = event.switch
+                kv.encode(Constant.k_t_cfg_s, event.switch)
+            }
+            is UIEvent.UpdateTSampler -> {
+                tSampler = event.value
+                kv.encode(Constant.k_t_sampler, event.value)
+            }
+            is UIEvent.UpdateTSamplerS -> {
+                tSamplerSwitch = event.switch
+                kv.encode(Constant.k_t_sampler_s, event.switch)
+            }
+            is UIEvent.UpdateTBS -> {
+                tBatchSize = event.value
+                kv.encode(Constant.k_t_bsize, event.value)
+            }
+            is UIEvent.UpdateTBSS -> {
+                tBatchSizeSwitch = event.switch
+                kv.encode(Constant.k_t_bsize_s, event.switch)
+            }
+            is UIEvent.UpdateTScriptS -> {
+                tScriptSwitch = event.switch
+                kv.encode(Constant.k_t_script_s, event.switch)
+            }
+            is UIEvent.UpdateTSDPS -> {
+                tSDPromptSwitch = event.switch
+                kv.encode(Constant.k_t_sdprompt_s, event.switch)
+            }
+            is UIEvent.UpdateTCNS -> {
+                tCNSwitch = event.switch
+                kv.encode(Constant.k_t_cn_s, event.switch)
             }
         }
     }

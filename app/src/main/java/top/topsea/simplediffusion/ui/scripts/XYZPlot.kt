@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -438,7 +437,8 @@ fun XYZPlotChooseRow(
         FitScreen(
             titleComp = {
                 ParamTitle(
-                    boldTitle = false,title = title1, isPad = it) }
+                    boldTitle = false, title = title1
+                ) }
         ) { modifier ->
 
             Box(
@@ -497,7 +497,8 @@ fun XYZPlotChooseRow(
             modifier = Modifier,
             titleComp = {
                 ParamTitle(
-                    boldTitle = false,title = title2, isPad = it) }
+                    boldTitle = false, title = title2
+                ) }
         ) { modifier ->
             Row(
                 modifier = modifier,
@@ -574,7 +575,7 @@ fun XYZPlotCheckRow(
                     .weight(.5f),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                ParamTitle(boldTitle = false, title = title1, isPad = false)
+                ParamTitle(boldTitle = false, title = title1)
                 Checkbox(checked = value1.value, onCheckedChange = { value1.value = it })
             }
             Row(
@@ -583,7 +584,7 @@ fun XYZPlotCheckRow(
                     .weight(.5f),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                ParamTitle(boldTitle = false, title = title2, isPad = false)
+                ParamTitle(boldTitle = false, title = title2)
                 Checkbox(checked = value2.value, onCheckedChange = { value2.value = it })
             }
         }
@@ -600,7 +601,7 @@ fun XYZPlotCheckRow(
                     .weight(.5f),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                ParamTitle(boldTitle = false, title = title3, isPad = false)
+                ParamTitle(boldTitle = false, title = title3)
                 Checkbox(checked = value3.value, onCheckedChange = { value3.value = it })
             }
             Row(
@@ -609,7 +610,7 @@ fun XYZPlotCheckRow(
                     .weight(.5f),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                ParamTitle(boldTitle = false, title = title4, isPad = false)
+                ParamTitle(boldTitle = false, title = title4)
                 Checkbox(checked = value4.value, onCheckedChange = { value4.value = it })
             }
         }

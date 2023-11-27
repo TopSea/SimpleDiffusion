@@ -167,8 +167,8 @@ fun USDUpscaleScript(
             titleComp = {
                 ParamTitle(
                     boldTitle = false,
-                    title = stringResource(id = R.string.upscale_choose_1),
-                    isPad = it)
+                    title = stringResource(id = R.string.upscale_choose_1)
+                )
             }
         ) { modifier ->
 
@@ -263,8 +263,8 @@ fun USDUpscaleScript(
             titleComp = {
                 ParamTitle(
                     boldTitle = false,
-                    title = stringResource(id = R.string.upscale_func),
-                    isPad = it)
+                    title = stringResource(id = R.string.upscale_func)
+                )
             }
         ) { modifier ->
             Box(
@@ -351,8 +351,8 @@ fun USDUpscaleScript(
             titleComp = {
                 ParamTitle(
                     boldTitle = false,
-                    title = stringResource(id = R.string.seams_func_title),
-                    isPad = it)
+                    title = stringResource(id = R.string.seams_func_title)
+                )
             }
         ) { modifier ->
 

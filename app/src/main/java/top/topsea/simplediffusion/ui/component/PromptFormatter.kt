@@ -45,6 +45,32 @@ fun ClickableMessage(
         }
     )
 }
+@Composable
+fun ClickableMessage(
+    prompt: String,
+    onEditPrompt: MutableState<Boolean>,
+    onClickItem: (Int, Int) -> Unit
+) {
+    val styledMessage = promptFormatter(
+        text = prompt,
+    )
+
+    ClickableText(
+        text = styledMessage,
+        style = MaterialTheme.typography.bodyLarge.copy(color = LocalContentColor.current),
+        modifier = Modifier.padding(12.dp),
+        onClick = {
+            styledMessage
+                .getStringAnnotations(start = it, end = it)
+                .firstOrNull()?.let { annotation ->
+                    when (annotation.tag) {
+                        SymbolAnnotationType.DEFAULT.name -> onEditPrompt.value = true
+                        else -> onClickItem(annotation.start, annotation.end)
+                    }
+                }
+        }
+    )
+}
 
 @Keep
 enum class SymbolAnnotationType {

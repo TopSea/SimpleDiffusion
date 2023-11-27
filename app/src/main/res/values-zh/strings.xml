@@ -311,6 +311,11 @@
     <string name="a_sponsor">支持作者</string>
     <string name="a_open_source">开源项目地址</string>
 
+    <!-- 编辑参数页面中的字符串 -->
+    <string name="sp_top_bar">编辑生图参数页面</string>
+    <string name="sp_top_bar_txt">文生图页面</string>
+    <string name="sp_default_value">默认值：</string>
+
     <!-- SimpleDiffusion 桌面中的字符串 -->
     <string name="sd_top_bar">SimpleDiffusion 桌面</string>
 </resources>
