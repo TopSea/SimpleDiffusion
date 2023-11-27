@@ -8,6 +8,7 @@ import androidx.compose.foundation.gestures.snapping.SnapLayoutInfoProvider
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
@@ -42,6 +43,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import top.topsea.simplediffusion.R
@@ -91,7 +93,7 @@ fun DisplayInGrid(
                 GridItemSpan(maxLineSpan) }
         ) {
             if (errorTasks.isNotEmpty() || tasks.isNotEmpty())
-                GridHeader(headStr = "Task")
+                GridHeader(headStr = stringResource(id = R.string.gird_header_task))
         }
 
         itemsIndexed(items = errorTasks) { index, task ->
@@ -99,7 +101,7 @@ fun DisplayInGrid(
                 modifier = Modifier
                     .height(wdp)
                     .clickable {
-                        uiViewModel.onEvent(UIEvent.DisplayImg(index))
+                        uiViewModel.onEvent(UIEvent.DisplayTask(index))
                     },
                 task = task,
             )
@@ -318,15 +320,10 @@ fun DisplayImages(
     uiViewModel: UIViewModel,
     imgDataViewModel: ImgDataViewModel,
     paramViewModel: BasicViewModel,
-
-    tasks: List<TaskParam>,
-    errorTasks: List<TaskParam>,
-    genState: GenerateState,
-    generateEvent: (GenerateEvent) -> Unit
 ) {
     val context = LocalContext.current
     val wp = context.resources.displayMetrics.widthPixels
-    val pdp = with(LocalDensity.current) { (wp * 0.08F).toDp() }
+    val pdp = with(LocalDensity.current) { (wp * 0.04F).toDp() }
     val imageState by imgDataViewModel.state.collectAsState()
     val images = imageState.images
 
@@ -342,7 +339,48 @@ fun DisplayImages(
                 .fillMaxHeight(0.95F)
                 .align(Alignment.Center),
             state = state,
-            flingBehavior = flingBehavior
+            flingBehavior = flingBehavior,
+            contentPadding = PaddingValues(horizontal = pdp)
+        ) {
+            items(
+                items = images,
+                key = { img ->
+                    img.index
+                }
+            ) {img ->
+                ImageInDisplay(false, img, paramViewModel, onImgEvent = imgDataViewModel::onEvent)
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun DisplayTasks(
+    modifier: Modifier,
+    uiViewModel: UIViewModel,
+    tasks: List<TaskParam>,
+    errorTasks: List<TaskParam>,
+    genState: GenerateState,
+    generateEvent: (GenerateEvent) -> Unit
+) {
+    val context = LocalContext.current
+    val wp = context.resources.displayMetrics.widthPixels
+    val pdp = with(LocalDensity.current) { (wp * 0.04F).toDp() }
+
+    val state = rememberLazyListState(initialFirstVisibleItemIndex = uiViewModel.displayingImg)
+
+    val snappingLayout = remember(state) { SnapLayoutInfoProvider(state) }
+    val flingBehavior = rememberSnapFlingBehavior(snappingLayout)
+
+    Box(modifier = modifier) {
+        LazyRow(
+            modifier = Modifier
+                .fillMaxHeight(0.95F)
+                .align(Alignment.Center),
+            state = state,
+            flingBehavior = flingBehavior,
+            contentPadding = PaddingValues(horizontal = pdp)
         ) {
             items(
                 items = errorTasks
@@ -354,15 +392,6 @@ fun DisplayImages(
             ) { index, task ->
                 TaskInDisplay(gen = task, genState = genState, generateEvent = generateEvent, index = index)
             }
-            items(
-                items = images,
-                key = { img ->
-                    img.index
-                }
-            ) {img ->
-                ImageInDisplay(false, img, paramViewModel, onImgEvent = imgDataViewModel::onEvent)
-            }
-            item { Spacer(modifier = Modifier.size(pdp)) }
         }
     }
 }

@@ -13,6 +13,7 @@ sealed class UIEvent {
                          val onSuccess: () -> Unit) : UIEvent()
     data class Display(val display: Boolean = false) : UIEvent()
     data class DisplayImg(val index: Int) : UIEvent()
+    data class DisplayTask(val index: Int) : UIEvent()
     data class LongPressImage(val longPressImage: Boolean) : UIEvent()
     data class IsSaveCapImg(val saveCapImage: Boolean = true) : UIEvent()
     data class IsSaveGridImg(val saveGridImage: Boolean = true) : UIEvent()

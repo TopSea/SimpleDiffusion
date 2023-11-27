@@ -8,6 +8,9 @@
     <string name="textfield_hint">请输入消息…</string>
     <string name="e_top_bar">修改参数</string>
 
+    <!-- 主页中的字符串 -->
+    <string name="gird_header_task">生成任务</string>
+
     <!--文生图参数字符串-->
     <string name="enable_hr">启用高清修复：</string>
     <string name="denoising_strength">降噪强度：</string>

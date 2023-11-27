@@ -47,6 +47,8 @@ class UIViewModel @Inject constructor(
         private set     // 是否正在修改基础模型，初次进入时要先更新模型
     var displayingImg by mutableStateOf(-1)
         private set     // 当前展示的图片
+    var displayingTask by mutableStateOf(-1)
+        private set     // 当前展示的生成任务
     var warningStr by mutableStateOf("")
         private set     // 弹窗警告字符串
     var paramTab by mutableStateOf(0)
@@ -127,6 +129,11 @@ class UIViewModel @Inject constructor(
                 displaying = !displaying
                 displayingImg = event.index
                 TextUtil.topsea("DisplayImg: ${event.index}", Log.ERROR)
+            }
+            is UIEvent.DisplayTask -> {
+                displaying = !displaying
+                displayingTask = event.index
+                TextUtil.topsea("DisplayTask : ${event.index}", Log.ERROR)
             }
             is UIEvent.LongPressImage -> {
                 longPressImage = event.longPressImage

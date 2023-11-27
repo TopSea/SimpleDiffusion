@@ -78,6 +78,7 @@ import top.topsea.simplediffusion.event.ParamEvent
 import top.topsea.simplediffusion.event.TaskListEvent
 import top.topsea.simplediffusion.ui.component.DisplayImages
 import top.topsea.simplediffusion.ui.component.DisplayInGrid
+import top.topsea.simplediffusion.ui.component.DisplayTasks
 import top.topsea.simplediffusion.util.getWidthDp
 
 
@@ -213,6 +214,23 @@ fun BaseScreen(
             uiViewModel = uiViewModel,
             imgDataViewModel = imgDataViewModel,
             paramViewModel = paramViewModel,
+        )
+    }
+
+    AnimatedVisibility(
+        visible = uiViewModel.displaying && uiViewModel.displayingTask >= 0,
+    ) {
+        DisplayTasks(
+            modifier = Modifier
+                .fillMaxSize(1F)
+                .background(Color(50, 50, 50, 0x88))
+                .clickable(
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() }
+                ) {
+                    uiViewModel.onEvent(UIEvent.DisplayTask(-1))
+                },
+            uiViewModel = uiViewModel,
             tasks = tasks,
             errorTasks = errorTasks,
             genState = genState,

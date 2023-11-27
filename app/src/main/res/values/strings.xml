@@ -46,6 +46,9 @@
     <string name="textfield_hint">Enter Message…</string>
     <string name="e_top_bar">Edit Param</string>
 
+    <!-- 主页中的字符串 -->
+    <string name="gird_header_task">Task</string>
+
 
     <!--文生图参数字符串-->
     <string name="enable_hr">enable_hr</string>
