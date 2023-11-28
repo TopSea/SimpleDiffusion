@@ -40,7 +40,6 @@ import top.topsea.simplediffusion.data.viewmodel.NormalViewModel
 import top.topsea.simplediffusion.data.viewmodel.ParamViewModel
 import top.topsea.simplediffusion.data.viewmodel.UIViewModel
 import top.topsea.simplediffusion.event.ControlNetEvent
-import top.topsea.simplediffusion.event.ImageEvent
 import top.topsea.simplediffusion.event.ParamEvent
 import top.topsea.simplediffusion.ui.screen.AboutSDScreen
 import top.topsea.simplediffusion.ui.screen.BaseBottomBar
@@ -51,10 +50,10 @@ import top.topsea.simplediffusion.ui.screen.CameraScreen
 import top.topsea.simplediffusion.ui.screen.CameraSettingScreen
 import top.topsea.simplediffusion.ui.screen.DesktopScreen
 import top.topsea.simplediffusion.ui.screen.ParamEditScreen
-import top.topsea.simplediffusion.ui.screen.SetParamEditScreen
+import top.topsea.simplediffusion.ui.screen.SetPEScreen
+import top.topsea.simplediffusion.ui.screen.SetTxtParamScreen
 import top.topsea.simplediffusion.ui.screen.SettingScreen
 import top.topsea.simplediffusion.ui.theme.SimpleDiffusionTheme
-import top.topsea.simplediffusion.util.DeleteImage
 import top.topsea.simplediffusion.util.FileUtil
 import top.topsea.simplediffusion.util.TaskQueue
 import top.topsea.simplediffusion.util.TextUtil
@@ -241,8 +240,14 @@ class MainActivity : ComponentActivity() {
                                     tasks = taskQueue.tasks,
                                 )
                             }
-                            composable(SetParamEditScreen.route) {
-                                SetParamEditScreen(
+                            composable(SetPEScreen.route) {
+                                SetPEScreen(
+                                    navController = navController,
+                                    uiViewModel = uiViewModel,
+                                )
+                            }
+                            composable(SetTxtParamScreen.route) {
+                                SetTxtParamScreen(
                                     navController = navController,
                                     uiViewModel = uiViewModel,
                                     normalViewModel = normalViewModel,

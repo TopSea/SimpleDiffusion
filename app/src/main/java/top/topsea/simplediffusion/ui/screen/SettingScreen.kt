@@ -51,9 +51,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.tencent.mmkv.MMKV
 import top.topsea.simplediffusion.AboutScreen
+import top.topsea.simplediffusion.SetPEScreen
 import top.topsea.simplediffusion.DesktopScreen
 import top.topsea.simplediffusion.R
-import top.topsea.simplediffusion.SetParamEditScreen
 import top.topsea.simplediffusion.api.dto.VaeModel
 import top.topsea.simplediffusion.data.param.TaskParam
 import top.topsea.simplediffusion.data.param.UserPrompt
@@ -401,8 +401,8 @@ fun DefaultSettings(
             }
             Divider(color = Color.LightGray, thickness = 1.dp)
             SettingGoTo(title = stringResource(id = R.string.sp_top_bar)) {
-                uiViewModel.onEvent(UIEvent.Navigate(SetParamEditScreen){
-                    navController.navigate(SetParamEditScreen.route)
+                uiViewModel.onEvent(UIEvent.Navigate(SetPEScreen){
+                    navController.navigate(SetPEScreen.route)
                 })
             }
         }

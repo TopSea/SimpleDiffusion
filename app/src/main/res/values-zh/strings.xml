@@ -314,6 +314,7 @@
     <!-- 编辑参数页面中的字符串 -->
     <string name="sp_top_bar">编辑生图参数页面</string>
     <string name="sp_top_bar_txt">文生图页面</string>
+    <string name="sp_top_bar_img">图生图页面</string>
     <string name="sp_default_value">默认值：</string>
 
     <!-- SimpleDiffusion 桌面中的字符串 -->

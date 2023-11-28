@@ -364,6 +364,7 @@
     <!-- 编辑参数页面中的字符串 -->
     <string name="sp_top_bar">Edit Generate Params</string>
     <string name="sp_top_bar_txt">Txt2Img Screen</string>
+    <string name="sp_top_bar_img">Img2Img Screen</string>
     <string name="sp_default_value">Default value: </string>
 
     <!-- SimpleDiffusion 桌面中的字符串 -->

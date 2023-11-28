@@ -39,6 +39,8 @@ fun updateCurrScreen(route: String) {
         SettingScreen.route -> { SettingScreen }
         EditScreen.route -> { EditScreen }
         EditCNScreen.route -> { EditCNScreen }
+        SetPEScreen.route -> { SetPEScreen }
+        SetTxtParamScreen.route -> { SetTxtParamScreen }
         AboutScreen.route -> { AboutScreen }
         CameraScreen.route -> { CameraScreen }
         CameraSettingScreen.route -> { CameraSettingScreen }
@@ -72,13 +74,22 @@ object SettingScreen : SimpleDestination {
     override val route: String = "settings"
 }
 
-object SetParamEditScreen : SimpleDestination {
+object SetPEScreen : SimpleDestination {
     override val topBar: @Composable (UIViewModel, NavController) -> Unit = { uiViewModel, navController: NavController ->
-        TopBar(navController = navController, title = stringResource(R.string.sp_top_bar_txt), screen = Screen.SET_PARAM) {
+        TopBar(navController = navController, title = stringResource(R.string.sp_top_bar), screen = Screen.SET_PARAM) {
             uiViewModel.onEvent(it)
         }
     }
     override val route: String = "set_param"
+}
+
+object SetTxtParamScreen : SimpleDestination {
+    override val topBar: @Composable (UIViewModel, NavController) -> Unit = { uiViewModel, navController: NavController ->
+        TopBar(navController = navController, title = stringResource(R.string.sp_top_bar_txt), screen = Screen.SET_PARAM_TXT) {
+            uiViewModel.onEvent(it)
+        }
+    }
+    override val route: String = "set_param_txt"
 }
 
 object EditScreen : SimpleDestination {

@@ -47,7 +47,7 @@ import top.topsea.simplediffusion.ui.component.StepRowInt
 import top.topsea.simplediffusion.ui.component.SwipeInt
 
 @Composable
-fun SetParamEditScreen(
+fun SetTxtParamScreen(
     navController: NavController,
     uiViewModel: UIViewModel,
     normalViewModel: NormalViewModel,
