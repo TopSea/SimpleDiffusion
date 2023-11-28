@@ -12,10 +12,12 @@ import androidx.room.Delete
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.PrimaryKey
 import androidx.room.Query
 import androidx.room.TypeConverters
 import androidx.room.Update
+import androidx.room.Upsert
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
 import top.topsea.simplediffusion.data.SerialConverter
@@ -194,21 +196,25 @@ data class SavableImgParam(
 @Dao
 interface ImgParamDao {
 //    @Query("SELECT * FROM ImgParam order by `id` desc limit 20")
-    @Query("SELECT * FROM ImgParam ORDER BY priority_order DESC")
-    fun getImgParams(): Flow<List<ImgParam>>
-    @Query("SELECT * FROM ImgParam WHERE name LIKE '%' || :searchTxt || '%' ORDER BY priority_order DESC")
-    fun getSearchParams(searchTxt: String): Flow<List<ImgParam>>
+    @Query("SELECT * FROM ImgParam WHERE id = :defaultID")
+    fun defaultImgParam(defaultID: Long): Flow<ImgParam>
+    @Query("SELECT * FROM ImgParam WHERE id != :defaultID ORDER BY priority_order DESC")
+    fun getImgParams(defaultID: Long): Flow<List<ImgParam>>
+    @Query("SELECT * FROM ImgParam WHERE id != :defaultID AND name LIKE '%' || :searchTxt || '%' ORDER BY priority_order DESC")
+    fun getSearchParams(searchTxt: String, defaultID: Long): Flow<List<ImgParam>>
 
     @Update(ImgParam::class)
     suspend fun update(imgParam: ImgParam)
+    @Upsert(ImgParam::class)
+    suspend fun upsert(imgParam: ImgParam)
     @Update(ImgParam::class)
     suspend fun update(pa: ParamActivate)
     @Update(ImgParam::class)
     suspend fun update(pi: ParamImage)
     @Update(ImgParam::class)
     suspend fun update(pcn: ParamControlNet)
-    @Insert
-    suspend fun insert(vararg imgParam: ImgParam)
+    @Insert(onConflict = OnConflictStrategy.REPLACE, entity = ImgParam::class)
+    suspend fun insert(imgParam: ImgParam): Long
     @Delete(ImgParam::class)
     suspend fun delete(imgParam: ImgParam): Int
 }

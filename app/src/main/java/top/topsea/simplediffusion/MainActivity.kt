@@ -50,6 +50,7 @@ import top.topsea.simplediffusion.ui.screen.CameraScreen
 import top.topsea.simplediffusion.ui.screen.CameraSettingScreen
 import top.topsea.simplediffusion.ui.screen.DesktopScreen
 import top.topsea.simplediffusion.ui.screen.ParamEditScreen
+import top.topsea.simplediffusion.ui.screen.SetImgParamScreen
 import top.topsea.simplediffusion.ui.screen.SetPEScreen
 import top.topsea.simplediffusion.ui.screen.SetTxtParamScreen
 import top.topsea.simplediffusion.ui.screen.SettingScreen
@@ -251,6 +252,15 @@ class MainActivity : ComponentActivity() {
                                     navController = navController,
                                     uiViewModel = uiViewModel,
                                     normalViewModel = normalViewModel,
+                                )
+                            }
+                            composable(SetImgParamScreen.route) {
+                                SetImgParamScreen(
+                                    navController = navController,
+                                    uiViewModel = uiViewModel,
+                                    normalViewModel = normalViewModel,
+                                    defaultImgParam = paramViewModel.iparam.collectAsState().value,
+                                    paramEvent = paramViewModel::paramEvent
                                 )
                             }
                             composable(AboutScreen.route) {

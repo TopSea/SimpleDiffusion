@@ -22,6 +22,7 @@ import top.topsea.simplediffusion.api.dto.VaeModel
 import top.topsea.simplediffusion.api.impl.NormalApiImp
 import top.topsea.simplediffusion.api.impl.PromptApiImp
 import top.topsea.simplediffusion.currentScreen
+import top.topsea.simplediffusion.data.param.TxtParam
 import top.topsea.simplediffusion.data.state.UIEvent
 import top.topsea.simplediffusion.event.ExecuteState
 import top.topsea.simplediffusion.util.Constant
@@ -56,6 +57,7 @@ class UIViewModel @Inject constructor(
     var cameraTab by mutableStateOf(0)
         private set     // 拍摄设置页面 Tab 序号
 
+    
     var tDisplayPri by mutableStateOf(
         kv.decodeInt(Constant.k_t_display_pri, 0)
     )
@@ -166,6 +168,76 @@ class UIViewModel @Inject constructor(
         private set     // 是否显示脚本
     var tCNSwitch by mutableStateOf(
         kv.decodeBool(Constant.k_t_cn_s, true)
+    )
+        private set     // 是否显示 ControlNet
+
+    
+    var iDisplayPriSwitch by mutableStateOf(
+        kv.decodeBool(Constant.k_i_display_pri_s, true)
+    )
+        private set     // 是否显示显示优先级
+    var iSDModelSwitch by mutableStateOf(
+        kv.decodeBool(Constant.k_i_sdmodel_s, true)
+    )
+        private set     // 是否显示基础大模型
+    var iRefineModelSwitch by mutableStateOf(
+        kv.decodeBool(Constant.k_i_refinermodel_s, true)
+    )
+        private set     // 是否显示 Refiner 大模型
+    var iRefineAtSwitch by mutableStateOf(
+        kv.decodeBool(Constant.k_i_refinerat_s, true)
+    )
+        private set     // 是否显示Refiner 时机
+    var iPromptSwitch by mutableStateOf(
+        kv.decodeBool(Constant.k_i_prompt_s, true)
+    )
+        private set     // 是否显示正面提示词
+    var iPromptAdSwitch by mutableStateOf(
+        kv.decodeBool(Constant.k_i_promptad_s, true)
+    )
+        private set     // 是否显示正面提示词的可添加项
+    var iNPromptSwitch by mutableStateOf(
+        kv.decodeBool(Constant.k_i_nprompt_s, true)
+    )
+        private set     // 是否显示负面提示词
+    var iDnoiseSwitch by mutableStateOf(
+        kv.decodeBool(Constant.k_i_dnoise_s, true)
+    )
+        private set     // 是否显示重绘幅度
+    var iImgWidthSwitch by mutableStateOf(
+        kv.decodeBool(Constant.k_i_imgw_s, true)
+    )
+        private set     // 是否显示图片宽度
+    var iImgHeightSwitch by mutableStateOf(
+        kv.decodeBool(Constant.k_i_imgh_s, true)
+    )
+        private set     // 是否显示图片高度
+    var iStepsSwitch by mutableStateOf(
+        kv.decodeBool(Constant.k_i_step_s, true)
+    )
+        private set     // 是否显示生成步数
+    var iCFGSwitch by mutableStateOf(
+        kv.decodeBool(Constant.k_i_cfg_s, true)
+    )
+        private set     // 是否显示提示词相关性
+    var iSamplerSwitch by mutableStateOf(
+        kv.decodeBool(Constant.k_i_sampler_s, true)
+    )
+        private set     // 是否显示 sampler
+    var iBatchSizeSwitch by mutableStateOf(
+        kv.decodeBool(Constant.k_i_bsize_s, true)
+    )
+        private set     // 是否显示每批次生成数
+    var iSDPromptSwitch by mutableStateOf(
+        kv.decodeBool(Constant.k_i_sdprompt_s, true)
+    )
+        private set     // 是否显示脚本
+    var iScriptSwitch by mutableStateOf(
+        kv.decodeBool(Constant.k_i_script_s, true)
+    )
+        private set     // 是否显示脚本
+    var iCNSwitch by mutableStateOf(
+        kv.decodeBool(Constant.k_i_cn_s, true)
     )
         private set     // 是否显示 ControlNet
 
@@ -505,6 +577,76 @@ class UIViewModel @Inject constructor(
             is UIEvent.UpdateTCNS -> {
                 tCNSwitch = event.switch
                 kv.encode(Constant.k_t_cn_s, event.switch)
+            }
+
+
+            is UIEvent.UpdateIDPS -> {
+                iDisplayPriSwitch = event.switch
+                kv.encode(Constant.k_i_display_pri_s, event.switch)
+            }
+            is UIEvent.UpdateISDMS -> {
+                iSDModelSwitch = event.switch
+                kv.encode(Constant.k_i_sdmodel_s, event.switch)
+            }
+            is UIEvent.UpdateIRMS -> {
+                iRefineModelSwitch = event.switch
+                kv.encode(Constant.k_i_refinermodel_s, event.switch)
+            }
+            is UIEvent.UpdateIRAS -> {
+                iRefineAtSwitch = event.switch
+                kv.encode(Constant.k_i_refinerat_s, event.switch)
+            }
+            is UIEvent.UpdateIPS -> {
+                iPromptSwitch = event.switch
+                kv.encode(Constant.k_i_prompt_s, event.switch)
+            }
+            is UIEvent.UpdateIPAS -> {
+                iPromptAdSwitch = event.switch
+                kv.encode(Constant.k_i_promptad_s, event.switch)
+            }
+            is UIEvent.UpdateINPS -> {
+                iNPromptSwitch = event.switch
+                kv.encode(Constant.k_i_nprompt_s, event.switch)
+            }
+            is UIEvent.UpdateIDNS -> {
+                iDnoiseSwitch = event.switch
+                kv.encode(Constant.k_i_dnoise_s, event.switch)
+            }
+            is UIEvent.UpdateIIWS -> {
+                iImgWidthSwitch = event.switch
+                kv.encode(Constant.k_i_imgw_s, event.switch)
+            }
+            is UIEvent.UpdateIIHS -> {
+                iImgHeightSwitch = event.switch
+                kv.encode(Constant.k_i_imgh_s, event.switch)
+            }
+            is UIEvent.UpdateISS -> {
+                iStepsSwitch = event.switch
+                kv.encode(Constant.k_i_step_s, event.switch)
+            }
+            is UIEvent.UpdateICS -> {
+                iCFGSwitch = event.switch
+                kv.encode(Constant.k_i_cfg_s, event.switch)
+            }
+            is UIEvent.UpdateISamplerS -> {
+                iSamplerSwitch = event.switch
+                kv.encode(Constant.k_i_sampler_s, event.switch)
+            }
+            is UIEvent.UpdateIBSS -> {
+                iBatchSizeSwitch = event.switch
+                kv.encode(Constant.k_i_bsize_s, event.switch)
+            }
+            is UIEvent.UpdateIScriptS -> {
+                iScriptSwitch = event.switch
+                kv.encode(Constant.k_i_script_s, event.switch)
+            }
+            is UIEvent.UpdateISDPS -> {
+                iSDPromptSwitch = event.switch
+                kv.encode(Constant.k_i_sdprompt_s, event.switch)
+            }
+            is UIEvent.UpdateICNS -> {
+                iCNSwitch = event.switch
+                kv.encode(Constant.k_i_cn_s, event.switch)
             }
         }
     }

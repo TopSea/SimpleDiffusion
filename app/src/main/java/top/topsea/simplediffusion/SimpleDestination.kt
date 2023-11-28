@@ -92,6 +92,15 @@ object SetTxtParamScreen : SimpleDestination {
     override val route: String = "set_param_txt"
 }
 
+object SetImgParamScreen : SimpleDestination {
+    override val topBar: @Composable (UIViewModel, NavController) -> Unit = { uiViewModel, navController: NavController ->
+        TopBar(navController = navController, title = stringResource(R.string.sp_top_bar_img), screen = Screen.SET_PARAM_IMG) {
+            uiViewModel.onEvent(it)
+        }
+    }
+    override val route: String = "set_param_img"
+}
+
 object EditScreen : SimpleDestination {
     override val topBar: @Composable (UIViewModel, NavController) -> Unit = { uiViewModel, navController: NavController ->
         TopBar(navController = navController, title = stringResource(R.string.e_top_bar), screen = Screen.EDIT) {

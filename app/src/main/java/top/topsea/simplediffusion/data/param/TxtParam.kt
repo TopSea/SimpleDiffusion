@@ -14,6 +14,7 @@ import androidx.room.PrimaryKey
 import androidx.room.Query
 import androidx.room.TypeConverters
 import androidx.room.Update
+import androidx.room.Upsert
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
 import top.topsea.simplediffusion.data.SerialConverter
@@ -173,11 +174,15 @@ data class SavableTxtParam(
 @Dao
 interface TxtParamDao {
 //    @Query("SELECT * FROM TxtParam order by `id` desc limit 20")
-    @Query("SELECT * FROM TxtParam ORDER BY priority_order DESC")
+    @Query("SELECT * FROM TxtParam WHERE id = 0")
+    fun defaultTxtParam(): Flow<TxtParam>
+    @Query("SELECT * FROM TxtParam WHERE id > 0 ORDER BY priority_order DESC")
     fun getTxtParams(): Flow<List<TxtParam>>
-    @Query("SELECT * FROM TxtParam WHERE name LIKE '%' || :searchTxt || '%' ORDER BY priority_order DESC")
+    @Query("SELECT * FROM TxtParam WHERE id > 0 AND name LIKE '%' || :searchTxt || '%' ORDER BY priority_order DESC")
     fun getSearchParams(searchTxt: String): Flow<List<TxtParam>>
 
+    @Upsert(TxtParam::class)
+    suspend fun upsert(txtParam: TxtParam)
     @Update(TxtParam::class)
     suspend fun update(txtParam: TxtParam)
     @Update(TxtParam::class)

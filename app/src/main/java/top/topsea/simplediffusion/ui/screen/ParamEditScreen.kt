@@ -195,7 +195,7 @@ fun ParamEditContent(
                         thickness = 2.dp,
                         color = cardColor
                     )
-                    if (!isImg2Img && uiViewModel.tDisplayPriSwitch) {
+                    if ((!isImg2Img && uiViewModel.tDisplayPriSwitch) || (isImg2Img && uiViewModel.iDisplayPriSwitch)) {
                         StepRowInt(
                             name = stringResource(id = R.string.r_sort_order),
                             int = order,
@@ -207,7 +207,7 @@ fun ParamEditContent(
                             color = cardColor
                         )
                     }
-                    if (!isImg2Img && uiViewModel.tSDModelSwitch) {
+                    if ((!isImg2Img && uiViewModel.tSDModelSwitch) || (isImg2Img && uiViewModel.iSDModelSwitch)) {
                         ParamRowChoice(
                             name = stringResource(id = R.string.r_base_model),
                             currChoice = baseModel,
@@ -221,7 +221,7 @@ fun ParamEditContent(
                             color = cardColor
                         )
                     }
-                    if (!isImg2Img && uiViewModel.tRefineModelSwitch) {
+                    if ((!isImg2Img && uiViewModel.tRefineModelSwitch) || (isImg2Img && uiViewModel.iRefineModelSwitch)) {
                         ParamRowChoice(
                             name = stringResource(id = R.string.r_refiner_model),
                             currChoice = refinerModel,
@@ -235,7 +235,7 @@ fun ParamEditContent(
                             color = cardColor
                         )
                     }
-                    if (!isImg2Img && uiViewModel.tRefineAtSwitch) {
+                    if ((!isImg2Img && uiViewModel.tRefineAtSwitch) || (isImg2Img && uiViewModel.iRefineAtSwitch)) {
                         StepRowFloat(
                             name = stringResource(id = R.string.r_refiner_at),
                             float = refinerAt,
@@ -247,7 +247,7 @@ fun ParamEditContent(
                             color = cardColor
                         )
                     }
-                    if (!isImg2Img && uiViewModel.tImgWidthSwitch) {
+                    if ((!isImg2Img && uiViewModel.tImgWidthSwitch) || (isImg2Img && uiViewModel.iImgWidthSwitch)) {
                         SwipeInt(
                             boldTitle = true,
                             name = stringResource(id = R.string.r_img_width),
@@ -259,7 +259,7 @@ fun ParamEditContent(
                             color = cardColor
                         )
                     }
-                    if (!isImg2Img && uiViewModel.tImgHeightSwitch) {
+                    if ((!isImg2Img && uiViewModel.tImgHeightSwitch) || (isImg2Img && uiViewModel.iImgHeightSwitch)) {
                         SwipeInt(
                             boldTitle = true,
                             name = stringResource(id = R.string.r_img_height),
@@ -271,7 +271,7 @@ fun ParamEditContent(
                             color = cardColor
                         )
                     }
-                    if (!isImg2Img && uiViewModel.tStepsSwitch) {
+                    if ((!isImg2Img && uiViewModel.tStepsSwitch) || (isImg2Img && uiViewModel.iStepsSwitch)) {
                         StepRowInt(
                             name = stringResource(id = R.string.r_gen_steps),
                             int = steps,
@@ -283,7 +283,7 @@ fun ParamEditContent(
                             color = cardColor
                         )
                     }
-                    if (!isImg2Img && uiViewModel.tCFGSwitch) {
+                    if ((!isImg2Img && uiViewModel.tCFGSwitch) || (isImg2Img && uiViewModel.iCFGSwitch)) {
                         StepRowFloat(
                             name = stringResource(id = R.string.r_cfg_scales),
                             float = cfgScale,
@@ -295,7 +295,7 @@ fun ParamEditContent(
                             color = cardColor
                         )
                     }
-                    if (!isImg2Img && uiViewModel.tSamplerSwitch) {
+                    if ((!isImg2Img && uiViewModel.tSamplerSwitch) || (isImg2Img && uiViewModel.iSamplerSwitch)) {
                         ParamRowChooseSampler(
                             name = stringResource(id = R.string.r_choose_sampler),
                             currChoice = sampler_index,
@@ -306,7 +306,7 @@ fun ParamEditContent(
                             color = cardColor
                         )
                     }
-                    if (!isImg2Img && uiViewModel.tBatchSizeSwitch) {
+                    if ((!isImg2Img && uiViewModel.tBatchSizeSwitch) || (isImg2Img && uiViewModel.iBatchSizeSwitch)) {
                         StepRowInt(
                             name = stringResource(id = R.string.r_batch_size),
                             int = batch_size,
@@ -318,7 +318,7 @@ fun ParamEditContent(
                             color = cardColor
                         )
                     }
-                    if (!isImg2Img && uiViewModel.tSDPromptSwitch) {
+                    if ((!isImg2Img && uiViewModel.tSDPromptSwitch) || (isImg2Img && uiViewModel.iSDPromptSwitch)) {
                         // SD 服务器中保存的 Prompt 样式
                         ParamRowChoice(
                             name = stringResource(id = R.string.r_sd_prompt),
@@ -342,7 +342,7 @@ fun ParamEditContent(
                             color = cardColor
                         )
                     }
-                    if (!isImg2Img && uiViewModel.tPromptSwitch) {
+                    if ((!isImg2Img && uiViewModel.tPromptSwitch) || (isImg2Img && uiViewModel.iPromptSwitch)) {
                         ParamRowPrompt(
                             name = stringResource(id = R.string.r_prompt),
                             loras = loras,
@@ -358,7 +358,7 @@ fun ParamEditContent(
                             color = cardColor
                         )
                     }
-                    if (!isImg2Img && uiViewModel.tNPromptSwitch) {
+                    if ((!isImg2Img && uiViewModel.tNPromptSwitch) || (isImg2Img && uiViewModel.iNPromptSwitch)) {
                         ParamRowNegPrompt(
                             name = stringResource(id = R.string.r_neg_prompt),
                             prompt = defaultNegPrompt,
@@ -387,7 +387,7 @@ fun ParamEditContent(
                             color = cardColor
                         )
                     }
-                    if (!isImg2Img && uiViewModel.tScriptSwitch) {
+                    if ((!isImg2Img && uiViewModel.tScriptSwitch) || (isImg2Img && uiViewModel.iScriptSwitch)) {
                         // 脚本
                         ParamRowChoice(
                             name = stringResource(id = R.string.r_scripts),
@@ -405,7 +405,7 @@ fun ParamEditContent(
                             color = cardColor
                         )
                     }
-                    if (!isImg2Img && uiViewModel.tCNSwitch) {
+                    if ((!isImg2Img && uiViewModel.tCNSwitch) || (isImg2Img && uiViewModel.iCNSwitch)) {
                         ParamRowControlNet(
                             name = stringResource(id = R.string.r_control_net),
                             cnModels = cnModels,

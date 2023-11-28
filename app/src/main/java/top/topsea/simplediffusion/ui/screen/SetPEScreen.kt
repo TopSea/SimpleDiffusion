@@ -67,7 +67,9 @@ fun SetPERows(
             }
             Divider()
             SettingGoTo(title = stringResource(id = R.string.sp_top_bar_img)) {
-                // TODO
+                uiViewModel.onEvent(UIEvent.Navigate(top.topsea.simplediffusion.SetImgParamScreen){
+                    navController.navigate(top.topsea.simplediffusion.SetImgParamScreen.route)
+                })
             }
         }
     }

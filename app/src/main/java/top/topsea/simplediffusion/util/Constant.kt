@@ -25,6 +25,7 @@ object Constant {
     const val k_ex_agent_scheduler = "ex_gen_scheduler"
     const val k_ex_sd_prompt = "ex_sd_prompt"
 
+    const val k_t_default_id = "k_t_default_id"
     const val k_t_display_pri = "k_t_display_pri"
     const val k_t_display_pri_s = "k_t_display_pri_s"
     const val k_t_sdmodel = "k_t_sdmodel"
@@ -53,6 +54,25 @@ object Constant {
     const val k_t_sdprompt_s = "k_t_sdprompt_s"
     const val k_t_script_s = "k_t_script_s"
     const val k_t_cn_s = "k_t_cn_s"
+
+    const val k_i_default_id = "k_i_default_id"
+    const val k_i_display_pri_s = "k_i_display_pri_s"
+    const val k_i_sdmodel_s = "k_i_sdmodel_s"
+    const val k_i_refinermodel_s = "k_i_refinermodel_s"
+    const val k_i_refinerat_s = "k_i_refinerat_s"
+    const val k_i_prompt_s = "k_i_prompt_s"
+    const val k_i_promptad_s = "k_i_promptad_s"
+    const val k_i_nprompt_s = "k_i_nprompt_s"
+    const val k_i_dnoise_s = "k_i_dnoise_s"
+    const val k_i_imgw_s = "k_i_imgw_s"
+    const val k_i_imgh_s = "k_i_imgh_s"
+    const val k_i_step_s = "k_i_step_s"
+    const val k_i_cfg_s = "k_i_cfg_s"
+    const val k_i_sampler_s = "k_i_sampler_s"
+    const val k_i_bsize_s = "k_i_bsize_s"
+    const val k_i_sdprompt_s = "k_i_sdprompt_s"
+    const val k_i_script_s = "k_i_script_s"
+    const val k_i_cn_s = "k_i_cn_s"
 
     var TAG_RECEIPT_HEADER = "\${HZ}$:"
     var SERVER_PORT = 10086

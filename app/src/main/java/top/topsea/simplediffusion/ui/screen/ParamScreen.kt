@@ -84,7 +84,7 @@ fun ParamScreen(
                     paramEvent = paramEvent,
                     cnEvent = cnEvent,
                 ){
-                    paramEvent(ParamEvent.AddParam(ImgParam()))
+                    paramEvent(ParamEvent.AddByDefaultParam(true))
                 }
             }
             2 -> {

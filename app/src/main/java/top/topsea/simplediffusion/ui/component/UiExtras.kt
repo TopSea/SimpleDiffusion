@@ -73,6 +73,7 @@ enum class Screen {
     SETTING,
     SET_PARAM,
     SET_PARAM_TXT,
+    SET_PARAM_IMG,
     EDIT,
     EDIT_CN,
     ABOUT,
@@ -147,6 +148,14 @@ fun TopBar(
                     }
             })
             Screen.SET_PARAM_TXT -> BaseTopBar(
+                modifier = Modifier.background(color = MaterialTheme.colorScheme.primary),
+                title = title,
+                startIcon = {
+                    backIcon {
+                        navUp(navController)
+                    }
+            })
+            Screen.SET_PARAM_IMG -> BaseTopBar(
                 modifier = Modifier.background(color = MaterialTheme.colorScheme.primary),
                 title = title,
                 startIcon = {

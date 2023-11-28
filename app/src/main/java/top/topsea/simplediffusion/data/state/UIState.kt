@@ -67,4 +67,23 @@ sealed class UIEvent {
     data class UpdateTSDPS(val switch: Boolean): UIEvent()
     data class UpdateTScriptS(val switch: Boolean): UIEvent()
     data class UpdateTCNS(val switch: Boolean): UIEvent()
+
+
+    data class UpdateIDPS(val switch: Boolean): UIEvent()
+    data class UpdateISDMS(val switch: Boolean): UIEvent()
+    data class UpdateIRMS(val switch: Boolean): UIEvent()
+    data class UpdateIRAS(val switch: Boolean): UIEvent()
+    data class UpdateIPS(val switch: Boolean): UIEvent()
+    data class UpdateIPAS(val switch: Boolean): UIEvent()
+    data class UpdateINPS(val switch: Boolean): UIEvent()
+    data class UpdateIDNS(val switch: Boolean): UIEvent()
+    data class UpdateIIWS(val switch: Boolean): UIEvent()
+    data class UpdateIIHS(val switch: Boolean): UIEvent()
+    data class UpdateISS(val switch: Boolean): UIEvent()
+    data class UpdateICS(val switch: Boolean): UIEvent()
+    data class UpdateISamplerS(val switch: Boolean): UIEvent()
+    data class UpdateIBSS(val switch: Boolean): UIEvent()
+    data class UpdateISDPS(val switch: Boolean): UIEvent()
+    data class UpdateIScriptS(val switch: Boolean): UIEvent()
+    data class UpdateICNS(val switch: Boolean): UIEvent()
 }
