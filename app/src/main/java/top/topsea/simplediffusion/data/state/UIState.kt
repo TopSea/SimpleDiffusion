@@ -38,6 +38,7 @@ sealed class UIEvent {
     data class Send2Desktop(val str: String): UIEvent()
 
 
+    data class TempParamShow(val switch: Boolean): UIEvent()
     data class UpdateTDPS(val switch: Boolean): UIEvent()
     data class UpdateTSDMS(val switch: Boolean): UIEvent()
     data class UpdateTRMS(val switch: Boolean): UIEvent()

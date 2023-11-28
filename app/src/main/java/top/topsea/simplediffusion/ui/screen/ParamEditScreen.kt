@@ -191,23 +191,23 @@ fun ParamEditContent(
                         title = stringResource(id = R.string.r_param_name),
                         name = name
                     )
-                    Divider(
-                        thickness = 2.dp,
-                        color = cardColor
-                    )
-                    if ((!isImg2Img && uiViewModel.tDisplayPriSwitch) || (isImg2Img && uiViewModel.iDisplayPriSwitch)) {
+                    if ((!isImg2Img && uiViewModel.tDisplayPriSwitch) || uiViewModel.tempParamShow || (isImg2Img && uiViewModel.iDisplayPriSwitch)) {
+                        Divider(
+                            thickness = 2.dp,
+                            color = cardColor
+                        )
                         StepRowInt(
                             name = stringResource(id = R.string.r_sort_order),
                             int = order,
                             step = 1,
                             max = Int.MAX_VALUE
                         )
+                    }
+                    if ((!isImg2Img && uiViewModel.tSDModelSwitch) || uiViewModel.tempParamShow || (isImg2Img && uiViewModel.iSDModelSwitch)) {
                         Divider(
                             thickness = 2.dp,
                             color = cardColor
                         )
-                    }
-                    if ((!isImg2Img && uiViewModel.tSDModelSwitch) || (isImg2Img && uiViewModel.iSDModelSwitch)) {
                         ParamRowChoice(
                             name = stringResource(id = R.string.r_base_model),
                             currChoice = baseModel,
@@ -216,12 +216,12 @@ fun ParamEditContent(
                                 normalViewModel.refreshBases()
                             }
                         )
+                    }
+                    if ((!isImg2Img && uiViewModel.tRefineModelSwitch) || uiViewModel.tempParamShow || (isImg2Img && uiViewModel.iRefineModelSwitch)) {
                         Divider(
                             thickness = 2.dp,
                             color = cardColor
                         )
-                    }
-                    if ((!isImg2Img && uiViewModel.tRefineModelSwitch) || (isImg2Img && uiViewModel.iRefineModelSwitch)) {
                         ParamRowChoice(
                             name = stringResource(id = R.string.r_refiner_model),
                             currChoice = refinerModel,
@@ -230,95 +230,95 @@ fun ParamEditContent(
                                 normalViewModel.refreshBases()
                             }
                         )
+                    }
+                    if ((!isImg2Img && uiViewModel.tRefineAtSwitch) || uiViewModel.tempParamShow || (isImg2Img && uiViewModel.iRefineAtSwitch)) {
                         Divider(
                             thickness = 2.dp,
                             color = cardColor
                         )
-                    }
-                    if ((!isImg2Img && uiViewModel.tRefineAtSwitch) || (isImg2Img && uiViewModel.iRefineAtSwitch)) {
                         StepRowFloat(
                             name = stringResource(id = R.string.r_refiner_at),
                             float = refinerAt,
                             step = 0.1f,
                             max = 1f,
                         )
+                    }
+                    if ((!isImg2Img && uiViewModel.tImgWidthSwitch) || uiViewModel.tempParamShow || (isImg2Img && uiViewModel.iImgWidthSwitch)) {
                         Divider(
                             thickness = 2.dp,
                             color = cardColor
                         )
-                    }
-                    if ((!isImg2Img && uiViewModel.tImgWidthSwitch) || (isImg2Img && uiViewModel.iImgWidthSwitch)) {
                         SwipeInt(
                             boldTitle = true,
                             name = stringResource(id = R.string.r_img_width),
                             int = width,
                             max = 2048
                         )
+                    }
+                    if ((!isImg2Img && uiViewModel.tImgHeightSwitch) || uiViewModel.tempParamShow || (isImg2Img && uiViewModel.iImgHeightSwitch)) {
                         Divider(
                             thickness = 2.dp,
                             color = cardColor
                         )
-                    }
-                    if ((!isImg2Img && uiViewModel.tImgHeightSwitch) || (isImg2Img && uiViewModel.iImgHeightSwitch)) {
                         SwipeInt(
                             boldTitle = true,
                             name = stringResource(id = R.string.r_img_height),
                             int = height,
                             max = 2048
                         )
+                    }
+                    if ((!isImg2Img && uiViewModel.tStepsSwitch) || uiViewModel.tempParamShow || (isImg2Img && uiViewModel.iStepsSwitch)) {
                         Divider(
                             thickness = 2.dp,
                             color = cardColor
                         )
-                    }
-                    if ((!isImg2Img && uiViewModel.tStepsSwitch) || (isImg2Img && uiViewModel.iStepsSwitch)) {
                         StepRowInt(
                             name = stringResource(id = R.string.r_gen_steps),
                             int = steps,
                             step = 1,
                             max = 150
                         )
+                    }
+                    if ((!isImg2Img && uiViewModel.tCFGSwitch) || uiViewModel.tempParamShow || (isImg2Img && uiViewModel.iCFGSwitch)) {
                         Divider(
                             thickness = 2.dp,
                             color = cardColor
                         )
-                    }
-                    if ((!isImg2Img && uiViewModel.tCFGSwitch) || (isImg2Img && uiViewModel.iCFGSwitch)) {
                         StepRowFloat(
                             name = stringResource(id = R.string.r_cfg_scales),
                             float = cfgScale,
                             step = 0.1f,
                             max = 15f,
                         )
+                    }
+                    if ((!isImg2Img && uiViewModel.tSamplerSwitch) || uiViewModel.tempParamShow || (isImg2Img && uiViewModel.iSamplerSwitch)) {
                         Divider(
                             thickness = 2.dp,
                             color = cardColor
                         )
-                    }
-                    if ((!isImg2Img && uiViewModel.tSamplerSwitch) || (isImg2Img && uiViewModel.iSamplerSwitch)) {
                         ParamRowChooseSampler(
                             name = stringResource(id = R.string.r_choose_sampler),
                             currChoice = sampler_index,
                             content = baseState.samplers
                         )
+                    }
+                    if ((!isImg2Img && uiViewModel.tBatchSizeSwitch) || uiViewModel.tempParamShow || (isImg2Img && uiViewModel.iBatchSizeSwitch)) {
                         Divider(
                             thickness = 2.dp,
                             color = cardColor
                         )
-                    }
-                    if ((!isImg2Img && uiViewModel.tBatchSizeSwitch) || (isImg2Img && uiViewModel.iBatchSizeSwitch)) {
                         StepRowInt(
                             name = stringResource(id = R.string.r_batch_size),
                             int = batch_size,
                             max = 20,
                             min = 1
                         )
+                    }
+                    if ((!isImg2Img && uiViewModel.tSDPromptSwitch) || uiViewModel.tempParamShow || (isImg2Img && uiViewModel.iSDPromptSwitch)) {
                         Divider(
                             thickness = 2.dp,
                             color = cardColor
                         )
-                    }
-                    if ((!isImg2Img && uiViewModel.tSDPromptSwitch) || (isImg2Img && uiViewModel.iSDPromptSwitch)) {
                         // SD 服务器中保存的 Prompt 样式
                         ParamRowChoice(
                             name = stringResource(id = R.string.r_sd_prompt),
@@ -337,12 +337,12 @@ fun ParamEditContent(
                                 maxLines = 1
                             )
                         }
+                    }
+                    if ((!isImg2Img && uiViewModel.tPromptSwitch) || uiViewModel.tempParamShow || (isImg2Img && uiViewModel.iPromptSwitch)) {
                         Divider(
                             thickness = 2.dp,
                             color = cardColor
                         )
-                    }
-                    if ((!isImg2Img && uiViewModel.tPromptSwitch) || (isImg2Img && uiViewModel.iPromptSwitch)) {
                         ParamRowPrompt(
                             name = stringResource(id = R.string.r_prompt),
                             loras = loras,
@@ -353,41 +353,43 @@ fun ParamEditContent(
                                 normalViewModel.refreshLoras()
                             }
                         )
+                    }
+                    if ((!isImg2Img && uiViewModel.tNPromptSwitch) || uiViewModel.tempParamShow || (isImg2Img && uiViewModel.iNPromptSwitch)) {
                         Divider(
                             thickness = 2.dp,
                             color = cardColor
                         )
-                    }
-                    if ((!isImg2Img && uiViewModel.tNPromptSwitch) || (isImg2Img && uiViewModel.iNPromptSwitch)) {
                         ParamRowNegPrompt(
                             name = stringResource(id = R.string.r_neg_prompt),
                             prompt = defaultNegPrompt,
                             onRefresh = suspend { }
                         )
-                        Divider(
-                            thickness = 2.dp,
-                            color = cardColor
-                        )
                     }
                     if (isImg2Img) {
-                        StepRowFloat(
-                            name = stringResource(id = R.string.r_denoising_strength),
-                            float = denoising_strength,
-                            max = 1f,
-                            step = 0.01f,
-                            ff = "%.2f",
-                        )
+                        if (uiViewModel.iDnoiseSwitch) {
+                            Divider(
+                                thickness = 2.dp,
+                                color = cardColor
+                            )
+                            StepRowFloat(
+                                name = stringResource(id = R.string.r_denoising_strength),
+                                float = denoising_strength,
+                                max = 1f,
+                                step = 0.01f,
+                                ff = "%.2f",
+                            )
+                        }
                         Divider(
                             thickness = 2.dp,
                             color = cardColor
                         )
                         ParamRowImgChoose(base64Str = image)
+                    }
+                    if ((!isImg2Img && uiViewModel.tScriptSwitch) || uiViewModel.tempParamShow || (isImg2Img && uiViewModel.iScriptSwitch)) {
                         Divider(
                             thickness = 2.dp,
                             color = cardColor
                         )
-                    }
-                    if ((!isImg2Img && uiViewModel.tScriptSwitch) || (isImg2Img && uiViewModel.iScriptSwitch)) {
                         // 脚本
                         ParamRowChoice(
                             name = stringResource(id = R.string.r_scripts),
@@ -400,12 +402,12 @@ fun ParamEditContent(
                         } else if (script_name.value == "Ultimate SD upscale") {
                             USDUpscaleScript(script_args)
                         }
+                    }
+                    if ((!isImg2Img && uiViewModel.tCNSwitch) || uiViewModel.tempParamShow || (isImg2Img && uiViewModel.iCNSwitch)) {
                         Divider(
                             thickness = 2.dp,
                             color = cardColor
                         )
-                    }
-                    if ((!isImg2Img && uiViewModel.tCNSwitch) || (isImg2Img && uiViewModel.iCNSwitch)) {
                         ParamRowControlNet(
                             name = stringResource(id = R.string.r_control_net),
                             cnModels = cnModels,

@@ -58,6 +58,8 @@ class UIViewModel @Inject constructor(
         private set     // 拍摄设置页面 Tab 序号
 
 
+    var tempParamShow by mutableStateOf(false)
+        private set
     var tDisplayPriSwitch by mutableStateOf(
         kv.decodeBool(Constant.k_t_display_pri_s, true)
     )
@@ -417,6 +419,9 @@ class UIViewModel @Inject constructor(
             }
 
 
+            is UIEvent.TempParamShow -> {
+                tempParamShow = event.switch
+            }
             is UIEvent.UpdateTDPS -> {
                 tDisplayPriSwitch = event.switch
                 kv.encode(Constant.k_t_display_pri_s, event.switch)

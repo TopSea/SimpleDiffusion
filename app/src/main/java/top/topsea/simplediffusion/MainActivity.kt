@@ -305,6 +305,9 @@ class MainActivity : ComponentActivity() {
                                 uiViewModel.onEvent(UIEvent.Display(false))
                                 return@BackHandler
                             }
+                            if (uiViewModel.tempParamShow) {
+                                uiViewModel.onEvent(UIEvent.TempParamShow(false))
+                            }
                             if (!navController.popBackStack())
                                 this.finish()
                             else

@@ -6,6 +6,7 @@ import androidx.annotation.Keep
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -24,6 +25,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Settings
@@ -65,6 +68,7 @@ import top.topsea.simplediffusion.data.param.UserPrompt
 import top.topsea.simplediffusion.data.state.UIEvent
 import top.topsea.simplediffusion.navUp
 import top.topsea.simplediffusion.util.Constant
+import top.topsea.simplediffusion.util.TextUtil
 
 
 @Keep
@@ -102,6 +106,8 @@ fun TopBar(
     },
     navOp: (UIEvent) -> Unit
 ) {
+    var tempParamShow by remember { mutableStateOf(false) }
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -166,11 +172,22 @@ fun TopBar(
             Screen.EDIT -> BaseTopBar(
                 modifier = Modifier.background(color = MaterialTheme.colorScheme.primary),
                 title = title,
-                startIcon = {
-                backIcon {
-                    navUp(navController)
-                }
-            })
+                startIcon = { backIcon {  } }
+            ){
+                Icon(
+                    imageVector = if (tempParamShow) Icons.Filled.Info else Icons.Outlined.Info,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(end = 16.dp, top = 4.dp, bottom = 8.dp)
+                        .size(32.dp)
+                        .align(Alignment.CenterEnd)
+                        .clickable(indication = null, interactionSource = remember { MutableInteractionSource() }) {
+                            tempParamShow = !tempParamShow
+                            navOp(UIEvent.TempParamShow(tempParamShow))
+                        },
+                    tint = Color.White
+                )
+            }
             Screen.EDIT_CN -> BaseTopBar(
                 modifier = Modifier.background(color = MaterialTheme.colorScheme.primary),
                 title = title,

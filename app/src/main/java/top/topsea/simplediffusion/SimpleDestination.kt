@@ -41,6 +41,7 @@ fun updateCurrScreen(route: String) {
         EditCNScreen.route -> { EditCNScreen }
         SetPEScreen.route -> { SetPEScreen }
         SetTxtParamScreen.route -> { SetTxtParamScreen }
+        SetImgParamScreen.route -> { SetImgParamScreen }
         AboutScreen.route -> { AboutScreen }
         CameraScreen.route -> { CameraScreen }
         CameraSettingScreen.route -> { CameraSettingScreen }
@@ -103,7 +104,24 @@ object SetImgParamScreen : SimpleDestination {
 
 object EditScreen : SimpleDestination {
     override val topBar: @Composable (UIViewModel, NavController) -> Unit = { uiViewModel, navController: NavController ->
-        TopBar(navController = navController, title = stringResource(R.string.e_top_bar), screen = Screen.EDIT) {
+        TopBar(navController = navController, title = stringResource(R.string.e_top_bar), screen = Screen.EDIT,
+            backIcon = {
+                Icon(
+                    imageVector = Icons.Rounded.ArrowBack, contentDescription = null,
+                    modifier = Modifier
+                        .align(Alignment.CenterStart)
+                        .padding(start = 16.dp)
+                        .size(32.dp)
+                        .clickable {
+                            if (uiViewModel.tempParamShow) {
+                                uiViewModel.onEvent(UIEvent.TempParamShow(false))
+                            }
+                            navUp(navController)
+                        },
+                    tint = Color.White
+                )
+            }
+        ) {
             uiViewModel.onEvent(it)
         }
     }
