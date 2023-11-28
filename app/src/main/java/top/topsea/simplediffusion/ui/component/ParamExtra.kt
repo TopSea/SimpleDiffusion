@@ -103,7 +103,6 @@ import top.topsea.simplediffusion.util.TextUtil
 import top.topsea.simplediffusion.util.getWidthDp
 import kotlin.math.roundToInt
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchRequest(
     onSearch: (String) -> Unit,
@@ -144,8 +143,8 @@ fun StepRowInt(
     step: Int = 1
 ) {
     val scope = rememberCoroutineScope()
-    var longMinus = false
-    var longPlus = false
+    var longMinus: Boolean
+    var longPlus: Boolean
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
@@ -230,106 +229,6 @@ fun StepRowInt(
     }
 }
 
-@Composable
-fun StepRowInt(
-    boldTitle: Boolean = true,
-    name: String,
-    int: Int,
-    max: Int = 100,
-    min: Int = 0,
-    step: Int = 1,
-    onValueChange: (int: Int) -> Unit,
-) {
-    val scope = rememberCoroutineScope()
-    var longMinus: Boolean
-    var longPlus: Boolean
-    var value by remember { mutableIntStateOf(int) }
-
-    Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier
-            .padding(start = 4.dp)
-            .fillMaxWidth()
-            .height(dimensionResource(id = R.dimen.param_pad_item_height)),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        ParamTitle(modifier = Modifier.weight(1f), boldTitle = boldTitle, title = name)
-
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(
-                painter = painterResource(id = R.drawable.circle_minus),
-                contentDescription = "",
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .clickable {
-                        value -= step
-                        if (value >= min) {
-                            onValueChange(value)
-                        }
-                    }
-                    .pointerInput(Unit) {
-                        detectDragGesturesAfterLongPress(
-                            onDrag = { _, _ -> },
-                            onDragStart = {
-                                longMinus = true
-                                value -= step
-                                scope.launch {
-                                    while (value >= min && longMinus) {
-                                        delay(100)
-                                        onValueChange(value)
-                                        value -= step
-                                    }
-                                }
-                            },
-                            onDragEnd = { longMinus = false },
-                            onDragCancel = { longMinus = false }
-                        )
-                    },
-                tint = MaterialTheme.colorScheme.primary
-            )
-            Text(
-                text = "$int",
-                textAlign = TextAlign.Center,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.width(64.dp)
-            )
-            Icon(
-                painter = painterResource(id = R.drawable.circle_plus),
-                contentDescription = "",
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .clickable {
-                        value += step
-                        if (value <= max) {
-                            onValueChange(value)
-                        }
-                    }
-                    .pointerInput(Unit) {
-                        detectDragGesturesAfterLongPress(
-                            onDrag = { _, _ -> },
-                            onDragStart = {
-                                longPlus = true
-                                value += step
-                                scope.launch {
-                                    while (value <= max && longPlus) {
-                                        delay(100)
-                                        onValueChange(value)
-                                        TextUtil.topsea("onValueChange value: $value")
-                                        value += step
-                                    }
-                                }
-                            },
-                            onDragEnd = { longPlus = false },
-                            onDragCancel = { longPlus = false }
-                        )
-                    },
-                tint = MaterialTheme.colorScheme.primary
-            )
-        }
-    }
-}
-
 /**
  * @param ff: float print format.
  */
@@ -344,8 +243,8 @@ fun StepRowFloat(
     step: Float = 0.5f
 ) {
     val scope = rememberCoroutineScope()
-    var longMinus = false
-    var longPlus = false
+    var longMinus: Boolean
+    var longPlus: Boolean
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
@@ -429,105 +328,6 @@ fun StepRowFloat(
         }
     }
 }
-@Composable
-fun StepRowFloat(
-    boldTitle: Boolean = true,
-    name: String,
-    float: Float,
-    max: Float = 100f,
-    min: Float = 0f,
-    ff: String = "%.1f",
-    step: Float = 0.5f,
-    onValueChange: (float: Float) -> Unit,
-) {
-    val scope = rememberCoroutineScope()
-    var longMinus: Boolean
-    var longPlus: Boolean
-    var value by remember { mutableStateOf(float) }
-
-    Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier
-            .padding(start = 4.dp)
-            .fillMaxWidth()
-            .height(dimensionResource(id = R.dimen.param_pad_item_height)),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        ParamTitle(modifier = Modifier.weight(1f), boldTitle = boldTitle, title = name)
-
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(
-                painter = painterResource(id = R.drawable.circle_minus),
-                contentDescription = "",
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .clickable {
-                        value -= step
-                        if (value >= min) {
-                            onValueChange(value)
-                        }
-                    }
-                    .pointerInput(Unit) {
-                        detectDragGesturesAfterLongPress(
-                            onDrag = { _, _ -> },
-                            onDragStart = {
-                                longMinus = true
-                                value -= step
-                                scope.launch {
-                                    while (value >= min && longMinus) {
-                                        delay(100)
-                                        onValueChange(value)
-                                        value -= step
-                                    }
-                                }
-                            },
-                            onDragEnd = { longMinus = false },
-                            onDragCancel = { longMinus = false }
-                        )
-                    },
-                tint = MaterialTheme.colorScheme.primary
-            )
-            Text(
-                text = ff.format(float),
-                textAlign = TextAlign.Center,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.width(64.dp)
-            )
-            Icon(
-                painter = painterResource(id = R.drawable.circle_plus),
-                contentDescription = "",
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .clickable {
-                        value += step
-                        if (value <= max) {
-                            onValueChange(value)
-                        }
-                    }
-                    .pointerInput(Unit) {
-                        detectDragGesturesAfterLongPress(
-                            onDrag = { _, _ -> },
-                            onDragStart = {
-                                longPlus = true
-                                value += step
-                                scope.launch {
-                                    while (value <= max && longPlus) {
-                                        delay(100)
-                                        onValueChange(value)
-                                        value += step
-                                    }
-                                }
-                            },
-                            onDragEnd = { longPlus = false },
-                            onDragCancel = { longPlus = false }
-                        )
-                    },
-                tint = MaterialTheme.colorScheme.primary
-            )
-        }
-    }
-}
 
 @Composable
 fun SwipeInt(
@@ -540,8 +340,8 @@ fun SwipeInt(
     step: Int = 1,
 ) {
     val scope = rememberCoroutineScope()
-    var longMinus = false
-    var longPlus = false
+    var longMinus: Boolean
+    var longPlus: Boolean
 
     val wdp = getWidthDp()
     val width = if (wdp > 420.dp) wdp / 2 else wdp / 3
@@ -551,150 +351,6 @@ fun SwipeInt(
     val percentage = offsetX / sizePx
     val num = (percentage * max).toInt()
     int.value = num
-
-    val bmChangingColors = arrayOf(
-        percentage to MaterialTheme.colorScheme.primary,
-        percentage + 0.001F to MaterialTheme.colorScheme.inverseOnSurface,
-        1f to MaterialTheme.colorScheme.inverseOnSurface
-    )
-
-    Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = modifier
-            .padding(start = 4.dp)
-            .fillMaxWidth()
-            .height(dimensionResource(id = R.dimen.param_pad_item_height)),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        ParamTitle(boldTitle = boldTitle, title = name)
-
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(
-                painter = painterResource(id = R.drawable.circle_minus),
-                contentDescription = "",
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .clickable {
-                        val value = offsetX - trueStep
-                        if (value >= min) {
-                            offsetX = value
-                        }
-                    }
-                    .pointerInput(Unit) {
-                        detectDragGesturesAfterLongPress(
-                            onDrag = { _, _ -> },
-                            onDragStart = {
-                                longMinus = true
-                                var value = offsetX - trueStep
-                                scope.launch {
-                                    while (value >= min && longMinus) {
-                                        delay(100)
-                                        offsetX = value
-                                        value = offsetX - trueStep
-                                    }
-                                }
-                            },
-                            onDragEnd = { longMinus = false },
-                            onDragCancel = { longMinus = false }
-                        )
-                    },
-                tint = MaterialTheme.colorScheme.primary
-            )
-            Row(
-                modifier = Modifier
-                    .padding(vertical = 12.dp)
-                    .fillMaxHeight()
-                    .width(width)
-                    .background(
-                        brush = Brush.horizontalGradient(colorStops = bmChangingColors),
-                        RoundedCornerShape(16.dp)
-                    ),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Box(
-                    Modifier
-                        .offset { IntOffset(offsetX.roundToInt(), 0) }
-                        .background(
-                            MaterialTheme.colorScheme.primary,
-                            RoundedCornerShape(8.dp)
-                        )
-                        .pointerInput(Unit) {
-                            detectDragGestures { change, dragAmount ->
-                                change.consume()
-                                val x = offsetX + dragAmount.x
-                                offsetX = if (x < sizePx) {
-                                    if (x < 0)
-                                        0f
-                                    else
-                                        x
-                                } else
-                                    sizePx
-                            }
-                        },
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Text(text = "$num", color =  Color.White, modifier = Modifier.padding(horizontal = 8.dp))
-                }
-            }
-            Text(text = "         ", color =  Color.White, modifier = Modifier.padding(horizontal = 8.dp))
-            Icon(
-                painter = painterResource(id = R.drawable.circle_plus),
-                contentDescription = "",
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .clickable {
-                        val value = offsetX + trueStep
-                        if (value <= max) {
-                            offsetX = value
-                        }
-                    }
-                    .pointerInput(Unit) {
-                        detectDragGesturesAfterLongPress(
-                            onDrag = { _, _ -> },
-                            onDragStart = {
-                                longPlus = true
-                                var value = offsetX + trueStep
-                                scope.launch {
-                                    while (value <= max && longPlus) {
-                                        delay(100)
-                                        offsetX = value
-                                        value = offsetX + trueStep
-                                    }
-                                }
-                            },
-                            onDragEnd = { longPlus = false },
-                            onDragCancel = { longPlus = false }
-                        )
-                    },
-                tint = MaterialTheme.colorScheme.primary
-            )
-        }
-    }
-}
-
-@Composable
-fun SwipeInt(
-    boldTitle: Boolean = true,
-    modifier: Modifier = Modifier,
-    name: String,
-    int: Int,
-    max: Int = 100,
-    min: Int = 0,
-    step: Int = 1,
-    onValueChange: (int: Int) -> Unit,
-) {
-    val scope = rememberCoroutineScope()
-    var longMinus = false
-    var longPlus = false
-
-    val wdp = getWidthDp()
-    val width = if (wdp > 420.dp) wdp / 2 else wdp / 3
-    val sizePx = with(LocalDensity.current) { width.toPx() }
-    var offsetX by remember { mutableStateOf(int / max.toFloat() * sizePx) }
-    val trueStep = step / max.toFloat() * sizePx
-    val percentage = offsetX / sizePx
-    val num = (percentage * max).toInt()
-    onValueChange(num)
 
     val bmChangingColors = arrayOf(
         percentage to MaterialTheme.colorScheme.primary,
@@ -979,94 +635,6 @@ fun ParamRowChoice(
 @Composable
 fun ParamRowChoice(
     name: String,
-    currChoice: String,
-    content: List<BaseModel>,
-    onValueChange: (str: String) -> Unit,
-    onRefresh: suspend () -> Unit,
-) {
-    var menuExpanded by remember { mutableStateOf(false) }
-
-    val scope = rememberCoroutineScope()
-
-    FitScreen(modifier = Modifier,
-        titleComp = { ParamTitle(title = name) }) { modifier ->
-        Row(
-            modifier = modifier
-                .fillMaxHeight()
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Box(
-                modifier = Modifier
-                    .padding(start = 8.dp)
-                    .weight(1F)
-            ) {
-
-                Row(
-                    modifier = Modifier
-                        .height(dimensionResource(id = R.dimen.param_drop_menu))
-                        .fillMaxWidth()
-                        .border(2.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(4.dp))
-                        .clickable { menuExpanded = true },
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text = currChoice,
-                        modifier = Modifier
-                            .widthIn(
-                                min = dimensionResource(id = R.dimen.param_menu_length_min),
-                                max = dimensionResource(id = R.dimen.param_menu_length_max)
-                            )
-                            .padding(start = 8.dp)
-                            .align(Alignment.CenterVertically),
-                        fontSize = 18.sp,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
-                    Icon(
-                        imageVector = if (menuExpanded) Icons.Default.KeyboardArrowDown else Icons.Default.KeyboardArrowLeft,
-                        contentDescription = "",
-                        modifier = Modifier
-                            .padding(start = 8.dp)
-                            .align(Alignment.CenterVertically),
-                    )
-                }
-
-                DropdownMenu(
-                    expanded = menuExpanded, onDismissRequest = { menuExpanded = false },
-                    modifier = Modifier
-                        .fillMaxWidth(0.6F)
-                ) {
-                    content.forEach {
-                        DropdownMenuItem(text = {
-                            Text(
-                                text = it.title,
-                                modifier = Modifier
-                                    .widthIn(min = 160.dp),
-                                maxLines = 1
-                            )
-                        }, onClick = {
-                            onValueChange(it.title)
-                            menuExpanded = false
-                        })
-                    }
-                }
-            }
-
-            IconButton(onClick = { scope.launch { onRefresh() } }) {
-                Icon(
-                    imageVector = Icons.Default.Refresh,
-                    contentDescription = "Refresh Choices",
-                    tint = MaterialTheme.colorScheme.primary
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun ParamRowChoice(
-    name: String,
     currChoice: MutableState<String>,
     content: List<String>,
 ) {
@@ -1221,85 +789,6 @@ fun ParamRowChooseSampler(
 }
 
 @Composable
-fun ParamRowChooseSampler(
-    name: String,
-    currChoice: String,
-    content: List<Sampler>,
-    onValueChange: (str: String) -> Unit,
-) {
-    var menuExpanded by remember { mutableStateOf(false) }
-    Row(
-        modifier = Modifier
-            .padding(start = 4.dp)
-            .fillMaxWidth()
-            .height(dimensionResource(id = R.dimen.param_pad_item_height)),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        ParamTitle(title = name)
-        Row(
-            modifier = Modifier
-                .fillMaxHeight()
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Box(
-                modifier = Modifier
-                    .padding(start = 8.dp, end = 8.dp)
-                    .weight(1F)
-            ) {
-
-                Row(
-                    modifier = Modifier
-                        .height(dimensionResource(id = R.dimen.param_drop_menu))
-                        .fillMaxWidth()
-                        .border(2.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(4.dp))
-                        .clickable { menuExpanded = true },
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text = currChoice,
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(start = 8.dp)
-                            .align(Alignment.CenterVertically),
-                        fontSize = 18.sp,
-                        maxLines = 1
-                    )
-                    Icon(
-                        imageVector = if (menuExpanded) Icons.Default.KeyboardArrowDown else Icons.Default.KeyboardArrowLeft,
-                        contentDescription = "",
-                        modifier = Modifier
-                            .padding(start = 8.dp)
-                            .align(Alignment.CenterVertically),
-                    )
-                }
-
-                DropdownMenu(
-                    expanded = menuExpanded, onDismissRequest = { menuExpanded = false },
-                    modifier = Modifier
-                        .fillMaxWidth(0.6F)
-                ) {
-                    content.forEach {
-                        DropdownMenuItem(text = {
-                            Text(
-                                text = it.name,
-                                modifier = Modifier
-                                    .widthIn(min = 240.dp),
-                                maxLines = 1
-                            )
-                        }, onClick = {
-                            onValueChange(it.name)
-                            menuExpanded = false
-                        })
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
 fun ParamRowChangeName(
     title: String,
     name: MutableState<String>,
@@ -1409,87 +898,8 @@ fun ParamRowImgChoose(
         }
     }
 }
-@Composable
-fun ParamRowImgChoose(
-    base64Str: String,
-    picking: Int = -1,
-) {
-    val stroke = Stroke(
-        width = 8f,
-        pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
-    )
 
-    Box(
-        modifier = Modifier
-            .padding(start = 8.dp, top = 4.dp, end = 8.dp)
-            .fillMaxWidth()
-            .height(420.dp)
-            .clickable {
-                pickingImg.value = picking
-            }
-    ) {
-        if (base64Str.isNotEmpty()) {
-            Image(
-                bitmap = FileUtil.getIBFromBase64(base64Str)!!,
-                contentDescription = "Selected image.",
-                modifier = Modifier.align(
-                    Alignment.Center
-                )
-            )
-
-            IconButton(
-                onClick = {
-                    if (picking == -1) {
-                        pickingImg.value = -3
-                    } else {
-                        pickingImg.value = -4 - picking
-                    }
-                },
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .background(MaterialTheme.colorScheme.primary),
-            ) {
-                Icon(imageVector = Icons.Default.Close, contentDescription = "Close image.", tint = Color.White)
-            }
-        } else {
-            Canvas(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxSize()
-            ) {
-                drawRoundRect(
-                    color = Color.Gray,
-                    style = stroke,
-                    cornerRadius = CornerRadius(30F, 30F)
-                )
-            }
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(
-                        Alignment.Center
-                    ),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = "",
-                    modifier = Modifier
-                        .size(48.dp),
-                    tint = Color.Gray
-                )
-                Text(
-                    text = stringResource(id = R.string.r_img_choose),
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Gray
-                )
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ParamRowPrompt(
     name: String,
@@ -1585,130 +995,6 @@ fun ParamRowPrompt(
                         modifier = Modifier
                             .padding(horizontal = 8.dp),
                         onClick = { prompt.value = "" },
-                        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp),
-                        shape = RoundedCornerShape(8.dp)
-                    ) {
-                        Text(text = stringResource(id = R.string.r_btn_clear))
-                    }
-                }
-            }
-        }
-        RowAddablePrompt(
-            loras = loras,
-            local = local,
-            promptSets = promptSets,
-            onAddLora = onAddLora,
-        )
-    }
-}
-
-@OptIn(ExperimentalComposeUiApi::class)
-@Composable
-fun ParamRowPrompt(
-    name: String,
-    loras: PromptFile,
-    local: PromptFile,
-    promptSets: List<PromptFile> = emptyList(),
-    prompt: String,
-    onRefresh: suspend () -> Unit,
-    onValueChange: (str: String) -> Unit,
-) {
-    val onEditPrompt = remember { mutableStateOf(false) }
-
-    val focusRequester = remember { FocusRequester() } //焦点
-    val softKeyboard = LocalSoftwareKeyboardController.current //软键盘
-
-    var value by remember { mutableStateOf(prompt) }
-
-    val onAddLora = { str: String ->
-        value += str
-        onValueChange(value)
-    }
-    val onClickItem: (Int, Int) -> Unit = { start: Int, end: Int ->
-        TextUtil.topsea("DiffusionRowPrompt: start--$start, end--$end ")
-        value = value.removeRange(start, end + 1)
-        onValueChange(value)
-    }
-
-    LaunchedEffect(key1 = onEditPrompt.value) {
-        if (onEditPrompt.value) {
-            delay(100) //延迟操作(关键点)
-            focusRequester.requestFocus()
-            softKeyboard?.show()
-        }
-    }
-
-    val editingColor = if (onEditPrompt.value) {
-        Pink80
-    } else {
-        MaterialTheme.colorScheme.primary
-    }
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-    ) {
-        FitScreen(modifier = Modifier,
-            titleComp = { ParamTitle(title = name) }) { modifier ->
-            Row(
-                modifier = modifier,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-
-                LazyColumn(
-                    modifier = Modifier
-                        .padding(start = 8.dp, top = 8.dp)
-                        .weight(1F)
-                        .height(dimensionResource(id = R.dimen.param_prompt_height))
-                        .border(2.dp, editingColor, RoundedCornerShape(8.dp))
-                ) {
-                    item {
-                        if (onEditPrompt.value) {
-                            BasicTextField(
-                                value = prompt,
-                                modifier = Modifier
-                                    .focusRequester(focusRequester)
-                                    .padding(8.dp)
-                                    .fillMaxSize(),
-                                onValueChange = {
-                                    value = it
-                                    onValueChange(value)
-                                },
-                                textStyle = TextStyle(
-                                    fontSize = TextUnit(
-                                        value = 16F,
-                                        type = TextUnitType.Sp
-                                    )
-                                ),
-
-                            )
-                        } else {
-                            ClickableMessage(
-                                prompt = prompt,
-                                onEditPrompt = onEditPrompt,
-                                onClickItem = onClickItem
-                            )
-                        }
-                    }
-                }
-
-                Column {
-                    Button(
-                        modifier = Modifier
-                            .padding(horizontal = 8.dp),
-                        onClick = { onEditPrompt.value = false },
-                        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp),
-                        shape = RoundedCornerShape(8.dp)
-                    ) {
-                        Text(text = stringResource(id = R.string.r_btn_confirm))
-                    }
-                    Button(
-                        modifier = Modifier
-                            .padding(horizontal = 8.dp),
-                        onClick = {
-                            value = ""
-                            onValueChange(value)
-                        },
                         contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp),
                         shape = RoundedCornerShape(8.dp)
                     ) {
@@ -1897,7 +1183,7 @@ fun RowAddablePrompt(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ParamRowNegPrompt(
     name: String,
@@ -1949,87 +1235,6 @@ fun ParamRowNegPrompt(
                                 .padding(8.dp)
                                 .fillMaxSize(),
                             onValueChange = { prompt.value = it },
-                            textStyle = TextStyle(
-                                fontSize = TextUnit(
-                                    value = 16F,
-                                    type = TextUnitType.Sp
-                                )
-                            )
-                        )
-                    }
-                }
-
-                Button(
-                    modifier = Modifier
-                        .padding(horizontal = 8.dp),
-                    onClick = { onEditPrompt.value = false },
-                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp),
-                    shape = RoundedCornerShape(8.dp)
-                ) {
-                    Text(text = stringResource(id = R.string.r_btn_confirm))
-                }
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
-@Composable
-fun ParamRowNegPrompt(
-    name: String,
-    prompt: String,
-    onRefresh: suspend () -> Unit,
-    onValueChange: (str: String) -> Unit
-) {
-    val onEditPrompt = remember { mutableStateOf(false) }
-
-    val focusRequester = remember { FocusRequester() } //焦点
-    val softKeyboard = LocalSoftwareKeyboardController.current //软键盘
-    var value by remember { mutableStateOf(prompt) }
-
-    LaunchedEffect(key1 = onEditPrompt.value) {
-        if (onEditPrompt.value) {
-            delay(100) //延迟操作(关键点)
-            focusRequester.requestFocus()
-            softKeyboard?.show()
-        }
-    }
-
-    val editingColor = if (onEditPrompt.value) {
-        Pink80
-    } else {
-        MaterialTheme.colorScheme.primary
-    }
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-    ) {
-
-        FitScreen(modifier = Modifier,
-            titleComp = { ParamTitle(title = name) }) { modifier ->
-            Row(
-                modifier = modifier,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                LazyColumn(
-                    modifier = Modifier
-                        .padding(start = 8.dp, top = 8.dp, bottom = 8.dp)
-                        .weight(1F)
-                        .height(dimensionResource(id = R.dimen.param_prompt_height))
-                        .border(2.dp, editingColor, RoundedCornerShape(8.dp))
-                ) {
-                    item {
-                        BasicTextField(
-                            value = prompt,
-                            modifier = Modifier
-                                .focusRequester(focusRequester)
-                                .padding(8.dp)
-                                .fillMaxSize(),
-                            onValueChange = {
-                                value = it
-                                onValueChange(value)
-                            },
                             textStyle = TextStyle(
                                 fontSize = TextUnit(
                                     value = 16F,

@@ -252,6 +252,8 @@ class MainActivity : ComponentActivity() {
                                     navController = navController,
                                     uiViewModel = uiViewModel,
                                     normalViewModel = normalViewModel,
+                                    defaultTxtParam = paramViewModel.tparam.collectAsState().value,
+                                    paramEvent = paramViewModel::paramEvent
                                 )
                             }
                             composable(SetImgParamScreen.route) {

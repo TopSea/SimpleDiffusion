@@ -53,8 +53,8 @@ import top.topsea.simplediffusion.ui.component.ParamRowChooseSampler
 import top.topsea.simplediffusion.ui.component.ParamRowControlNet
 import top.topsea.simplediffusion.ui.component.StepRowFloat
 import top.topsea.simplediffusion.ui.component.ParamRowImgChoose
-import top.topsea.simplediffusion.ui.component.StepRowInt
 import top.topsea.simplediffusion.ui.component.ParamRowNegPrompt
+import top.topsea.simplediffusion.ui.component.StepRowInt
 import top.topsea.simplediffusion.ui.component.ParamRowPrompt
 import top.topsea.simplediffusion.ui.component.SwipeInt
 import top.topsea.simplediffusion.ui.scripts.USDUpscaleScript

@@ -42,13 +42,21 @@ class ParamViewModel @Inject constructor(
     private val searchTxt = MutableStateFlow("")
     private val searchImg = MutableStateFlow("")
 
+    private val defaultT2IID = MutableStateFlow(kv.decodeLong(Constant.k_t_default_id, -1L))
     private val defaultI2IID = MutableStateFlow(kv.decodeLong(Constant.k_i_default_id, -1L))
-    private val defaultT2IID = MutableStateFlow(kv.decodeLong(Constant.k_i_default_id, -1L))
 
-    private val _tparam: StateFlow<TxtParam> = defaultT2IID.flatMapLatest {
-        // TODO
-        aTxtDao.defaultTxtParam()
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), TxtParam())
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val tparam: StateFlow<TxtParam> = defaultT2IID.flatMapLatest {
+        if (it == -1L) {
+            val id = aTxtDao.insert(TxtParam())         // 插入一个参数作为默认参数
+            defaultT2IID.update { id }                  // 不显示在参数页面，防止被删除
+            kv.encode(Constant.k_t_default_id, id)
+            aTxtDao.defaultTxtParam(id)
+        } else {
+            aTxtDao.defaultTxtParam(it)
+        }
+        aTxtDao.defaultTxtParam(it)
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, TxtParam())
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val iparam: StateFlow<ImgParam> = defaultI2IID.flatMapLatest {
@@ -67,9 +75,9 @@ class ParamViewModel @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     private val _tparams: StateFlow<List<TxtParam>> = searchTxt.flatMapLatest { txt ->
         if (txt.isEmpty()) {
-            aTxtDao.getTxtParams()
+            aTxtDao.getTxtParams(defaultT2IID.value)
         } else {
-            aTxtDao.getSearchParams(txt)
+            aTxtDao.getSearchParams(txt, defaultT2IID.value)
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
@@ -242,7 +250,8 @@ class ParamViewModel @Inject constructor(
                         imgParam.id = 0
                         aImgDao.insert(imgParam)
                     } else {
-                        val txtParam = _tparam.value
+                        val txtParam = tparam.value
+                        txtParam.id = 0
                         aTxtDao.insert(txtParam)
                     }
                 }

@@ -55,24 +55,7 @@ fun ParamScreen(
                     paramEvent = paramEvent,
                     cnEvent = cnEvent,
                 ) {
-                    paramEvent(
-                        ParamEvent.AddParam(
-                            TxtParam(
-                                priority_order = uiViewModel.tDisplayPri,
-                                baseModel = uiViewModel.tSDModel,
-                                refinerModel = uiViewModel.tRefineModel,
-                                refinerAt = uiViewModel.tRefineAt,
-                                defaultPrompt = uiViewModel.tPrompt,
-                                defaultNegPrompt = uiViewModel.tNPrompt,
-                                width = uiViewModel.tImgWidth,
-                                height = uiViewModel.tImgHeight,
-                                steps = uiViewModel.tSteps,
-                                cfgScale = uiViewModel.tCFG,
-                                sampler_index = uiViewModel.tSampler,
-                                batch_size = uiViewModel.tBatchSize,
-                            )
-                        )
-                    )
+                    paramEvent(ParamEvent.AddByDefaultParam(false))
                 }
             }
             1 -> {
