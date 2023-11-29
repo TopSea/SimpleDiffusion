@@ -224,7 +224,7 @@ fun SetImgParamScreen(
                 title = stringResource(id = R.string.r_sd_prompt),
                 switch = uiViewModel.iSDPromptSwitch,
                 onSwitch = { uiViewModel.onEvent(UIEvent.UpdateISDPS(it)) },
-            ){  }
+            )
             Divider(thickness = 2.dp, color = dividerColor)
             SetParam(
                 title = stringResource(id = R.string.r_prompt),

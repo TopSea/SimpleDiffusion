@@ -239,7 +239,7 @@ fun SetTxtParamScreen(
                 title = stringResource(id = R.string.r_sd_prompt),
                 switch = uiViewModel.tSDPromptSwitch,
                 onSwitch = { uiViewModel.onEvent(UIEvent.UpdateTSDPS(it)) },
-            ){  }
+            )
             Divider(thickness = 2.dp, color = dividerColor)
             SetParam(
                 title = stringResource(id = R.string.r_prompt),
