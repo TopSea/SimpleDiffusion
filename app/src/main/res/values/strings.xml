@@ -222,6 +222,7 @@
     <string name="t_image_added">Image added.</string>
     <string name="t_too_many_gen">The generation queue is full.</string>
     <string name="t_no_ex">This extension was not found on SD server.</string>
+    <string name="t_invalid_name">Name contains invalid characters.</string>
 
     <!--MMKV字符串-->
     <string name="kv_card_position" translatable="false">Card_Position</string>

@@ -35,7 +35,7 @@ data class TxtParam(
     @ColumnInfo(name = "priority_order")
     override var priority_order: Int = 0,
     @ColumnInfo(name = "name")
-    override val name: String = "Name",
+    override var name: String = "Name",
     @ColumnInfo(name = "activate")
     override val activate: Boolean = false,
 
@@ -174,15 +174,13 @@ data class SavableTxtParam(
 @Dao
 interface TxtParamDao {
 //    @Query("SELECT * FROM TxtParam order by `id` desc limit 20")
-    @Query("SELECT * FROM TxtParam WHERE id = :defaultID")
-    fun defaultTxtParam(defaultID: Long): Flow<TxtParam>
-    @Query("SELECT * FROM TxtParam WHERE id != :defaultID ORDER BY priority_order DESC")
-    fun getTxtParams(defaultID: Long): Flow<List<TxtParam>>
-    @Query("SELECT * FROM TxtParam WHERE id != :defaultID AND name LIKE '%' || :searchTxt || '%' ORDER BY priority_order DESC")
-    fun getSearchParams(searchTxt: String, defaultID: Long): Flow<List<TxtParam>>
+    @Query("SELECT * FROM TxtParam WHERE name == '罓罒' ")
+    fun defaultTxtParam(): Flow<TxtParam>
+    @Query("SELECT * FROM TxtParam WHERE name != '罓罒' ORDER BY priority_order DESC")
+    fun getTxtParams(): Flow<List<TxtParam>>
+    @Query("SELECT * FROM TxtParam WHERE name != '罓罒' AND name LIKE '%' || :searchTxt || '%' ORDER BY priority_order DESC")
+    fun getSearchParams(searchTxt: String): Flow<List<TxtParam>>
 
-    @Upsert(TxtParam::class)
-    suspend fun upsert(txtParam: TxtParam)
     @Update(TxtParam::class)
     suspend fun update(txtParam: TxtParam)
     @Update(TxtParam::class)

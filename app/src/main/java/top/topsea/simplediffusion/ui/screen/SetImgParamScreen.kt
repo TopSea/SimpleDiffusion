@@ -303,6 +303,7 @@ fun SetImgParamScreen(
         ) {
             val param = ImgParam(
                 id = defaultImgParam.id,
+                name = defaultImgParam.name,
                 priority_order = order.value,
                 activate = false,
                 refinerModel = refinerModel.value,

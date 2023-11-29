@@ -1,13 +1,11 @@
 package top.topsea.simplediffusion.data.viewmodel
 
 import androidx.lifecycle.viewModelScope
-import com.tencent.mmkv.MMKV
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
@@ -27,7 +25,6 @@ import top.topsea.simplediffusion.data.param.TxtParamDao
 import top.topsea.simplediffusion.data.state.ParamLocalState
 import top.topsea.simplediffusion.event.ParamEvent
 import top.topsea.simplediffusion.event.RequestState
-import top.topsea.simplediffusion.util.Constant
 import top.topsea.simplediffusion.util.FileUtil
 import top.topsea.simplediffusion.util.TextUtil
 import javax.inject.Inject
@@ -37,56 +34,33 @@ class ParamViewModel @Inject constructor(
     private val newbieApi: GenImgApiImp,
     private val aTxtDao: TxtParamDao,
     private val aImgDao: ImgParamDao,
-    private val kv: MMKV,
 ): BasicViewModel() {
     private val searchTxt = MutableStateFlow("")
     private val searchImg = MutableStateFlow("")
 
-    private val defaultT2IID = MutableStateFlow(kv.decodeLong(Constant.k_t_default_id, -1L))
-    private val defaultI2IID = MutableStateFlow(kv.decodeLong(Constant.k_i_default_id, -1L))
+    val tparam: StateFlow<TxtParam> = aTxtDao.defaultTxtParam()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), TxtParam())
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val tparam: StateFlow<TxtParam> = defaultT2IID.flatMapLatest {
-        if (it == -1L) {
-            val id = aTxtDao.insert(TxtParam())         // 插入一个参数作为默认参数
-            defaultT2IID.update { id }                  // 不显示在参数页面，防止被删除
-            kv.encode(Constant.k_t_default_id, id)
-            aTxtDao.defaultTxtParam(id)
-        } else {
-            aTxtDao.defaultTxtParam(it)
-        }
-        aTxtDao.defaultTxtParam(it)
-    }.stateIn(viewModelScope, SharingStarted.Eagerly, TxtParam())
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val iparam: StateFlow<ImgParam> = defaultI2IID.flatMapLatest {
-        if (it == -1L) {
-            val id = aImgDao.insert(ImgParam())         // 插入一个参数作为默认参数
-            defaultI2IID.update { id }                  // 不显示在参数页面，防止被删除
-            kv.encode(Constant.k_i_default_id, id)
-            aImgDao.defaultImgParam(id)
-        } else {
-            aImgDao.defaultImgParam(it)
-        }
-    }.stateIn(viewModelScope, SharingStarted.Eagerly, ImgParam())
+    val iparam: StateFlow<ImgParam> = aImgDao.defaultImgParam()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), ImgParam())
 
     private val _param_state = MutableStateFlow(ParamLocalState())
 
     @OptIn(ExperimentalCoroutinesApi::class)
     private val _tparams: StateFlow<List<TxtParam>> = searchTxt.flatMapLatest { txt ->
         if (txt.isEmpty()) {
-            aTxtDao.getTxtParams(defaultT2IID.value)
+            aTxtDao.getTxtParams()
         } else {
-            aTxtDao.getSearchParams(txt, defaultT2IID.value)
+            aTxtDao.getSearchParams(txt)
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
     @OptIn(ExperimentalCoroutinesApi::class)
     private val _iparams: StateFlow<List<ImgParam>> = searchImg.flatMapLatest { txt ->
         if (txt.isEmpty()) {
-            aImgDao.getImgParams(defaultI2IID.value)
+            aImgDao.getImgParams()
         } else {
-            aImgDao.getSearchParams(txt, defaultI2IID.value)
+            aImgDao.getSearchParams(txt)
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
@@ -248,10 +222,12 @@ class ParamViewModel @Inject constructor(
                     if (isI2I) {
                         val imgParam = iparam.value
                         imgParam.id = 0
+                        imgParam.name = "Name"
                         aImgDao.insert(imgParam)
                     } else {
                         val txtParam = tparam.value
                         txtParam.id = 0
+                        txtParam.name = "Name"
                         aTxtDao.insert(txtParam)
                     }
                 }
@@ -441,25 +417,6 @@ class ParamViewModel @Inject constructor(
                     }
                     if (bp is ImgParam) {
                         aImgDao.update(bp)
-                    }
-                    if (bp.activate) {
-                        _param_state.update {
-                            it.copy(
-                                currParam = bp
-                            )
-                        }
-                    }
-                }
-            }
-            is ParamEvent.UpsertParam -> {
-                viewModelScope.launch {
-                    val bp = event.bp
-                    TextUtil.topsea("UpsertParam bp: $bp")
-                    if (bp is TxtParam) {
-                        aTxtDao.upsert(bp)
-                    }
-                    if (bp is ImgParam) {
-                        aImgDao.upsert(bp)
                     }
                     if (bp.activate) {
                         _param_state.update {

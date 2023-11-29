@@ -304,6 +304,7 @@ fun SetTxtParamScreen(
         ) {
             val param = TxtParam(
                 id = defaultTxtParam.id,
+                name = defaultTxtParam.name,
                 priority_order = order.value,
                 activate = false,
                 refinerModel = refinerModel.value,

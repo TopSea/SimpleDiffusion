@@ -183,6 +183,7 @@
     <string name="t_image_added">图片添加成功。</string>
     <string name="t_too_many_gen">生成队列已满。</string>
     <string name="t_no_ex">SD 服务器上未找到该插件。</string>
+    <string name="t_invalid_name">名字中包含非法字符。</string>
 
     <!--MMKV字符串-->
     <string name="server_ip">Server_IP</string>

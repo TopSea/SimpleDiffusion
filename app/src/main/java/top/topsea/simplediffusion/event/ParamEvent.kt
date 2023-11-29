@@ -10,7 +10,6 @@ sealed class ParamEvent {
     data class AddParam(val bp: BasicParam?) : ParamEvent()
     data class AddByDefaultParam(val isI2I: Boolean) : ParamEvent()
     data class UpdateParam(val bp: BasicParam) : ParamEvent()
-    data class UpsertParam(val bp: BasicParam) : ParamEvent()
     data class DeleteParam(val bp: BasicParam) : ParamEvent()
     data class GenImage(val controlNets: List<CNParam>, val onGenError: (String) -> Unit, val onGenSuccess: (Array<String>?, String?) -> Unit) : ParamEvent()
     data class GenImageInList(val controlNets: List<CNParam>, val imgParam: ImgParam,

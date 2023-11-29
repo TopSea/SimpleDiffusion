@@ -39,7 +39,7 @@ data class ImgParam(
     @ColumnInfo(name = "priority_order")
     override val priority_order: Int = 0,
     @ColumnInfo(name = "name")
-    override val name: String = "Name",
+    override var name: String = "Name",
     @ColumnInfo(name = "activate")
     override val activate: Boolean = false,
 
@@ -196,17 +196,15 @@ data class SavableImgParam(
 @Dao
 interface ImgParamDao {
 //    @Query("SELECT * FROM ImgParam order by `id` desc limit 20")
-    @Query("SELECT * FROM ImgParam WHERE id = :defaultID")
-    fun defaultImgParam(defaultID: Long): Flow<ImgParam>
-    @Query("SELECT * FROM ImgParam WHERE id != :defaultID ORDER BY priority_order DESC")
-    fun getImgParams(defaultID: Long): Flow<List<ImgParam>>
-    @Query("SELECT * FROM ImgParam WHERE id != :defaultID AND name LIKE '%' || :searchTxt || '%' ORDER BY priority_order DESC")
-    fun getSearchParams(searchTxt: String, defaultID: Long): Flow<List<ImgParam>>
+    @Query("SELECT * FROM ImgParam WHERE name == '罓罒'")
+    fun defaultImgParam(): Flow<ImgParam>
+    @Query("SELECT * FROM ImgParam WHERE name != '罓罒' ORDER BY priority_order DESC")
+    fun getImgParams(): Flow<List<ImgParam>>
+    @Query("SELECT * FROM ImgParam WHERE name != '罓罒' AND name LIKE '%' || :searchTxt || '%' ORDER BY priority_order DESC")
+    fun getSearchParams(searchTxt: String): Flow<List<ImgParam>>
 
     @Update(ImgParam::class)
     suspend fun update(imgParam: ImgParam)
-    @Upsert(ImgParam::class)
-    suspend fun upsert(imgParam: ImgParam)
     @Update(ImgParam::class)
     suspend fun update(pa: ParamActivate)
     @Update(ImgParam::class)

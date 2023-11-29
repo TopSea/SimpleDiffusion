@@ -15,8 +15,6 @@ object Constant {
     const val default_date = "1997-01-01 00:00:00"
     const val download_buffer = 8192
 
-    const val k_delete_mode = "delete_mode"
-    const val k_use_mode = "Use_Mode"
     const val k_save_cap_img = "save_cap_img"
     const val k_save_grid_img = "k_save_grid_img"
     const val k_save_control = "save_control"
@@ -25,7 +23,6 @@ object Constant {
     const val k_ex_agent_scheduler = "ex_gen_scheduler"
     const val k_ex_sd_prompt = "ex_sd_prompt"
 
-    const val k_t_default_id = "k_t_default_id"
     const val k_t_display_pri_s = "k_t_display_pri_s"
     const val k_t_sdmodel_s = "k_t_sdmodel_s"
     const val k_t_refinermodel_s = "k_t_refinermodel_s"
@@ -44,7 +41,6 @@ object Constant {
     const val k_t_script_s = "k_t_script_s"
     const val k_t_cn_s = "k_t_cn_s"
 
-    const val k_i_default_id = "k_i_default_id"
     const val k_i_display_pri_s = "k_i_display_pri_s"
     const val k_i_sdmodel_s = "k_i_sdmodel_s"
     const val k_i_refinermodel_s = "k_i_refinermodel_s"

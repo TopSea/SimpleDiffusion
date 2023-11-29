@@ -1,5 +1,6 @@
 package top.topsea.simplediffusion.ui.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -59,6 +61,7 @@ import top.topsea.simplediffusion.ui.component.ParamRowPrompt
 import top.topsea.simplediffusion.ui.component.SwipeInt
 import top.topsea.simplediffusion.ui.scripts.USDUpscaleScript
 import top.topsea.simplediffusion.ui.scripts.XYZPlotScript
+import top.topsea.simplediffusion.util.Constant
 import top.topsea.simplediffusion.util.TextUtil
 
 @Composable
@@ -124,7 +127,7 @@ fun ParamEditContent(
     paramEvent: (ParamEvent) -> Unit,
     normalViewModel: NormalViewModel,
 ) {
-    val isCamera = navController.previousBackStackEntry?.destination?.route == top.topsea.simplediffusion.CameraSettingScreen.route
+    val context = LocalContext.current
     val isImg2Img = currParam is ImgParam
     val name = remember { mutableStateOf(currParam.name) }
     val order = remember { mutableStateOf(currParam.priority_order) }
@@ -156,7 +159,6 @@ fun ParamEditContent(
     val controlNets = remember {
         currParam.control_net
     }
-
 
     val image = remember {
         if (currParam is ImgParam)
@@ -434,72 +436,78 @@ fun ParamEditContent(
                 navUp(navController)
             },
         ) {
-            TextUtil.topsea("ParamEditScreen currParam: ${currParam}")
+            val nameStr = name.value
+            val invalidStr = Constant.addableSecond + Constant.addableFirst
+            if (nameStr == invalidStr) {
+                Toast.makeText(context, context.getString(R.string.t_invalid_name), Toast.LENGTH_SHORT).show()
+            } else {
+                TextUtil.topsea("ParamEditScreen currParam: ${currParam}")
 
-            if (baseModel.value != currParam.baseModel) {
-                uiViewModel.onEvent(UIEvent.ModelChanging(true))
-            }
-
-            val param = when (currParam) {
-                is TxtParam -> {
-                    TxtParam(
-                        id = currParam.id,
-                        name = name.value,
-                        priority_order = order.value,
-                        activate = currParam.activate,
-                        refinerModel = refinerModel.value,
-                        refinerAt = refinerAt.value,
-                        width = width.value,
-                        height = height.value,
-                        baseModel = baseModel.value,
-                        steps = steps.value,
-                        cfgScale = cfgScale.value,
-                        sampler_index = sampler_index.value,
-                        batch_size = batch_size.value,
-                        defaultPrompt = defaultPrompt.value,
-                        defaultNegPrompt = defaultNegPrompt.value,
-                        script_name = script_name.value,
-                        script_args = script_args.value,
-                        control_net = controlNets,
-                    )
+                if (baseModel.value != currParam.baseModel) {
+                    uiViewModel.onEvent(UIEvent.ModelChanging(true))
                 }
 
-                is ImgParam -> {
-                    ImgParam(
-                        id = currParam.id,
-                        name = name.value,
-                        priority_order = order.value,
-                        activate = currParam.activate,
-                        refinerModel = refinerModel.value,
-                        refinerAt = refinerAt.value,
-                        image = image,
-                        denoising_strength = denoising_strength.value,
-                        width = width.value,
-                        height = height.value,
-                        baseModel = baseModel.value,
-                        steps = steps.value,
-                        cfgScale = cfgScale.value,
-                        sampler_index = sampler_index.value,
-                        batch_size = batch_size.value,
-                        defaultPrompt = defaultPrompt.value,
-                        defaultNegPrompt = defaultNegPrompt.value,
-                        script_name = script_name.value,
-                        script_args = script_args.value,
-                        control_net = controlNets,
-                    )
+                val param = when (currParam) {
+                    is TxtParam -> {
+                        TxtParam(
+                            id = currParam.id,
+                            name = name.value,
+                            priority_order = order.value,
+                            activate = currParam.activate,
+                            refinerModel = refinerModel.value,
+                            refinerAt = refinerAt.value,
+                            width = width.value,
+                            height = height.value,
+                            baseModel = baseModel.value,
+                            steps = steps.value,
+                            cfgScale = cfgScale.value,
+                            sampler_index = sampler_index.value,
+                            batch_size = batch_size.value,
+                            defaultPrompt = defaultPrompt.value,
+                            defaultNegPrompt = defaultNegPrompt.value,
+                            script_name = script_name.value,
+                            script_args = script_args.value,
+                            control_net = controlNets,
+                        )
+                    }
+
+                    is ImgParam -> {
+                        ImgParam(
+                            id = currParam.id,
+                            name = name.value,
+                            priority_order = order.value,
+                            activate = currParam.activate,
+                            refinerModel = refinerModel.value,
+                            refinerAt = refinerAt.value,
+                            image = image,
+                            denoising_strength = denoising_strength.value,
+                            width = width.value,
+                            height = height.value,
+                            baseModel = baseModel.value,
+                            steps = steps.value,
+                            cfgScale = cfgScale.value,
+                            sampler_index = sampler_index.value,
+                            batch_size = batch_size.value,
+                            defaultPrompt = defaultPrompt.value,
+                            defaultNegPrompt = defaultNegPrompt.value,
+                            script_name = script_name.value,
+                            script_args = script_args.value,
+                            control_net = controlNets,
+                        )
+                    }
+
+                    else -> null
+                }
+                if (param!!.activate) {
+                    normalViewModel.cnEvent(ControlNetEvent.ActivateByRequest(param.control_net))
                 }
 
-                else -> null
+                TextUtil.topsea("EditParam: ${param.toRequest()}")
+
+                paramEvent(ParamEvent.UpdateParam(param))
+
+                navUp(navController)
             }
-            if (param!!.activate) {
-                normalViewModel.cnEvent(ControlNetEvent.ActivateByRequest(param.control_net))
-            }
-
-            TextUtil.topsea("EditParam: ${param.toRequest()}")
-
-            paramEvent(ParamEvent.UpdateParam(param))
-
-            navUp(navController)
         }
     }
 }

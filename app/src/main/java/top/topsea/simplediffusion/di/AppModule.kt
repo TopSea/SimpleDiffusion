@@ -170,13 +170,26 @@ object AppModule {
                         " ADD COLUMN priority_order INTEGER NOT NULL DEFAULT 0")
             }
         }
+        val MIGRATION_2_3 = object : Migration(2, 3) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                // 更新原有数据的’非法‘名字
+                database.execSQL("UPDATE TxtParam SET name = 'Invalid Name' WHERE name == '罓罒'")
+                database.execSQL("UPDATE ImgParam SET name = 'Invalid Name' WHERE name == '罓罒'")
+
+                // 插入默认参数
+                database.execSQL("INSERT INTO TxtParam (id, priority_order, name, activate, baseModel, refinerModel, refinerAt, defaultPrompt, defaultNegPrompt, width, height, steps, cfgScale, sampler_index, batch_size, script_name, script_args, control_net) " +
+                        "VALUES ('0', '0', '罓罒', '0', '', '', '0.0', '', '', '512', '512', '28', '7.0', '', '1', '', '', '');")
+                database.execSQL("INSERT INTO ImgParam (id, priority_order, name, activate, image, denoising_strength, baseModel, refinerModel, refinerAt, defaultPrompt, defaultNegPrompt, width, height, steps, cfgScale, sampler_index, resize_mode, batch_size, script_name, script_args, control_net) " +
+                        "VALUES ('0', '0', '罓罒', '0', '0.75', '', '', '', '0.0', '', '', '512', '512', '28', '7.0', '', '0', '1', '', '', '')")
+            }
+        }
         return Room.databaseBuilder(
             appContext,
             DiffusionDatabase::class.java,
             "SimpleDiffusion.db"
         )
-            .addMigrations(MIGRATION_1_2)
-//            .createFromAsset("SimpleDiffusion.db")
+            .createFromAsset("SimpleDiffusion.db")
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
 //            .allowMainThreadQueries()
             .build()
     }
