@@ -86,8 +86,11 @@ class UIViewModel @Inject constructor(
         private set     // 是否显示正面提示词的可添加项
     var tNPromptSwitch by mutableStateOf(
         kv.decodeBool(Constant.k_t_nprompt_s, true)
+    )                   // 是否显示负面提示词
+    var tNPromptAdSwitch by mutableStateOf(
+        kv.decodeBool(Constant.k_t_npromptad_s, true)
     )
-        private set     // 是否显示负面提示词
+        private set     // 是否显示负面提示词的可添加项
     var tImgWidthSwitch by mutableStateOf(
         kv.decodeBool(Constant.k_t_imgw_s, true)
     )
@@ -154,6 +157,10 @@ class UIViewModel @Inject constructor(
         kv.decodeBool(Constant.k_i_nprompt_s, true)
     )
         private set     // 是否显示负面提示词
+    var iNPromptAdSwitch by mutableStateOf(
+        kv.decodeBool(Constant.k_i_npromptad_s, true)
+    )
+        private set     // 是否显示负面提示词的可添加项
     var iDnoiseSwitch by mutableStateOf(
         kv.decodeBool(Constant.k_i_dnoise_s, true)
     )
@@ -450,6 +457,10 @@ class UIViewModel @Inject constructor(
                 tNPromptSwitch = event.switch
                 kv.encode(Constant.k_t_nprompt_s, event.switch)
             }
+            is UIEvent.UpdateTNPAS -> {
+                tNPromptAdSwitch = event.switch
+                kv.encode(Constant.k_t_npromptad_s, event.switch)
+            }
             is UIEvent.UpdateTIWS -> {
                 tImgWidthSwitch = event.switch
                 kv.encode(Constant.k_t_imgw_s, event.switch)
@@ -515,6 +526,10 @@ class UIViewModel @Inject constructor(
             is UIEvent.UpdateINPS -> {
                 iNPromptSwitch = event.switch
                 kv.encode(Constant.k_i_nprompt_s, event.switch)
+            }
+            is UIEvent.UpdateINPAS -> {
+                iNPromptAdSwitch = event.switch
+                kv.encode(Constant.k_i_npromptad_s, event.switch)
             }
             is UIEvent.UpdateIDNS -> {
                 iDnoiseSwitch = event.switch

@@ -226,15 +226,19 @@ fun SetImgParamScreen(
                 onSwitch = { uiViewModel.onEvent(UIEvent.UpdateISDPS(it)) },
             )
             Divider(thickness = 2.dp, color = dividerColor)
-            SetParam(
+            SetParamForPrompt(
                 title = stringResource(id = R.string.r_prompt),
+                titleA = stringResource(id = R.string.sp_show_addable),
                 switch = uiViewModel.iPromptSwitch,
+                switchA = uiViewModel.iPromptAdSwitch,
                 onSwitch = { uiViewModel.onEvent(UIEvent.UpdateIPS(it)) },
+                onSwitchA = { uiViewModel.onEvent(UIEvent.UpdateIPAS(it)) },
             ){
                 ParamRowPrompt(
                     name = stringResource(id = R.string.sp_default_value),
                     loras = loras,
                     local = prompts,
+                    showAddable = true,
                     promptSets = promptSets,
                     prompt = defaultPrompt,
                     onRefresh = suspend {
@@ -243,15 +247,24 @@ fun SetImgParamScreen(
                 )
             }
             Divider(thickness = 2.dp, color = dividerColor)
-            SetParam(
+            SetParamForPrompt(
                 title = stringResource(id = R.string.r_neg_prompt),
+                titleA = stringResource(id = R.string.sp_show_addable),
                 switch = uiViewModel.iNPromptSwitch,
+                switchA = uiViewModel.iNPromptAdSwitch,
                 onSwitch = { uiViewModel.onEvent(UIEvent.UpdateINPS(it)) },
+                onSwitchA = { uiViewModel.onEvent(UIEvent.UpdateINPAS(it)) },
             ){
-                ParamRowNegPrompt(
+                ParamRowPrompt(
                     name = stringResource(id = R.string.sp_default_value),
+                    loras = loras,
+                    local = prompts,
+                    showAddable = true,
+                    promptSets = promptSets,
                     prompt = defaultNegPrompt,
-                    onRefresh = suspend { }
+                    onRefresh = suspend {
+                        normalViewModel.refreshLoras()
+                    }
                 )
             }
             Divider(thickness = 2.dp, color = dividerColor)

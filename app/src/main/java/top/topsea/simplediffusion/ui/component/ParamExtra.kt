@@ -905,6 +905,7 @@ fun ParamRowPrompt(
     name: String,
     loras: PromptFile,
     local: PromptFile,
+    showAddable: Boolean,
     promptSets: List<PromptFile> = emptyList(),
     prompt: MutableState<String>,
     onRefresh: suspend () -> Unit
@@ -938,9 +939,11 @@ fun ParamRowPrompt(
 
     Column(
         modifier = Modifier
+            .padding(bottom = 8.dp)
             .fillMaxWidth()
     ) {
-        FitScreen(modifier = Modifier,
+        FitScreen(
+            modifier = Modifier,
             titleComp = { ParamTitle(title = name) }) { modifier ->
             Row(
                 modifier = modifier,
@@ -1003,12 +1006,13 @@ fun ParamRowPrompt(
                 }
             }
         }
-        RowAddablePrompt(
-            loras = loras,
-            local = local,
-            promptSets = promptSets,
-            onAddLora = onAddLora,
-        )
+        if (showAddable)
+            RowAddablePrompt(
+                loras = loras,
+                local = local,
+                promptSets = promptSets,
+                onAddLora = onAddLora,
+            )
     }
 }
 
@@ -1163,7 +1167,7 @@ fun RowAddablePrompt(
         ) {
             LoraField(
                 modifier = Modifier
-                    .padding(start = 8.dp, top = 8.dp, bottom = 8.dp)
+                    .padding(start = 8.dp, top = 8.dp)
                     .weight(1F)
                     .height(dimensionResource(id = R.dimen.param_prompt_height))
                     .border(2.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(8.dp)),

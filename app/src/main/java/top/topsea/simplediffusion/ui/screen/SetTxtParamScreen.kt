@@ -241,15 +241,19 @@ fun SetTxtParamScreen(
                 onSwitch = { uiViewModel.onEvent(UIEvent.UpdateTSDPS(it)) },
             )
             Divider(thickness = 2.dp, color = dividerColor)
-            SetParam(
+            SetParamForPrompt(
                 title = stringResource(id = R.string.r_prompt),
+                titleA = stringResource(id = R.string.sp_show_addable),
                 switch = uiViewModel.tPromptSwitch,
+                switchA = uiViewModel.tPromptAdSwitch,
                 onSwitch = { uiViewModel.onEvent(UIEvent.UpdateTPS(it)) },
+                onSwitchA = { uiViewModel.onEvent(UIEvent.UpdateTPAS(it)) },
             ){
                 ParamRowPrompt(
                     name = stringResource(id = R.string.sp_default_value),
                     loras = loras,
                     local = prompts,
+                    showAddable = true,
                     promptSets = promptSets,
                     prompt = defaultPrompt,
                     onRefresh = suspend {
@@ -258,15 +262,24 @@ fun SetTxtParamScreen(
                 )
             }
             Divider(thickness = 2.dp, color = dividerColor)
-            SetParam(
+            SetParamForPrompt(
                 title = stringResource(id = R.string.r_neg_prompt),
+                titleA = stringResource(id = R.string.sp_show_addable),
                 switch = uiViewModel.tNPromptSwitch,
+                switchA = uiViewModel.tNPromptAdSwitch,
                 onSwitch = { uiViewModel.onEvent(UIEvent.UpdateTNPS(it)) },
+                onSwitchA = { uiViewModel.onEvent(UIEvent.UpdateTNPAS(it)) },
             ){
-                ParamRowNegPrompt(
+                ParamRowPrompt(
                     name = stringResource(id = R.string.sp_default_value),
+                    loras = loras,
+                    local = prompts,
+                    showAddable = true,
+                    promptSets = promptSets,
                     prompt = defaultNegPrompt,
-                    onRefresh = suspend { }
+                    onRefresh = suspend {
+                        normalViewModel.refreshLoras()
+                    }
                 )
             }
             Divider(thickness = 2.dp, color = dividerColor)
@@ -402,6 +415,79 @@ fun SetParam(
         if (expanded)
             Row(modifier = Modifier.padding(horizontal = 16.dp)) {
                 defaultValue()
+            }
+    }
+}
+
+@Composable
+fun SetParamForPrompt(
+    title: String,
+    titleA: String,
+    enabled: Boolean = true,
+    switch: Boolean = true,
+    switchA: Boolean = true,
+    onSwitch: (enabled: Boolean) -> Unit,
+    onSwitchA: (enabled: Boolean) -> Unit,
+    defaultValue: @Composable() () -> Unit,
+) {
+    var expanded by remember { mutableStateOf(false) }
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier
+                .padding(vertical = 8.dp, horizontal = 8.dp)
+                .fillMaxWidth()
+                .height(dimensionResource(id = R.dimen.s_normal_height))
+                // 不要点击效果
+                .clickable(
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() }) {
+                    expanded = !expanded
+                },
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            ParamTitle(title = title)
+
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                SettingSwitch(
+                    modifier = Modifier.size(DpSize(54.dp, 42.dp)),
+                    isOn = switch,
+                    tint = if (enabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary
+                ) {
+                    if (enabled)
+                        onSwitch(it)
+                }
+
+                Icon(
+                    imageVector = if (expanded) Icons.Default.KeyboardArrowDown else Icons.Default.KeyboardArrowLeft,
+                    contentDescription = "Open menu.",
+                    modifier = Modifier
+                        .padding(horizontal = 8.dp)
+                        .size(32.dp),
+                )
+            }
+
+        }
+        if (expanded)
+            Column {
+                Row(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    ParamTitle(title = titleA)
+
+                    SettingSwitch(
+                        modifier = Modifier.size(DpSize(54.dp, 42.dp)),
+                        isOn = switchA,
+                        tint = MaterialTheme.colorScheme.primary
+                    ) {
+                        onSwitchA(it)
+                    }
+                }
+                Row(modifier = Modifier.padding(horizontal = 16.dp)) {
+                    defaultValue()
+                }
             }
     }
 }

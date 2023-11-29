@@ -366,6 +366,7 @@
     <string name="sp_top_bar_txt">Txt2Img Screen</string>
     <string name="sp_top_bar_img">Img2Img Screen</string>
     <string name="sp_default_value">Default value: </string>
+    <string name="sp_show_addable">Addable: </string>
 
     <!-- SimpleDiffusion 桌面中的字符串 -->
     <string name="sd_top_bar">SimpleDiffusion Desktop</string>

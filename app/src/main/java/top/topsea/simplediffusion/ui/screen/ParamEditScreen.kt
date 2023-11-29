@@ -347,6 +347,7 @@ fun ParamEditContent(
                             name = stringResource(id = R.string.r_prompt),
                             loras = loras,
                             local = prompts,
+                            showAddable = (!isImg2Img && uiViewModel.tPromptAdSwitch) || (isImg2Img && uiViewModel.iPromptAdSwitch),
                             promptSets = promptSets,
                             prompt = defaultPrompt,
                             onRefresh = suspend {
@@ -359,10 +360,16 @@ fun ParamEditContent(
                             thickness = 2.dp,
                             color = cardColor
                         )
-                        ParamRowNegPrompt(
+                        ParamRowPrompt(
                             name = stringResource(id = R.string.r_neg_prompt),
+                            loras = loras,
+                            local = prompts,
+                            showAddable = (!isImg2Img && uiViewModel.tNPromptAdSwitch) || (isImg2Img && uiViewModel.iNPromptAdSwitch),
+                            promptSets = promptSets,
                             prompt = defaultNegPrompt,
-                            onRefresh = suspend { }
+                            onRefresh = suspend {
+                                normalViewModel.refreshLoras()
+                            }
                         )
                     }
                     if (isImg2Img) {
