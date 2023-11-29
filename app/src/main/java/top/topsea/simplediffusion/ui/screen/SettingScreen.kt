@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -82,6 +83,7 @@ fun SettingScreen(
 
     LazyColumn(
         modifier = Modifier
+            .fillMaxSize()
             .background(color = Color.LightGray),
         contentPadding = PaddingValues(vertical = 4.dp)
     ) {
