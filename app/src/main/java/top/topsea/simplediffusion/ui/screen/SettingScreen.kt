@@ -327,23 +327,7 @@ fun DefaultSettings(
         mutableStateOf(context.getString(R.string.s_btn_modify))
     }
 
-    var changePrompt by remember { mutableStateOf(false) }
     val vaes = normalViewModel.vaeState.collectAsState()
-    val prompts by normalViewModel.localPrompts.collectAsState()
-    var chosenPrompt by remember { mutableStateOf(UserPrompt()) }
-
-    if (changePrompt) {
-        ChangePromptPopup(
-            title = if (chosenPrompt.id == 0)
-                stringResource(id = R.string.p_addable_prompt_title_add)
-            else stringResource(id = R.string.p_addable_prompt_title_mod),
-            userPrompt =  chosenPrompt,
-            { changePrompt = false }
-        ) {
-            normalViewModel.promptEvent(PromptEvent.UpdatePrompt(it))
-            changePrompt = false
-        }
-    }
 
     Column(modifier = Modifier.fillMaxWidth()) {
         if (!isCamera) {
@@ -523,49 +507,6 @@ fun DefaultSettings(
                 isOn = uiViewModel.saveGridImage,
             ) {
                 uiViewModel.onEvent(UIEvent.IsSaveGridImg(it))
-            }
-        }
-        Divider(color = Color.LightGray, thickness = 1.dp)
-        Column(
-            modifier = Modifier
-                .padding(vertical = 8.dp)
-                .fillMaxWidth()
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(dimensionResource(id = R.dimen.s_normal_height)),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                SettingTitle(name = stringResource(id = R.string.s_addable_prompt))
-                Button(
-                    onClick = { changePrompt = true }
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(imageVector = Icons.Default.Add, contentDescription = "")
-                        Text(text = stringResource(id = R.string.s_addable_prompt_add))
-                    }
-                }
-            }
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                PromptField(
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .weight(1F)
-                        .height(dimensionResource(id = R.dimen.param_prompt_height))
-                        .border(2.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(8.dp)),
-                    models = prompts,
-                    onDelete = { normalViewModel.promptEvent(PromptEvent.DeletePrompt(it)) }
-                ) {
-                    chosenPrompt = it
-                    changePrompt = true
-                }
             }
         }
         // 测试时使用

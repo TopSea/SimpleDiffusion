@@ -245,6 +245,7 @@ class MainActivity : ComponentActivity() {
                                 SetPEScreen(
                                     navController = navController,
                                     uiViewModel = uiViewModel,
+                                    normalViewModel = normalViewModel,
                                 )
                             }
                             composable(SetTxtParamScreen.route) {
