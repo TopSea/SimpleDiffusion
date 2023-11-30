@@ -42,6 +42,7 @@ import top.topsea.simplediffusion.data.viewmodel.UIViewModel
 import top.topsea.simplediffusion.event.PromptEvent
 import top.topsea.simplediffusion.ui.component.ChangePromptPopup
 import top.topsea.simplediffusion.ui.component.PromptField
+import top.topsea.simplediffusion.ui.dialog.ChangeAddable
 
 @Composable
 fun SetPEScreen(
@@ -54,7 +55,7 @@ fun SetPEScreen(
     var chosenPrompt by remember { mutableStateOf(UserPrompt()) }
 
     if (changePrompt) {
-        ChangePromptPopup(
+        ChangeAddable(
             title = if (chosenPrompt.id == 0)
                 stringResource(id = R.string.p_addable_prompt_title_add)
             else stringResource(id = R.string.p_addable_prompt_title_mod),

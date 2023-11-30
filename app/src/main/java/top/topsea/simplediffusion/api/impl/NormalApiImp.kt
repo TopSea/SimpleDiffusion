@@ -292,9 +292,13 @@ class NormalApiImp(
 
     suspend fun checkSDConnect(checkConnect: (Boolean) -> Unit) {
         withContext(Dispatchers.IO) {
+            val json = "application/json; charset=utf-8".toMediaType()
+            val requestBody = "{ }".toRequestBody(json)
+
             val connect = kotlin.runCatching {
-                normalApi.checkSDConnect().execute()
+                normalApi.checkSDConnect(requestBody).execute()
             }
+            TextUtil.topsea("checkSDConnect: ${connect.getOrNull()?.body()?.string()}")
             checkConnect(connect.isSuccess)
         }
     }

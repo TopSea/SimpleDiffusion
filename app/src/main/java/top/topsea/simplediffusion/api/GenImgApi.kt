@@ -9,6 +9,8 @@ import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Streaming
+import top.topsea.simplediffusion.api.dto.ImgResponse
+import top.topsea.simplediffusion.api.dto.QueueTask
 
 interface GenImgApi {
     @Headers("Content-Type: application/json", "Accept: application/json")

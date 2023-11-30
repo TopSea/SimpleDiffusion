@@ -66,8 +66,8 @@ interface NormalApi {
     fun getLoras(): Call<JsonArray>
 
     @Headers("Accept: application/json")
-    @GET("/robots.txt")
-    fun checkSDConnect(): Call<ResponseBody>
+    @POST("/sdapi/v1/options")
+    fun checkSDConnect(@Body json: RequestBody): Call<ResponseBody>
 
     @Headers("Accept: application/json")
     @GET("/agent-scheduler/v1/queue")

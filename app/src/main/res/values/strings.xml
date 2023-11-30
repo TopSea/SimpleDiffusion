@@ -208,6 +208,10 @@
     <string name="p_activate_code_newbie">Use Basic Mode</string>
     <string name="p_device_error">This software has been maliciously modified, please re-download and install.</string>
     <string name="p_proof_expired">An error has occurred, Please try again later.</string>
+    <string name="p_sd_url">SD server ip address</string>
+    <string name="p_sd_api_username">SD API username</string>
+    <string name="p_sd_api_password">SD API password</string>
+    <string name="p_sd_change_url">Change SD server address</string>
 
     <!-- Toast字符串 -->
     <string name="download_sucecssed">Download succeed!</string>
@@ -223,6 +227,8 @@
     <string name="t_too_many_gen">The generation queue is full.</string>
     <string name="t_no_ex">This extension was not found on SD server.</string>
     <string name="t_invalid_name">Name contains invalid characters.</string>
+    <string name="t_sd_empty_url">SD server address cannot be empty!</string>
+    <string name="t_sd_empty_addable_name">The addable item\'s name cannot be empty!</string>
 
     <!--MMKV字符串-->
     <string name="kv_card_position" translatable="false">Card_Position</string>
@@ -235,9 +241,9 @@
     <string name="url_afd" translatable="false">https://afdian.net/a/GoAHi</string>
     <string name="url_github" translatable="false">https://github.com/TopSea/SimpleDiffusion</string>
 
-    <string name="server_ip">Server_IP</string>
-    <string name="chat_history">Chat_History</string>
-    <string name="voice_chat">Voice_Chat</string>
+    <string name="server_ip" translatable="false">Server_IP</string>
+    <string name="api_username" translatable="false">Chat_History</string>
+    <string name="api_password" translatable="false">Voice_Chat</string>
 
 
     <!-- 设置中的字符串 -->

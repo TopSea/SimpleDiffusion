@@ -24,7 +24,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
@@ -57,16 +56,13 @@ import top.topsea.simplediffusion.DesktopScreen
 import top.topsea.simplediffusion.R
 import top.topsea.simplediffusion.api.dto.VaeModel
 import top.topsea.simplediffusion.data.param.TaskParam
-import top.topsea.simplediffusion.data.param.UserPrompt
 import top.topsea.simplediffusion.data.state.UIEvent
 import top.topsea.simplediffusion.data.viewmodel.NormalViewModel
 import top.topsea.simplediffusion.data.viewmodel.UIViewModel
-import top.topsea.simplediffusion.event.PromptEvent
-import top.topsea.simplediffusion.ui.component.ChangePromptPopup
-import top.topsea.simplediffusion.ui.component.PromptField
 import top.topsea.simplediffusion.ui.component.RequestErrorPopup
 import top.topsea.simplediffusion.ui.component.StepRowInt
 import top.topsea.simplediffusion.ui.component.SettingSwitch
+import top.topsea.simplediffusion.ui.dialog.ChangeUrl
 import top.topsea.simplediffusion.util.TextUtil
 
 @Composable
@@ -318,18 +314,17 @@ fun DefaultSettings(
 
     val kv = MMKV.defaultMMKV()
     val serverIP: String = kv.decodeString(stringResource(id = R.string.server_ip), "http://192.168.0.107:7860")!!
-    var serverIPStr by remember { mutableStateOf(serverIP) }
+    val serverIPStr = remember { mutableStateOf(serverIP) }
 
-    var enableServerIP by remember { mutableStateOf(true) }
-    var textColor by remember {
-        mutableStateOf(Color.LightGray)
-    }
-
-    var btnIP by remember {
-        mutableStateOf(context.getString(R.string.s_btn_modify))
-    }
+    var changeIP by remember { mutableStateOf(false) }
 
     val vaes = normalViewModel.vaeState.collectAsState()
+
+    if (changeIP) {
+        ChangeUrl(serverIP = serverIPStr) {
+            changeIP = false
+        }
+    }
 
     Column(modifier = Modifier.fillMaxWidth()) {
         if (!isCamera) {
@@ -349,34 +344,22 @@ fun DefaultSettings(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     SettingTitle(name = stringResource(id = R.string.s_sd_dress))
-                    BasicTextField(
+                    Text(
                         modifier = Modifier,
-                        value = serverIPStr,
-                        onValueChange = { serverIPStr = it },
-                        enabled = true,
-                        readOnly = enableServerIP,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                        textStyle = TextStyle(color = textColor)
+                        text = serverIPStr.value,
+                        color = MaterialTheme.colorScheme.secondary
                     )
                 }
                 Button(
                     modifier = Modifier
                         .height(36.dp),
                     onClick = {
-                        enableServerIP = !enableServerIP
-                        if (!enableServerIP) {
-                            textColor = Color.Black
-                            btnIP = context.getString(R.string.s_btn_confirm)
-                        } else {
-                            textColor = Color.LightGray
-                            btnIP = context.getString(R.string.s_btn_modify)
-                            kv.encode(context.resources.getString(R.string.server_ip), serverIPStr)
-                        }
+                        changeIP = true
                     },
                     shape = RoundedCornerShape(8.dp),
                     contentPadding = PaddingValues(vertical = 2.dp, horizontal = 8.dp)
                 ) {
-                    Text(text = btnIP)
+                    Text(text = stringResource(id = R.string.s_btn_modify))
                 }
             }
             Divider(color = Color.LightGray, thickness = 1.dp)

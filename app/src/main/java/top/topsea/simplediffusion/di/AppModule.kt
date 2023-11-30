@@ -11,13 +11,16 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import okhttp3.Credentials
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import top.topsea.simplediffusion.R
 import top.topsea.simplediffusion.api.GenImgApi
 import top.topsea.simplediffusion.api.NormalApi
 import top.topsea.simplediffusion.api.PromptApi
@@ -32,10 +35,11 @@ import top.topsea.simplediffusion.data.param.ImgParamDao
 import top.topsea.simplediffusion.data.param.TaskParamDao
 import top.topsea.simplediffusion.data.param.TxtParamDao
 import top.topsea.simplediffusion.data.param.UserPromptDao
+import top.topsea.simplediffusion.util.Constant
 import top.topsea.simplediffusion.util.TextUtil
 import java.util.concurrent.TimeUnit
+import javax.inject.Qualifier
 import javax.inject.Singleton
-
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -57,13 +61,16 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideInterceptor(kv: MMKV): Interceptor {
+    fun provideInterceptor(@ApplicationContext context: Context, kv: MMKV): Interceptor {
         // OkHttpClient的拦截器，用于拦截retrofit里header的配置
         val interceptor = Interceptor { chain ->
             val request: Request = chain.request()
             val builder: Request.Builder = request.newBuilder()
 
-            val serverIP = kv.decodeString("Server_IP", "http://192.168.0.107:7860")!!
+            val serverIP = kv.decodeString(context.getString(R.string.server_ip), "http://192.168.0.107:7860")!!
+            val user = kv.decodeString(context.getString(R.string.api_username), "")!!
+            val password = kv.decodeString(context.getString(R.string.api_password), "")!!
+            val credentials = Credentials.basic(user, password)
 
             val url = serverIP.toHttpUrl()
             val trueUrl = url.newBuilder()
@@ -74,7 +81,9 @@ object AppModule {
                 .build()
 
             val newRequest: Request = builder.url(trueUrl).build()
-            return@Interceptor chain.proceed(newRequest)
+            val authenticatedRequest = newRequest.newBuilder()
+                .header("Authorization", credentials).build()
+            return@Interceptor chain.proceed(authenticatedRequest)
         }
 
         return interceptor
@@ -82,9 +91,13 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor, interceptor: Interceptor): OkHttpClient {
+    fun provideOkHttpClient(
+        loggingInterceptor: HttpLoggingInterceptor,
+        interceptor: Interceptor,
+    ): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(interceptor)
+//            .addInterceptor(authInterceptor)
             .addInterceptor(loggingInterceptor)
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)

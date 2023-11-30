@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import top.topsea.simplediffusion.api.QueueData
+import top.topsea.simplediffusion.api.dto.QueueData
 import top.topsea.simplediffusion.api.dto.Img2Img
 import top.topsea.simplediffusion.api.dto.TaskPgRequest
 import top.topsea.simplediffusion.api.dto.Txt2Img

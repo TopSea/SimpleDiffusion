@@ -18,7 +18,7 @@ import androidx.annotation.Keep
 import androidx.annotation.RequiresApi
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
-import top.topsea.simplediffusion.api.QueueData
+import top.topsea.simplediffusion.api.dto.QueueData
 import top.topsea.simplediffusion.data.param.ImageData
 import java.io.BufferedOutputStream
 import java.io.ByteArrayOutputStream

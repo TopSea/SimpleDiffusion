@@ -169,6 +169,10 @@
     <string name="p_activate_code_newbie">使用基础版</string>
     <string name="p_device_error">本软件已被恶意修改，请重新下载安装。</string>
     <string name="p_proof_expired">出现了错误，请稍后重试。</string>
+    <string name="p_sd_url">SD 服务器地址</string>
+    <string name="p_sd_api_username">SD API 用户名</string>
+    <string name="p_sd_api_password">SD API 密码</string>
+    <string name="p_sd_change_url">修改 SD 服务器地址</string>
 
     <!-- Toast字符串 -->
     <string name="download_sucecssed">下载成功！</string>
@@ -184,11 +188,8 @@
     <string name="t_too_many_gen">生成队列已满。</string>
     <string name="t_no_ex">SD 服务器上未找到该插件。</string>
     <string name="t_invalid_name">名字中包含非法字符。</string>
-
-    <!--MMKV字符串-->
-    <string name="server_ip">Server_IP</string>
-    <string name="chat_history">Chat_History</string>
-    <string name="voice_chat">Voice_Chat</string>
+    <string name="t_sd_empty_url">SD 服务器地址不能为空！</string>
+    <string name="t_sd_empty_addable_name">可添加项名字不能为空！</string>
 
 
     <!-- 设置中的字符串 -->

@@ -1,6 +1,5 @@
 package top.topsea.simplediffusion.api.impl
 
-import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
@@ -10,10 +9,10 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
-import top.topsea.simplediffusion.api.AgentResponse
+import top.topsea.simplediffusion.api.dto.AgentResponse
 import top.topsea.simplediffusion.api.GenImgApi
-import top.topsea.simplediffusion.api.QueueData
-import top.topsea.simplediffusion.api.QueueImgResponse
+import top.topsea.simplediffusion.api.dto.QueueData
+import top.topsea.simplediffusion.api.dto.QueueImgResponse
 import top.topsea.simplediffusion.api.dto.ErrorResponse
 import top.topsea.simplediffusion.api.dto.RequestErrorDetail
 import top.topsea.simplediffusion.event.RequestState
