@@ -367,7 +367,7 @@ fun DisplayTasks(
     val wp = context.resources.displayMetrics.widthPixels
     val pdp = with(LocalDensity.current) { (wp * 0.04F).toDp() }
 
-    val state = rememberLazyListState(initialFirstVisibleItemIndex = uiViewModel.displayingImg)
+    val state = rememberLazyListState(initialFirstVisibleItemIndex = uiViewModel.displayingTask)
 
     val snappingLayout = remember(state) { SnapLayoutInfoProvider(state) }
     val flingBehavior = rememberSnapFlingBehavior(snappingLayout)
