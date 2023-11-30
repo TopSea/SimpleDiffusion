@@ -298,8 +298,12 @@ class NormalApiImp(
             val connect = kotlin.runCatching {
                 normalApi.checkSDConnect(requestBody).execute()
             }
-            TextUtil.topsea("checkSDConnect: ${connect.getOrNull()?.body()?.string()}")
-            checkConnect(connect.isSuccess)
+            val responseBody = connect.getOrNull()
+            if (responseBody == null) {
+                checkConnect(false)
+            } else {
+                checkConnect(responseBody.isSuccessful)
+            }
         }
     }
 

@@ -37,13 +37,11 @@ import top.topsea.simplediffusion.event.ImageEvent
 import top.topsea.simplediffusion.event.RequestState
 
 class TaskQueue(
-
     val genImgApi: GenImgApiImp,
     val normalApi: NormalApiImp,
     val dao: TaskParamDao,
     val context: Context
-)
-{
+) {
     var cancelGenerate: ((String) -> Unit)? = null
     var cnState: ControlNetState? = null
     var imgViewModel: ImgDataViewModel? = null
@@ -69,7 +67,6 @@ class TaskQueue(
     val capGenImgList: SnapshotStateList<ImageData> = mutableStateListOf()
 
     private var started = false
-    private var currTask: TaskParam? = null
 
     fun genListEvent(event: TaskListEvent) {
         when(event) {
@@ -107,9 +104,8 @@ class TaskQueue(
         scope.launch {
             TextUtil.topsea("Update task: $task", Log.ERROR)
             if (task.genInfo.isNotEmpty()) {
+                // genInfo 不为空表示生成错误或者生成完成，所以从列表中删除
                 tasks.remove(task)
-            } else {
-                tasks.add(task)
             }
             dao.update(task)
         }
