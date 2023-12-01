@@ -17,7 +17,7 @@
 <a href="https://github.com/TopSea/SimpleDiffusion/blob/master/LICENSE"><img src="https://img.shields.io/github/license/TopSea/SimpleDiffusion?color=2b9348" alt="License Badge"/></a>
 <br>
 <a href="https://github.com/TopSea/SimpleDiffusion/releases"><img src="https://img.shields.io/github/downloads/TopSea/SimpleDiffusion/total" alt="Download Badge"/></a>
-<a href="https://play.google.com/store/apps/details?id=top.topsea.simplediffusion"><img src="https://img.shields.io/badge/jetpack_compose-gray?style=for-the-badge&logo=googleplay" alt="Download Badge"/></a>
+<a href="https://play.google.com/store/apps/details?id=top.topsea.simplediffusion"><img src="https://img.shields.io/badge/google_play-gray?style=for-the-badge&logo=googleplay" alt="Download Badge"/></a>
 
 </div>
 
