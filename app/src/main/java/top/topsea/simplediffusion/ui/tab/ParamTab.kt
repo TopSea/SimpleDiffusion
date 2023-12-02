@@ -191,7 +191,6 @@ fun ParamItem(
             .clickable {
                 paramEvent(ParamEvent.ActivateParam(param))
                 uiViewModel.onEvent(UIEvent.ModelChanging(true))
-                uiViewModel.onEvent(UIEvent.ModelChanging(true))
 
                 // 更改相应的 ControlNet
                 cnEvent(ControlNetEvent.ActivateByRequest(param.control_net))

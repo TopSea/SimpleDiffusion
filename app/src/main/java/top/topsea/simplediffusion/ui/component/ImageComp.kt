@@ -45,6 +45,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import com.google.gson.JsonParser
 import top.topsea.simplediffusion.R
 import top.topsea.simplediffusion.data.param.ImageData
 import top.topsea.simplediffusion.data.param.ImgParam
@@ -175,9 +176,32 @@ fun ImageInDisplay(
                             ShowingIcon(
                                 icon = painterResource(id = R.drawable.photo_plus),
                                 onclick = {
-                                    paramViewModel.paramEvent(ParamEvent.AddToParam(context, image.imageName){
-                                        Toast.makeText(context, context.getString(R.string.t_image_added), Toast.LENGTH_SHORT).show()
-                                    })
+                                    if (image.info.isNotEmpty()) {
+                                        val parser = JsonParser()
+                                        val json = parser.parse(image.info).asJsonObject
+                                        val imgParam = ImgParam(
+                                            id = param.id,
+                                            priority_order = param.priority_order,
+                                            name = param.name,
+                                            activate = true,
+                                            denoising_strength = json.get("denoising_strength")?.asFloat ?: 0f,
+                                            baseModel = json.get("sd_model_name")?.asString ?: "",
+                                            defaultPrompt = json.get("prompt")?.asString ?: "",
+                                            defaultNegPrompt = json.get("negative_prompt")?.asString ?: "",
+                                            width = json.get("width")?.asInt ?: 512,
+                                            height = json.get("height")?.asInt ?: 512,
+                                            steps = json.get("steps")?.asInt ?: 28,
+                                            cfgScale = json.get("cfg_scale")?.asFloat ?: 7f,
+                                            sampler_index = json.get("sampler_name")?.asString ?: "Euler",
+                                        )
+                                        paramViewModel.paramEvent(ParamEvent.ApplyToParam(context, imgParam, image.imageName){
+                                            Toast.makeText(context, context.getString(R.string.t_image_added), Toast.LENGTH_SHORT).show()
+                                        })
+                                    } else {
+                                        paramViewModel.paramEvent(ParamEvent.AddToParam(context, image.imageName){
+                                            Toast.makeText(context, context.getString(R.string.t_image_added), Toast.LENGTH_SHORT).show()
+                                        })
+                                    }
                                 },
                             )
                     }

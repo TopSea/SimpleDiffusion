@@ -173,6 +173,20 @@ class ParamViewModel @Inject constructor(
                     event.afterAdd()
                 }
             }
+            is ParamEvent.ApplyToParam -> {
+                val param = event.imgParam
+                viewModelScope.launch {
+                    val base64Str = FileUtil.imageName2Base64(event.context, event.imageName)
+                    param.image.value = base64Str
+                    _param_state.update {
+                        it.copy(
+                            currParam = param
+                        )
+                    }
+                    aImgDao.update(param)
+                    event.afterAdd()
+                }
+            }
             is ParamEvent.AddParam -> {
                 viewModelScope.launch {
                     val param = event.bp
