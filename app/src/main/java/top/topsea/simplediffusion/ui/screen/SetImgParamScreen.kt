@@ -270,8 +270,8 @@ fun SetImgParamScreen(
             Divider(thickness = 2.dp, color = dividerColor)
             SetParam(
                 title = stringResource(id = R.string.r_denoising_strength),
-                switch = uiViewModel.iNPromptSwitch,
-                onSwitch = { uiViewModel.onEvent(UIEvent.UpdateINPS(it)) },
+                switch = uiViewModel.iDnoiseSwitch,
+                onSwitch = { uiViewModel.onEvent(UIEvent.UpdateIDNS(it)) },
             ){
                 StepRowFloat(
                     name = stringResource(id = R.string.sp_default_value),
