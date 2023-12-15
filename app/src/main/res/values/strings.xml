@@ -41,6 +41,8 @@
     <string name="sd_top" translatable="false">http://sd.top</string>
 
 
+    <string name="app_sd_connected">SimpleDiffusion(Connected)</string>
+    <string name="app_sd_unconnected">SimpleDiffusion(Unconnected)</string>
     <string name="txt_2_img">Txt2Img</string>
     <string name="send">Send</string>
     <string name="textfield_hint">Enter Message…</string>

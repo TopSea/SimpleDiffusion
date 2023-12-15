@@ -6,7 +6,6 @@ import androidx.annotation.Keep
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -24,12 +23,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.Close
-import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -56,19 +49,11 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import top.topsea.simplediffusion.CameraSettingScreen
 import top.topsea.simplediffusion.R
-import top.topsea.simplediffusion.SettingScreen
 import top.topsea.simplediffusion.data.param.UserPrompt
-import top.topsea.simplediffusion.data.state.UIEvent
-import top.topsea.simplediffusion.navUp
 import top.topsea.simplediffusion.util.Constant
-import top.topsea.simplediffusion.util.TextUtil
 
 
 @Keep
@@ -88,26 +73,11 @@ enum class Screen {
 
 @Composable
 fun TopBar(
-    navController: NavController,
     title: String,
     screen: Screen,
-    backIcon: @Composable() (BoxScope.(() -> Unit) -> Unit) = { navUp ->
-        Icon(
-            imageVector = Icons.Rounded.ArrowBack, contentDescription = null,
-            modifier = Modifier
-                .align(Alignment.CenterStart)
-                .padding(start = 16.dp)
-                .size(32.dp)
-                .clickable {
-                    navUp()
-                },
-            tint = Color.White
-        )
-    },
-    navOp: (UIEvent) -> Unit
+    startIcon: @Composable() (BoxScope.() -> Unit),
+    endIcon: @Composable() (BoxScope.() -> Unit) = {},
 ) {
-    var tempParamShow by remember { mutableStateOf(false) }
-
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -116,131 +86,64 @@ fun TopBar(
     ) {
         when(screen) {
             Screen.BASE -> BaseTopBar(
-                modifier = Modifier.background(color = MaterialTheme.colorScheme.primary),
                 title = title,
-                startTitle = true
-            ) {
-                Icon(
-                    imageVector = Icons.Rounded.Settings,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .padding(end = 16.dp, top = 4.dp, bottom = 8.dp)
-                        .size(32.dp)
-                        .align(Alignment.CenterEnd)
-                        .clickable {
-                            navOp(UIEvent.Navigate(SettingScreen) {
-                                navController.navigate(SettingScreen.route)
-                            })
-                        },
-                    tint = Color.White
-                )
-            }
+                modifier = Modifier.background(color = MaterialTheme.colorScheme.primary),
+                endIcon = endIcon,
+            )
 
             Screen.SETTING -> BaseTopBar(
-                modifier = Modifier.background(color = MaterialTheme.colorScheme.primary),
                 title = title,
-                startIcon = {
-                backIcon {
-                    navUp(navController)
-                }
-            })
+                modifier = Modifier.background(color = MaterialTheme.colorScheme.primary),
+                startIcon = startIcon
+            )
 
             Screen.SET_PARAM -> BaseTopBar(
-                modifier = Modifier.background(color = MaterialTheme.colorScheme.primary),
                 title = title,
-                startIcon = {
-                    backIcon {
-                        navUp(navController)
-                    }
-            })
+                modifier = Modifier.background(color = MaterialTheme.colorScheme.primary),
+                startIcon = startIcon
+            )
             Screen.SET_PARAM_TXT -> BaseTopBar(
-                modifier = Modifier.background(color = MaterialTheme.colorScheme.primary),
                 title = title,
-                startIcon = {
-                    backIcon {
-                        navUp(navController)
-                    }
-            })
+                modifier = Modifier.background(color = MaterialTheme.colorScheme.primary),
+                startIcon = startIcon
+            )
             Screen.SET_PARAM_IMG -> BaseTopBar(
-                modifier = Modifier.background(color = MaterialTheme.colorScheme.primary),
                 title = title,
-                startIcon = {
-                    backIcon {
-                        navUp(navController)
-                    }
-            })
+                modifier = Modifier.background(color = MaterialTheme.colorScheme.primary),
+                startIcon = startIcon
+            )
             Screen.EDIT -> BaseTopBar(
-                modifier = Modifier.background(color = MaterialTheme.colorScheme.primary),
                 title = title,
-                startIcon = { backIcon {  } }
-            ){
-                Icon(
-                    imageVector = if (tempParamShow) Icons.Filled.Info else Icons.Outlined.Info,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .padding(end = 16.dp, top = 4.dp, bottom = 8.dp)
-                        .size(32.dp)
-                        .align(Alignment.CenterEnd)
-                        .clickable(indication = null, interactionSource = remember { MutableInteractionSource() }) {
-                            tempParamShow = !tempParamShow
-                            navOp(UIEvent.TempParamShow(tempParamShow))
-                        },
-                    tint = Color.White
-                )
-            }
+                modifier = Modifier.background(color = MaterialTheme.colorScheme.primary),
+                startIcon = startIcon,
+                endIcon = endIcon,
+            )
             Screen.EDIT_CN -> BaseTopBar(
-                modifier = Modifier.background(color = MaterialTheme.colorScheme.primary),
                 title = title,
-                startIcon = {
-                backIcon {
-                    navUp(navController)
-                }
-            })
+                modifier = Modifier.background(color = MaterialTheme.colorScheme.primary),
+                startIcon = startIcon
+            )
             Screen.ABOUT -> BaseTopBar(
-                modifier = Modifier.background(color = MaterialTheme.colorScheme.primary),
                 title = title,
-                startIcon = {
-                backIcon {
-                    navUp(navController)
-                }
-            })
+                modifier = Modifier.background(color = MaterialTheme.colorScheme.primary),
+                startIcon = startIcon
+            )
             Screen.CAMERA -> BaseTopBar(
-                modifier = Modifier.background(color = Color.Black),
                 title = "",
-                startIcon = {
-                    backIcon {  }
-            }){
-                Icon(
-                    imageVector = Icons.Rounded.Settings,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .padding(end = 16.dp, top = 4.dp, bottom = 8.dp)
-                        .size(32.dp)
-                        .align(Alignment.CenterEnd)
-                        .clickable {
-                            navOp(UIEvent.Navigate(CameraSettingScreen) {
-                                navController.navigate(CameraSettingScreen.route)
-                            })
-                        },
-                    tint = Color.White
-                )
-            }
+                modifier = Modifier.background(color = Color.Black),
+                startIcon = startIcon,
+                endIcon = endIcon
+            )
             Screen.CAMERA_SETTINGS -> BaseTopBar(
-                modifier = Modifier.background(color = MaterialTheme.colorScheme.primary),
                 title = title,
-                startIcon = {
-                    backIcon {
-                        navUp(navController)
-                    }
-            }){ }
+                modifier = Modifier.background(color = MaterialTheme.colorScheme.primary),
+                startIcon = startIcon
+            )
             Screen.DESKTOP -> BaseTopBar(
-                modifier = Modifier.background(color = MaterialTheme.colorScheme.primary),
                 title = title,
-                startIcon = {
-                backIcon {
-                    navUp(navController)
-                }
-            })
+                modifier = Modifier.background(color = MaterialTheme.colorScheme.primary),
+                startIcon = startIcon
+            )
         }
     }
 }
@@ -249,7 +152,6 @@ fun TopBar(
 fun BaseTopBar(
     title: String,
     modifier: Modifier = Modifier,
-    startTitle: Boolean = false,
     startIcon: @Composable() (BoxScope.() -> Unit) = {},
     endIcon: @Composable() (BoxScope.() -> Unit) = {},
 ) {
@@ -259,16 +161,43 @@ fun BaseTopBar(
             .height(52.dp)
     ) {
         startIcon()
-        if (title.isNotEmpty())
-            Text(
-                text = title,
-                modifier = Modifier
-                    .padding(start = 16.dp)
-                    .align(if (startTitle) Alignment.CenterStart else Alignment.Center),
-                fontSize = TextUnit(value = 20F, type = TextUnitType.Sp),
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
+        if (title.isNotEmpty()) {
+            if (title.contains("(")) {
+                val connectTitle = title.split("(")
+                Row(
+                    modifier = Modifier
+                        .padding(start = 16.dp)
+                        .align(Alignment.CenterStart),
+                    verticalAlignment = Alignment.Bottom
+                ) {
+                    Text(
+                        text = connectTitle[0],
+                        modifier = Modifier,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
+                    Text(
+                        text = "(" + connectTitle[1],
+                        modifier = Modifier
+                            .padding(start = 4.dp),
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
+                }
+            } else {
+                Text(
+                    text = title,
+                    modifier = Modifier
+                        .padding(start = 16.dp)
+                        .align(Alignment.Center),
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
+            }
+        }
         endIcon()
     }
 }
@@ -416,7 +345,7 @@ fun StringInput(
     textStyle: TextStyle,
 ) {
     val context = LocalContext.current
-    
+
     Column(
         modifier = modifier.width(200.dp)
     ) {
