@@ -1,6 +1,7 @@
 package top.topsea.simplediffusion.ui.screen
 
 import android.Manifest
+import android.util.Log
 import android.widget.Toast
 import androidx.annotation.Keep
 import androidx.compose.animation.AnimatedVisibility
@@ -24,6 +25,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -31,9 +33,8 @@ import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.pullrefresh.pullRefresh
-import androidx.compose.material3.pullrefresh.pullRefreshIndicatorTransform
-import androidx.compose.material3.pullrefresh.rememberPullRefreshState
+import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -48,6 +49,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -78,6 +80,7 @@ import top.topsea.simplediffusion.event.TaskListEvent
 import top.topsea.simplediffusion.ui.component.DisplayImages
 import top.topsea.simplediffusion.ui.component.DisplayInGrid
 import top.topsea.simplediffusion.ui.component.DisplayTasks
+import top.topsea.simplediffusion.util.TextUtil
 import top.topsea.simplediffusion.util.getWidthDp
 
 
@@ -87,6 +90,7 @@ enum class Bottom{
     PARAM
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BaseScreen(
     navController: NavController,
@@ -104,16 +108,28 @@ fun BaseScreen(
     var refreshing by remember { mutableStateOf(false) }
     val refreshScope = rememberCoroutineScope()
 
-    fun refresh() = refreshScope.launch {
-        refreshing = true
-        // 每次刷新检查SD的连接状态
-        normalViewModel.checkSDConnect {
-            uiViewModel.onEvent(UIEvent.ServerConnected(it))
-            refreshing = false
+//    fun refresh() = refreshScope.launch {
+//        refreshing = true
+//        // 每次刷新检查SD的连接状态
+//        normalViewModel.checkSDConnect {
+//            uiViewModel.onEvent(UIEvent.ServerConnected(it))
+//            refreshing = false
+//        }
+//    }
+
+    val state = rememberPullToRefreshState()
+    if (state.isRefreshing) {
+        LaunchedEffect(true) {
+            TextUtil.topsea("BaseScreen: isRefreshing")
+            refreshing = true
+            // 每次刷新检查SD的连接状态
+            normalViewModel.checkSDConnect {
+                uiViewModel.onEvent(UIEvent.ServerConnected(it))
+                refreshing = false
+            }
+            state.endRefresh()
         }
     }
-
-    val state = rememberPullRefreshState(refreshing, onRefresh = ::refresh)
     val rotation = animateFloatAsState(state.progress * 120, label = "")
 
     val paramState = paramViewModel.paramState.collectAsState()
@@ -143,7 +159,7 @@ fun BaseScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .pullRefresh(state)
+            .nestedScroll(state.nestedScrollConnection)
     ) {
         when (selectedItem.value) {
             Bottom.PHOTO -> {
@@ -173,28 +189,13 @@ fun BaseScreen(
             }
         }
 
-        Surface(
-            modifier = Modifier
-                .size(40.dp)
-                .align(Alignment.TopCenter)
-                .pullRefreshIndicatorTransform(state)
-                .rotate(rotation.value),
+        PullToRefreshContainer(
+            modifier = Modifier.align(Alignment.TopCenter),
+            state = state,
             shape = RoundedCornerShape(10.dp),
-            color = MaterialTheme.colorScheme.primary,
-            shadowElevation = 16.dp
-        ) {
-            Box {
-                if (refreshing) {
-                    CircularProgressIndicator(
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .size(25.dp),
-                        color = Color.White,
-                        strokeWidth = 3.dp
-                    )
-                }
-            }
-        }
+            containerColor = MaterialTheme.colorScheme.primary,
+            contentColor = Color.White,
+        )
     }
 
     AnimatedVisibility(
