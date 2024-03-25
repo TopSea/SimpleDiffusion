@@ -27,12 +27,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import top.topsea.simplediffusion.R
-import top.topsea.simplediffusion.data.state.UIEvent
-import top.topsea.simplediffusion.data.viewmodel.UIViewModel
+import top.topsea.simplediffusion.data.viewmodel.UISetsViewModel
 
 @Composable
 fun AboutSDScreen(
-    uiViewModel: UIViewModel,
+    uiSetsViewModel: UISetsViewModel,
 ) {
     val context = LocalContext.current
     val info = context.packageManager.getPackageInfo(context.packageName, 0)
@@ -58,7 +57,7 @@ fun AboutSDScreen(
             )
             Text(text = stringResource(R.string.a_develop_by, "TopSea"), fontSize = 16.sp, modifier = Modifier.padding(top = 8.dp))
 
-            AboutRows(uiViewModel = uiViewModel)
+            AboutRows(uiSetsViewModel = uiSetsViewModel)
 
         }
 
@@ -76,7 +75,7 @@ fun AboutSDScreen(
 @Composable
 fun AboutRows(
     modifier: Modifier = Modifier,
-    uiViewModel: UIViewModel,
+    uiSetsViewModel: UISetsViewModel,
 ) {
     val context = LocalContext.current
     Box(

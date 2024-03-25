@@ -3,10 +3,8 @@ package top.topsea.simplediffusion.ui.screen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -27,27 +25,23 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import top.topsea.simplediffusion.R
 import top.topsea.simplediffusion.data.param.UserPrompt
 import top.topsea.simplediffusion.data.state.UIEvent
 import top.topsea.simplediffusion.data.viewmodel.NormalViewModel
-import top.topsea.simplediffusion.data.viewmodel.UIViewModel
+import top.topsea.simplediffusion.data.viewmodel.UISetsViewModel
 import top.topsea.simplediffusion.event.PromptEvent
-import top.topsea.simplediffusion.ui.component.ChangePromptPopup
 import top.topsea.simplediffusion.ui.component.PromptField
 import top.topsea.simplediffusion.ui.dialog.ChangeAddable
 
 @Composable
 fun SetPEScreen(
     navController: NavController,
-    uiViewModel: UIViewModel,
+    uiSetsViewModel: UISetsViewModel,
     normalViewModel: NormalViewModel,
 ) {
     var changePrompt by remember { mutableStateOf(false) }
@@ -80,7 +74,7 @@ fun SetPEScreen(
                 1.dp, Color.LightGray, RoundedCornerShape(8.dp)
             ),
     ) {
-        SetPERows(navController = navController, uiViewModel = uiViewModel)
+        SetPERows(navController = navController, uiSetsViewModel = uiSetsViewModel)
         Divider()
         Column(
             modifier = Modifier
@@ -133,20 +127,20 @@ fun SetPEScreen(
 fun SetPERows(
     modifier: Modifier = Modifier,
     navController: NavController,
-    uiViewModel: UIViewModel,
+    uiSetsViewModel: UISetsViewModel,
 ) {
     Column(
         modifier = modifier
             .padding(horizontal = 8.dp)
     ) {
         SettingGoTo(title = stringResource(id = R.string.sp_top_bar_txt)) {
-            uiViewModel.onEvent(UIEvent.Navigate(top.topsea.simplediffusion.SetTxtParamScreen){
+            uiSetsViewModel.onEvent(UIEvent.Navigate(top.topsea.simplediffusion.SetTxtParamScreen){
                 navController.navigate(top.topsea.simplediffusion.SetTxtParamScreen.route)
             })
         }
         Divider()
         SettingGoTo(title = stringResource(id = R.string.sp_top_bar_img)) {
-            uiViewModel.onEvent(UIEvent.Navigate(top.topsea.simplediffusion.SetImgParamScreen){
+            uiSetsViewModel.onEvent(UIEvent.Navigate(top.topsea.simplediffusion.SetImgParamScreen){
                 navController.navigate(top.topsea.simplediffusion.SetImgParamScreen.route)
             })
         }

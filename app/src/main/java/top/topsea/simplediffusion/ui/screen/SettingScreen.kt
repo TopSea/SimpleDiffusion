@@ -21,8 +21,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
@@ -41,9 +39,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.dp
@@ -58,7 +54,7 @@ import top.topsea.simplediffusion.api.dto.VaeModel
 import top.topsea.simplediffusion.data.param.TaskParam
 import top.topsea.simplediffusion.data.state.UIEvent
 import top.topsea.simplediffusion.data.viewmodel.NormalViewModel
-import top.topsea.simplediffusion.data.viewmodel.UIViewModel
+import top.topsea.simplediffusion.data.viewmodel.UISetsViewModel
 import top.topsea.simplediffusion.ui.component.RequestErrorPopup
 import top.topsea.simplediffusion.ui.component.StepRowInt
 import top.topsea.simplediffusion.ui.component.SettingSwitch
@@ -68,13 +64,13 @@ import top.topsea.simplediffusion.util.TextUtil
 @Composable
 fun SettingScreen(
     navController: NavController,
-    uiViewModel: UIViewModel,
+    uiSetsViewModel: UISetsViewModel,
     normalViewModel: NormalViewModel,
     tasks: List<TaskParam>,
 ) {
     // 生图出错时的弹框
-    if (uiViewModel.warningStr.isNotEmpty()) {
-        RequestErrorPopup(errorMsg = uiViewModel.warningStr) { uiViewModel.onEvent(UIEvent.UIWarning("")) }
+    if (uiSetsViewModel.warningStr.isNotEmpty()) {
+        RequestErrorPopup(errorMsg = uiSetsViewModel.warningStr) { uiSetsViewModel.onEvent(UIEvent.UIWarning("")) }
     }
 
     LazyColumn(
@@ -86,11 +82,11 @@ fun SettingScreen(
         item {
             BasicSettingBlock(
                 modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-                uiViewModel = uiViewModel,
+                uiSetsViewModel = uiSetsViewModel,
                 normalViewModel = normalViewModel
             ) { uiViewModel, normalViewModel ->
                 DefaultSettings(
-                    uiViewModel = uiViewModel,
+                    uiSetsViewModel = uiViewModel,
                     normalViewModel = normalViewModel,
                     navController = navController,
                     tasks = tasks,
@@ -100,16 +96,16 @@ fun SettingScreen(
         item {
             CNSettingBlock(
                 modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-                uiViewModel = uiViewModel,
+                uiSetsViewModel = uiSetsViewModel,
                 normalViewModel = normalViewModel
             ) { uiViewModel, normalViewModel ->
-                ControlNetSettings(normalViewModel = normalViewModel, uiViewModel = uiViewModel)
+                ControlNetSettings(normalViewModel = normalViewModel, uiSetsViewModel = uiViewModel)
             }
         }
         item {
             AgentSchedulerBlock(
                 modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-                uiViewModel = uiViewModel,
+                uiSetsViewModel = uiSetsViewModel,
                 normalViewModel = normalViewModel,
                 tasks = tasks,
             ) { _, normalViewModel ->
@@ -119,7 +115,7 @@ fun SettingScreen(
         item {
             SdPromptBlock(
                 modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-                uiViewModel = uiViewModel,
+                uiSetsViewModel = uiSetsViewModel,
                 normalViewModel = normalViewModel,
             )
         }
@@ -131,9 +127,9 @@ fun SettingScreen(
 @Composable
 fun BasicSettingBlock(
     modifier: Modifier,
-    uiViewModel: UIViewModel,
+    uiSetsViewModel: UISetsViewModel,
     normalViewModel: NormalViewModel,
-    setting: @Composable() ((UIViewModel, NormalViewModel) -> Unit),
+    setting: @Composable() ((UISetsViewModel, NormalViewModel) -> Unit),
 ) {
     Column(modifier = modifier.background(color = MaterialTheme.colorScheme.background, shape = RoundedCornerShape(12.dp))) {
         Row(
@@ -163,16 +159,16 @@ fun BasicSettingBlock(
         }
         Divider(color = MaterialTheme.colorScheme.secondary, thickness = 1.5.dp)
         Column(modifier = Modifier.padding(horizontal = 8.dp)) {
-            setting(uiViewModel, normalViewModel)
+            setting(uiSetsViewModel, normalViewModel)
         }
     }
 }
 @Composable
 fun CNSettingBlock(
     modifier: Modifier,
-    uiViewModel: UIViewModel,
+    uiSetsViewModel: UISetsViewModel,
     normalViewModel: NormalViewModel,
-    setting: @Composable() ((UIViewModel, NormalViewModel) -> Unit),
+    setting: @Composable() ((UISetsViewModel, NormalViewModel) -> Unit),
 ) {
     Column(modifier = modifier.background(color = MaterialTheme.colorScheme.background, shape = RoundedCornerShape(12.dp))) {
         Row(
@@ -193,23 +189,23 @@ fun CNSettingBlock(
 
             SettingSwitch(
                 modifier = Modifier.size(DpSize(42.dp, 36.dp)),
-                isOn = uiViewModel.exControlNet,
+                isOn = uiSetsViewModel.exControlNet,
                 tint = MaterialTheme.colorScheme.secondary,
             ) {}
         }
         Divider(color = MaterialTheme.colorScheme.secondary, thickness = 1.5.dp)
         Column(modifier = Modifier.padding(horizontal = 8.dp)) {
-            setting(uiViewModel, normalViewModel)
+            setting(uiSetsViewModel, normalViewModel)
         }
     }
 }
 @Composable
 fun AgentSchedulerBlock(
     modifier: Modifier,
-    uiViewModel: UIViewModel,
+    uiSetsViewModel: UISetsViewModel,
     normalViewModel: NormalViewModel,
     tasks: List<TaskParam>,
-    setting: @Composable() ((UIViewModel, NormalViewModel) -> Unit),
+    setting: @Composable() ((UISetsViewModel, NormalViewModel) -> Unit),
 ) {
     val context = LocalContext.current
     Column(modifier = modifier.background(color = MaterialTheme.colorScheme.background, shape = RoundedCornerShape(12.dp))) {
@@ -231,14 +227,14 @@ fun AgentSchedulerBlock(
 
             SettingSwitch(
                 modifier = Modifier.size(DpSize(42.dp, 36.dp)),
-                isOn = uiViewModel.exAgentScheduler,
+                isOn = uiSetsViewModel.exAgentScheduler,
             ) {
                 // 先检查 SD 服务器的连接，再检查生成队列是否为空，再检查 SD 服务器是否有这个插件，然后再更改
-                if (uiViewModel.serverConnected) {
+                if (uiSetsViewModel.serverConnected) {
                     if (tasks.isNotEmpty()) {
-                        uiViewModel.onEvent(UIEvent.UIWarning(context.getString(R.string.s_agent_set_later)))
+                        uiSetsViewModel.onEvent(UIEvent.UIWarning(context.getString(R.string.s_agent_set_later)))
                     } else {
-                        uiViewModel.onEvent(UIEvent.ExSettingChange("AgentScheduler", context){})
+                        uiSetsViewModel.onEvent(UIEvent.ExSettingChange("AgentScheduler", context){})
                     }
                 }
                 else
@@ -257,7 +253,7 @@ fun AgentSchedulerBlock(
 @Composable
 fun SdPromptBlock(
     modifier: Modifier,
-    uiViewModel: UIViewModel,
+    uiSetsViewModel: UISetsViewModel,
     normalViewModel: NormalViewModel
 ) {
     val context = LocalContext.current
@@ -280,11 +276,11 @@ fun SdPromptBlock(
 
             SettingSwitch(
                 modifier = Modifier.size(DpSize(42.dp, 36.dp)),
-                isOn = uiViewModel.exSdPrompt,
+                isOn = uiSetsViewModel.exSdPrompt,
             ) {
                 // 先检查 SD 服务器的连接，再检查是否有这个插件
-                if (uiViewModel.serverConnected) {
-                    uiViewModel.onEvent(UIEvent.ExSettingChange("SdPrompt", context){
+                if (uiSetsViewModel.serverConnected) {
+                    uiSetsViewModel.onEvent(UIEvent.ExSettingChange("SdPrompt", context){
                         normalViewModel.exSdPrompt(it)
                     })
                 }
@@ -303,7 +299,7 @@ fun SdPromptBlock(
 
 @Composable
 fun DefaultSettings(
-    uiViewModel: UIViewModel,
+    uiSetsViewModel: UISetsViewModel,
     normalViewModel: NormalViewModel,
     navController: NavController,
     tasks: List<TaskParam>,
@@ -364,22 +360,22 @@ fun DefaultSettings(
             }
             Divider(color = Color.LightGray, thickness = 1.dp)
             SettingGoTo(title = stringResource(id = R.string.a_top_bar)) {
-                uiViewModel.onEvent(UIEvent.Navigate(AboutScreen){
+                uiSetsViewModel.onEvent(UIEvent.Navigate(AboutScreen){
                     navController.navigate(AboutScreen.route)
                 })
             }
             Divider(color = Color.LightGray, thickness = 1.dp)
             SettingGoTo(title = stringResource(id = R.string.sp_top_bar)) {
-                uiViewModel.onEvent(UIEvent.Navigate(SetPEScreen){
+                uiSetsViewModel.onEvent(UIEvent.Navigate(SetPEScreen){
                     navController.navigate(SetPEScreen.route)
                 })
             }
         }
 
-        if (uiViewModel.enableDesktop) {
+        if (uiSetsViewModel.enableDesktop) {
             Divider(color = Color.LightGray, thickness = 1.dp)
             SettingGoTo(title = stringResource(id = R.string.sd_top_bar)) {
-                uiViewModel.onEvent(UIEvent.Navigate(DesktopScreen){
+                uiSetsViewModel.onEvent(UIEvent.Navigate(DesktopScreen){
                     navController.navigate(DesktopScreen.route)
                 })
             }
@@ -387,21 +383,21 @@ fun DefaultSettings(
         Divider(color = Color.LightGray, thickness = 1.dp)
         StepRowInt(
             name = stringResource(id = R.string.s_gen_size),
-            value = uiViewModel.taskQueueSize,
+            value = uiSetsViewModel.taskQueueSize,
             onMinus = {
                 // 先检查生成队列是否为空
                 if (tasks.isNotEmpty()) {
-                    uiViewModel.onEvent(UIEvent.UIWarning(context.getString(R.string.s_agent_set_later)))
+                    uiSetsViewModel.onEvent(UIEvent.UIWarning(context.getString(R.string.s_agent_set_later)))
                 } else {
-                    uiViewModel.onEvent(UIEvent.MinusGenSize(context))
+                    uiSetsViewModel.onEvent(UIEvent.MinusGenSize(context))
                 }
             }
         ){
             // 先检查生成队列是否为空
             if (tasks.isNotEmpty()) {
-                uiViewModel.onEvent(UIEvent.UIWarning(context.getString(R.string.s_agent_set_later)))
+                uiSetsViewModel.onEvent(UIEvent.UIWarning(context.getString(R.string.s_agent_set_later)))
             } else {
-                uiViewModel.onEvent(UIEvent.AddGenSize(context))
+                uiSetsViewModel.onEvent(UIEvent.AddGenSize(context))
             }
         }
         Divider(color = Color.LightGray, thickness = 1.dp)
@@ -416,10 +412,10 @@ fun DefaultSettings(
             SettingTitle(name = stringResource(id = R.string.s_show_gen_one))
             SettingSwitch(
                 modifier = Modifier.size(DpSize(42.dp, 36.dp)),
-                isOn = uiViewModel.showGenOn1,
-                tint = if (uiViewModel.taskQueueSize > 1) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary
+                isOn = uiSetsViewModel.showGenOn1,
+                tint = if (uiSetsViewModel.taskQueueSize > 1) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary
             ) {
-                uiViewModel.onEvent(UIEvent.ShowGenOn1(it))
+                uiSetsViewModel.onEvent(UIEvent.ShowGenOn1(it))
             }
         }
         Divider(color = Color.LightGray, thickness = 1.dp)
@@ -434,9 +430,9 @@ fun DefaultSettings(
             SettingTitle(name = stringResource(id = R.string.s_save_on_server))
             SettingSwitch(
                 modifier = Modifier.size(DpSize(42.dp, 36.dp)),
-                isOn = uiViewModel.saveOnServer,
+                isOn = uiSetsViewModel.saveOnServer,
             ) {
-                uiViewModel.onEvent(UIEvent.SaveOnServer(it))
+                uiSetsViewModel.onEvent(UIEvent.SaveOnServer(it))
             }
         }
         Divider(color = Color.LightGray, thickness = 1.dp)
@@ -451,9 +447,9 @@ fun DefaultSettings(
             SettingTitle(name = stringResource(id = R.string.s_vae))
             MenuVae(
                 items = vaes.value.models,
-                selected = uiViewModel.currentVae.model_name,
+                selected = uiSetsViewModel.currentVae.model_name,
             ) {
-                uiViewModel.onEvent(UIEvent.UpdateVae(it, {
+                uiSetsViewModel.onEvent(UIEvent.UpdateVae(it, {
                     Toast.makeText(context, context.getString(R.string.p_request_error), Toast.LENGTH_SHORT).show()
                 }){
                     Toast.makeText(context, context.getString(R.string.p_change_vae_success), Toast.LENGTH_SHORT).show()
@@ -472,9 +468,9 @@ fun DefaultSettings(
             SettingTitle(name = stringResource(id = R.string.s_save_cap_img))
             SettingSwitch(
                 modifier = Modifier.size(DpSize(42.dp, 36.dp)),
-                isOn = uiViewModel.saveCapImage,
+                isOn = uiSetsViewModel.saveCapImage,
             ) {
-                uiViewModel.onEvent(UIEvent.IsSaveCapImg(it))
+                uiSetsViewModel.onEvent(UIEvent.IsSaveCapImg(it))
             }
         }
         Divider(color = Color.LightGray, thickness = 1.dp)
@@ -489,9 +485,9 @@ fun DefaultSettings(
             SettingTitle(name = stringResource(id = R.string.s_save_grid_img))
             SettingSwitch(
                 modifier = Modifier.size(DpSize(42.dp, 36.dp)),
-                isOn = uiViewModel.saveGridImage,
+                isOn = uiSetsViewModel.saveGridImage,
             ) {
-                uiViewModel.onEvent(UIEvent.IsSaveGridImg(it))
+                uiSetsViewModel.onEvent(UIEvent.IsSaveGridImg(it))
             }
         }
         // 测试时使用
@@ -513,7 +509,7 @@ fun DefaultSettings(
 @Composable
 fun ControlNetSettings(
     normalViewModel: NormalViewModel,
-    uiViewModel: UIViewModel
+    uiSetsViewModel: UISetsViewModel
 ) {
     val cnState by normalViewModel.cnState.collectAsState()
 
@@ -553,10 +549,10 @@ fun ControlNetSettings(
             SettingTitle(name = stringResource(id = R.string.s_save_control))
             SettingSwitch(
                 modifier = Modifier.size(DpSize(42.dp, 36.dp)),
-                isOn = uiViewModel.saveControlNet && !uiViewModel.exAgentScheduler,
-                tint = if (uiViewModel.exAgentScheduler) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary
+                isOn = uiSetsViewModel.saveControlNet && !uiSetsViewModel.exAgentScheduler,
+                tint = if (uiSetsViewModel.exAgentScheduler) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary
             ) {
-                uiViewModel.onEvent(UIEvent.IsSaveControl(it))
+                uiSetsViewModel.onEvent(UIEvent.IsSaveControl(it))
             }
         }
     }

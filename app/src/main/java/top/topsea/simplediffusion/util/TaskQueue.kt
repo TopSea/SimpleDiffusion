@@ -30,7 +30,7 @@ import top.topsea.simplediffusion.data.state.ControlNetState
 import top.topsea.simplediffusion.data.state.GenerateState
 import top.topsea.simplediffusion.data.state.TaskState
 import top.topsea.simplediffusion.data.viewmodel.ImgDataViewModel
-import top.topsea.simplediffusion.data.viewmodel.UIViewModel
+import top.topsea.simplediffusion.data.viewmodel.UISetsViewModel
 import top.topsea.simplediffusion.event.TaskListEvent
 import top.topsea.simplediffusion.event.GenerateEvent
 import top.topsea.simplediffusion.event.ImageEvent
@@ -45,7 +45,7 @@ class TaskQueue(
     var cancelGenerate: ((String) -> Unit)? = null
     var cnState: ControlNetState? = null
     var imgViewModel: ImgDataViewModel? = null
-    var uiViewModel: UIViewModel? = null
+    var uiSetsViewModel: UISetsViewModel? = null
 
     // 图像生成状态
     private val _genState = MutableStateFlow(GenerateState())
@@ -81,11 +81,11 @@ class TaskQueue(
      * 判断加入队列还是直接执行
      */
     private fun addGenImage(gen: Pair<ImageData?, BasicParam>, onAddFailure: () -> Unit) {
-        if (tasks.size >= uiViewModel!!.taskQueueSize) {
+        if (tasks.size >= uiSetsViewModel!!.taskQueueSize) {
             onAddFailure()
         } else {
             val task = TaskParam(image = gen.first, param = gen.second)
-            if (uiViewModel!!.exAgentScheduler) {
+            if (uiSetsViewModel!!.exAgentScheduler) {
                 getRealTask(task)
             } else {
                 addTask(task)
@@ -146,7 +146,7 @@ class TaskQueue(
                     } else {
                         val task = tasks[0]
                         TextUtil.topsea("tasks.size: ${tasks.size}", Log.ERROR)
-                        if (uiViewModel!!.exAgentScheduler) {
+                        if (uiSetsViewModel!!.exAgentScheduler) {
                             requestTaskProgress(task = task)
                         } else {
                             startGenOp(task = task)
@@ -230,7 +230,7 @@ class TaskQueue(
             val images: MutableList<ImageData?> = mutableListOf()
 
             data.forEachIndexed { index, queueData ->
-                if (uiViewModel!!.saveGridImage) {
+                if (uiSetsViewModel!!.saveGridImage) {
                     val image = FileUtil.saveQueueImage(queueData, context)
                     images.add(image)
                 } else {
@@ -275,7 +275,7 @@ class TaskQueue(
             is GenerateEvent.RemoveTask -> {
                 val task = event.task
                 if (event.isGenThis) {
-                    if (!uiViewModel!!.exAgentScheduler) {
+                    if (!uiSetsViewModel!!.exAgentScheduler) {
                         cancelGenerate?.let { it("") }!!
                     } else {
                         val taskID = task.taskID
@@ -287,7 +287,7 @@ class TaskQueue(
                         )
                     }
                 } else {
-                    if (uiViewModel!!.exAgentScheduler) {
+                    if (uiSetsViewModel!!.exAgentScheduler) {
                         val taskID = task.taskID
                         cancelGenerate?.let { it(taskID) }
                     }
@@ -329,12 +329,12 @@ class TaskQueue(
             // 先添加拍摄的照片
             if (capImg != null) {
                 capGenImgList.add(capImg)
-                if (uiViewModel!!.saveCapImage) {
+                if (uiSetsViewModel!!.saveCapImage) {
                     imgViewModel!!.onEvent(ImageEvent.AddImages(capImg))
                 }
             }
             // 添加生成的图片
-            if (uiViewModel!!.exAgentScheduler) {
+            if (uiSetsViewModel!!.exAgentScheduler) {
                 images.forEach { image ->
                     image?.let {
                         imgViewModel!!.onEvent(ImageEvent.AddImages(it))
@@ -344,8 +344,8 @@ class TaskQueue(
             }
             else
                 if (batchSize > 1) {
-                    if (uiViewModel!!.saveControlNet) {
-                        if (uiViewModel!!.saveGridImage)
+                    if (uiSetsViewModel!!.saveControlNet) {
+                        if (uiSetsViewModel!!.saveGridImage)
                             images.forEach { image ->
                                 image?.let {
                                     imgViewModel!!.onEvent(ImageEvent.AddImages(it))
@@ -363,7 +363,7 @@ class TaskQueue(
                             }
                         }
                     } else {
-                        if (uiViewModel!!.saveGridImage) {
+                        if (uiSetsViewModel!!.saveGridImage) {
                             val imageSubList = images.subList(0, batchSize + 1)
                             imageSubList.forEach { image ->
                                 image?.let {
@@ -382,7 +382,7 @@ class TaskQueue(
                         }
                     }
                 } else {
-                    if (uiViewModel!!.saveControlNet) {
+                    if (uiSetsViewModel!!.saveControlNet) {
                         images.forEach { image ->
                             image?.let {
                                 imgViewModel!!.onEvent(ImageEvent.AddImages(it))
@@ -489,7 +489,7 @@ class TaskQueue(
             }
         }
 
-        img2Img.save_images = uiViewModel!!.saveOnServer
+        img2Img.save_images = uiSetsViewModel!!.saveOnServer
 
         return img2Img.requestWithCN(controlNets)
     }
@@ -515,7 +515,7 @@ class TaskQueue(
             param.control_net.contains(it.id)
         }
 
-        txt2Img.save_images = uiViewModel!!.saveOnServer
+        txt2Img.save_images = uiSetsViewModel!!.saveOnServer
         return txt2Img.requestWithCN(controlNets)
     }
 }

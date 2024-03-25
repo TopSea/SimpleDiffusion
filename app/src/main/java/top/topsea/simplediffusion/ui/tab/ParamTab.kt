@@ -48,7 +48,7 @@ import top.topsea.simplediffusion.data.param.BasicParam
 import top.topsea.simplediffusion.data.param.CNParam
 import top.topsea.simplediffusion.data.state.ParamLocalState
 import top.topsea.simplediffusion.data.state.UIEvent
-import top.topsea.simplediffusion.data.viewmodel.UIViewModel
+import top.topsea.simplediffusion.data.viewmodel.UISetsViewModel
 import top.topsea.simplediffusion.event.ControlNetEvent
 import top.topsea.simplediffusion.event.ParamEvent
 import top.topsea.simplediffusion.ui.component.AddParam
@@ -62,7 +62,7 @@ fun ParamTab(
     modifier: Modifier = Modifier,
     isi2i: Boolean = false,
     params: List<BasicParam>,
-    uiViewModel: UIViewModel,
+    uiSetsViewModel: UISetsViewModel,
     paramEvent: (ParamEvent) -> Unit,
     cnEvent: (ControlNetEvent) -> Unit,
     addParam: () -> Unit,
@@ -84,7 +84,7 @@ fun ParamTab(
                 ParamItem(
                     navController = navController,
                     param = it,
-                    uiViewModel = uiViewModel,
+                    uiSetsViewModel = uiSetsViewModel,
                     paramEvent = paramEvent,
                     cnEvent = cnEvent,
                 )
@@ -103,7 +103,7 @@ fun CNParamTab(
     navController: NavController,
     modifier: Modifier = Modifier,
     cnModels: List<CNParam>,
-    uiViewModel: UIViewModel,
+    uiSetsViewModel: UISetsViewModel,
     paramState: ParamLocalState,
     paramEvent: (ParamEvent) -> Unit,
     cnEvent: (ControlNetEvent) -> Unit,
@@ -128,7 +128,7 @@ fun CNParamTab(
                     cnModel = it,
                     paramState = paramState,
                     paramEvent = paramEvent,
-                    uiEvent = uiViewModel::onEvent,
+                    uiEvent = uiSetsViewModel::onEvent,
                     cnEvent = cnEvent,
                 )
             }
@@ -145,7 +145,7 @@ fun CNParamTab(
 fun ParamItem(
     navController: NavController,
     param: BasicParam,
-    uiViewModel: UIViewModel,
+    uiSetsViewModel: UISetsViewModel,
     paramEvent: (ParamEvent) -> Unit,
     cnEvent: (ControlNetEvent) -> Unit,
 ) {
@@ -153,11 +153,11 @@ fun ParamItem(
     // 修改基模时的响应动画
     val cardColor =
         if (param.activate) MaterialTheme.colorScheme.inversePrimary else MaterialTheme.colorScheme.inverseOnSurface
-    var modelChanged by remember { mutableStateOf((!uiViewModel.modelChanging) && param.activate) }
+    var modelChanged by remember { mutableStateOf((!uiSetsViewModel.modelChanging) && param.activate) }
     var bmChangingProgress by remember { mutableStateOf(if (!modelChanged) 0f else 1f) }
 
-    LaunchedEffect(key1 = uiViewModel.modelChanging) {
-        while (uiViewModel.modelChanging) {
+    LaunchedEffect(key1 = uiSetsViewModel.modelChanging) {
+        while (uiSetsViewModel.modelChanging) {
             delay(200L)
             if (bmChangingProgress < 0.75F)
                 bmChangingProgress += 0.1f
@@ -190,7 +190,7 @@ fun ParamItem(
             )
             .clickable {
                 paramEvent(ParamEvent.ActivateParam(param))
-                uiViewModel.onEvent(UIEvent.ModelChanging(true))
+                uiSetsViewModel.onEvent(UIEvent.ModelChanging(true))
 
                 // 更改相应的 ControlNet
                 cnEvent(ControlNetEvent.ActivateByRequest(param.control_net))
@@ -235,7 +235,7 @@ fun ParamItem(
 
 //                    if (wdp < 450.dp) {
                 paramEvent(ParamEvent.EditParam(bp = param, editing = false))
-                uiViewModel.onEvent(UIEvent.Navigate(EditScreen) {
+                uiSetsViewModel.onEvent(UIEvent.Navigate(EditScreen) {
                     navController.navigate("param_edit")
                 })
 //                    } else {
@@ -256,13 +256,13 @@ fun ParamItem(
 
     // 更新大模型
     LaunchedEffect(key1 = param.baseModel, key2 = param.activate) {
-        if (uiViewModel.serverConnected && param.activate && uiViewModel.modelChanging) {
+        if (uiSetsViewModel.serverConnected && param.activate && uiSetsViewModel.modelChanging) {
             if (param.baseModel.isNotEmpty()) {
                 // 进度条置零
                 modelChanged = false
                 TextUtil.topsea("Changing Base Model to: ${param.baseModel}.", Log.ERROR)
                 // 开始读条
-                uiViewModel.onEvent(UIEvent.ModelChanging(true))
+                uiSetsViewModel.onEvent(UIEvent.ModelChanging(true))
                 val config = SimpleSdConfig(
                     configName = Constant.sd_model_checkpoint,
                     value = if (param.baseModel.contains("\\")) {
@@ -275,12 +275,12 @@ fun ParamItem(
                 // 运行结果
                 cnEvent(ControlNetEvent.UpdateConfig(config, onFailure = {
                     Toast.makeText(context, context.getString(R.string.p_request_error), Toast.LENGTH_SHORT).show()
-                    uiViewModel.onEvent(UIEvent.ModelChanging(true))
-                    uiViewModel.onEvent(UIEvent.ServerConnected(false))
+                    uiSetsViewModel.onEvent(UIEvent.ModelChanging(true))
+                    uiSetsViewModel.onEvent(UIEvent.ServerConnected(false))
                 }){
                     modelChanged = true
-                    uiViewModel.onEvent(UIEvent.ModelChanging(false))
-                    uiViewModel.onEvent(UIEvent.ServerConnected(true))
+                    uiSetsViewModel.onEvent(UIEvent.ModelChanging(false))
+                    uiSetsViewModel.onEvent(UIEvent.ServerConnected(true))
                 })
             }
         }

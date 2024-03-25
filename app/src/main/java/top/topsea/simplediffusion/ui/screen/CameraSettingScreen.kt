@@ -10,9 +10,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -26,7 +23,7 @@ import top.topsea.simplediffusion.data.param.TaskParam
 import top.topsea.simplediffusion.data.state.UIEvent
 import top.topsea.simplediffusion.data.viewmodel.BasicViewModel
 import top.topsea.simplediffusion.data.viewmodel.NormalViewModel
-import top.topsea.simplediffusion.data.viewmodel.UIViewModel
+import top.topsea.simplediffusion.data.viewmodel.UISetsViewModel
 import top.topsea.simplediffusion.event.ControlNetEvent
 import top.topsea.simplediffusion.event.ParamEvent
 import top.topsea.simplediffusion.ui.tab.CNParamTab
@@ -36,7 +33,7 @@ import top.topsea.simplediffusion.ui.tab.ParamTab
 @Composable
 fun CameraSettingScreen(
     navController: NavController,
-    uiViewModel: UIViewModel,
+    uiSetsViewModel: UISetsViewModel,
     normalViewModel: NormalViewModel = hiltViewModel(),
     paramViewModel: BasicViewModel = hiltViewModel(),
     tasks: List<TaskParam>,
@@ -55,22 +52,22 @@ fun CameraSettingScreen(
         listOf(stringResource(id = R.string.r_request_card_a2), stringResource(id = R.string.r_request_card_a3), stringResource(id = R.string.r_request_card_a4))
 
     Column(modifier = Modifier.fillMaxSize()) {
-        TabRow(selectedTabIndex = uiViewModel.cameraTab, modifier = Modifier.fillMaxWidth()) {
+        TabRow(selectedTabIndex = uiSetsViewModel.cameraTab, modifier = Modifier.fillMaxWidth()) {
             titles.forEachIndexed { index, title ->
                 Tab(
-                    selected = uiViewModel.cameraTab == index,
-                    onClick = { uiViewModel.onEvent(UIEvent.ChangeCameraTab(index)) },
+                    selected = uiSetsViewModel.cameraTab == index,
+                    onClick = { uiSetsViewModel.onEvent(UIEvent.ChangeCameraTab(index)) },
                     text = { Text(text = title, maxLines = 2, overflow = TextOverflow.Ellipsis) }
                 )
             }
         }
 
-        when (uiViewModel.cameraTab) {
+        when (uiSetsViewModel.cameraTab) {
             0 -> {
                 ParamTab(
                     navController = navController,
                     params = paramState.iParams,
-                    uiViewModel = uiViewModel,
+                    uiSetsViewModel = uiSetsViewModel,
                     paramEvent = paramViewModel::paramEvent,
                     cnEvent = normalViewModel::cnEvent,
                 ){
@@ -81,7 +78,7 @@ fun CameraSettingScreen(
                 CNParamTab(
                     navController = navController,
                     cnModels = cnState.cnParams,
-                    uiViewModel = uiViewModel,
+                    uiSetsViewModel = uiSetsViewModel,
                     paramState = paramState,
                     paramEvent = paramViewModel::paramEvent,
                     cnEvent = normalViewModel::cnEvent
@@ -92,7 +89,7 @@ fun CameraSettingScreen(
             2 -> {
                 SettingScreen(
                     navController = navController,
-                    uiViewModel = uiViewModel,
+                    uiSetsViewModel = uiSetsViewModel,
                     normalViewModel = normalViewModel,
                     tasks = tasks,
                 )

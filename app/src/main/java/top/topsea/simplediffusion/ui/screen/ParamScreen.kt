@@ -13,12 +13,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavController
 import top.topsea.simplediffusion.R
 import top.topsea.simplediffusion.data.param.CNParam
-import top.topsea.simplediffusion.data.param.ImgParam
-import top.topsea.simplediffusion.data.param.TxtParam
 import top.topsea.simplediffusion.data.state.ControlNetState
 import top.topsea.simplediffusion.data.state.ParamLocalState
 import top.topsea.simplediffusion.data.state.UIEvent
-import top.topsea.simplediffusion.data.viewmodel.UIViewModel
+import top.topsea.simplediffusion.data.viewmodel.UISetsViewModel
 import top.topsea.simplediffusion.event.ControlNetEvent
 import top.topsea.simplediffusion.event.ParamEvent
 import top.topsea.simplediffusion.ui.tab.CNParamTab
@@ -29,7 +27,7 @@ import top.topsea.simplediffusion.ui.tab.ParamTab
 fun ParamScreen(
     navController: NavController,
     paramState: ParamLocalState,
-    uiViewModel: UIViewModel,
+    uiSetsViewModel: UISetsViewModel,
     cnState: ControlNetState,
     paramEvent: (ParamEvent) -> Unit,
     cnEvent: (ControlNetEvent) -> Unit,
@@ -37,21 +35,21 @@ fun ParamScreen(
     val titles = listOf(stringResource(id = R.string.r_request_card_a1), stringResource(id = R.string.r_request_card_a2), stringResource(id = R.string.r_request_card_a3))
 
     Column(modifier = Modifier.fillMaxSize()) {
-        TabRow(selectedTabIndex = uiViewModel.paramTab, modifier = Modifier.fillMaxWidth()) {
+        TabRow(selectedTabIndex = uiSetsViewModel.paramTab, modifier = Modifier.fillMaxWidth()) {
             titles.forEachIndexed { index, title ->
                 Tab(
-                    selected = uiViewModel.paramTab == index,
-                    onClick = { uiViewModel.onEvent(UIEvent.ChangeParamTab(index)) },
+                    selected = uiSetsViewModel.paramTab == index,
+                    onClick = { uiSetsViewModel.onEvent(UIEvent.ChangeParamTab(index)) },
                     text = { Text(text = title, maxLines = 2, overflow = TextOverflow.Ellipsis) }
                 )
             }
         }
-        when (uiViewModel.paramTab) {
+        when (uiSetsViewModel.paramTab) {
             0 -> {
                 ParamTab(
                     navController = navController,
                     params = paramState.tParams,
-                    uiViewModel = uiViewModel,
+                    uiSetsViewModel = uiSetsViewModel,
                     paramEvent = paramEvent,
                     cnEvent = cnEvent,
                 ) {
@@ -63,7 +61,7 @@ fun ParamScreen(
                     navController = navController,
                     isi2i = true,
                     params = paramState.iParams,
-                    uiViewModel = uiViewModel,
+                    uiSetsViewModel = uiSetsViewModel,
                     paramEvent = paramEvent,
                     cnEvent = cnEvent,
                 ){
@@ -74,7 +72,7 @@ fun ParamScreen(
                 CNParamTab(
                     navController = navController,
                     cnModels = cnState.cnParams,
-                    uiViewModel = uiViewModel,
+                    uiSetsViewModel = uiSetsViewModel,
                     paramState = paramState,
                     paramEvent = paramEvent,
                     cnEvent = cnEvent

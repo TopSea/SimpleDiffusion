@@ -11,11 +11,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -31,12 +29,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
@@ -55,7 +50,7 @@ import top.topsea.simplediffusion.data.state.UIEvent
 import top.topsea.simplediffusion.data.viewmodel.BasicViewModel
 import top.topsea.simplediffusion.data.viewmodel.ImgDataViewModel
 import top.topsea.simplediffusion.data.viewmodel.NormalViewModel
-import top.topsea.simplediffusion.data.viewmodel.UIViewModel
+import top.topsea.simplediffusion.data.viewmodel.UISetsViewModel
 import top.topsea.simplediffusion.event.GenerateEvent
 import top.topsea.simplediffusion.event.ImageEvent
 import top.topsea.simplediffusion.util.TaskQueue
@@ -68,7 +63,7 @@ fun DisplayInGrid(
     imageState: ImgDataState,
     imageEvent: (ImageEvent) -> Unit,
     selectedID: List<Int>,
-    uiViewModel: UIViewModel,
+    uiSetsViewModel: UISetsViewModel,
     errorTasks: List<TaskParam>,
     tasks: List<TaskParam>,
     genState: GenerateState,
@@ -101,7 +96,7 @@ fun DisplayInGrid(
                 modifier = Modifier
                     .height(wdp)
                     .clickable {
-                        uiViewModel.onEvent(UIEvent.DisplayTask(index))
+                        uiSetsViewModel.onEvent(UIEvent.DisplayTask(index))
                     },
                 task = task,
             )
@@ -133,13 +128,13 @@ fun DisplayInGrid(
                     toCalendar.set(Calendar.MINUTE, 0)
                     toCalendar.set(Calendar.SECOND, 0)
                     toCalendar.set(Calendar.MILLISECOND, 0)
-                    FuncHeader(headStr = image.genDate.toString(), longPressed = uiViewModel.longPressImage, uiViewModel = uiViewModel) {
+                    FuncHeader(headStr = image.genDate.toString(), longPressed = uiSetsViewModel.longPressImage, uiSetsViewModel = uiSetsViewModel) {
                         imageEvent(ImageEvent.SelectByDay(toCalendar.time.time / 1000) {
                             val label = image.genDate.toString()
                             if (it)
-                                uiViewModel.fullSelected.remove(label)
+                                uiSetsViewModel.fullSelected.remove(label)
                             else
-                                uiViewModel.fullSelected.add(label)
+                                uiSetsViewModel.fullSelected.add(label)
                         })
                     }
                 }
@@ -165,13 +160,13 @@ fun DisplayInGrid(
                     item(
                         span = { GridItemSpan(maxLineSpan) }
                     ) {
-                        FuncHeader(headStr = image.genDate.toString(), longPressed = uiViewModel.longPressImage, uiViewModel = uiViewModel) {
+                        FuncHeader(headStr = image.genDate.toString(), longPressed = uiSetsViewModel.longPressImage, uiSetsViewModel = uiSetsViewModel) {
                             imageEvent(ImageEvent.SelectByDay(toCalendar.time.time / 1000) {
                                 val label = image.genDate.toString()
                                 if (it)
-                                    uiViewModel.fullSelected.remove(label)
+                                    uiSetsViewModel.fullSelected.remove(label)
                                 else
-                                    uiViewModel.fullSelected.add(label)
+                                    uiSetsViewModel.fullSelected.add(label)
                             })
                         }
                     }
@@ -185,16 +180,16 @@ fun DisplayInGrid(
                         .pointerInput(Unit) {
                             detectTapGestures(
                                 onTap = {
-                                    if (uiViewModel.longPressImage) {
+                                    if (uiSetsViewModel.longPressImage) {
                                         imageEvent(ImageEvent.Select(image.index, image.genDate) {
                                             val label = image.genDate.toString()
                                             if (it)
-                                                uiViewModel.fullSelected.add(label)
+                                                uiSetsViewModel.fullSelected.add(label)
                                             else
-                                                uiViewModel.fullSelected.remove(label)
+                                                uiSetsViewModel.fullSelected.remove(label)
                                         })
                                     } else {
-                                        uiViewModel.onEvent(UIEvent.DisplayImg(image.index))
+                                        uiSetsViewModel.onEvent(UIEvent.DisplayImg(image.index))
                                     }
                                 },
                                 onDoubleTap = {
@@ -202,21 +197,21 @@ fun DisplayInGrid(
                                 onPress = {
                                 },
                                 onLongPress = {
-                                    if (!uiViewModel.longPressImage) {
-                                        uiViewModel.onEvent(UIEvent.LongPressImage(true))
+                                    if (!uiSetsViewModel.longPressImage) {
+                                        uiSetsViewModel.onEvent(UIEvent.LongPressImage(true))
                                         imageEvent(ImageEvent.Select(image.index, image.genDate) {
                                             val label = image.genDate.toString()
                                             if (it)
-                                                uiViewModel.fullSelected.add(label)
+                                                uiSetsViewModel.fullSelected.add(label)
                                             else
-                                                uiViewModel.fullSelected.remove(label)
+                                                uiSetsViewModel.fullSelected.remove(label)
                                         })
                                     }
                                 }
                             )
                         },
                     imgName = image.imageName,
-                    longPressed = uiViewModel.longPressImage,
+                    longPressed = uiSetsViewModel.longPressImage,
                     selected = selectedID.contains(image.index)
                 )
             }
@@ -248,7 +243,7 @@ fun GridHeader(headStr: String) {
 fun FuncHeader(
     headStr: String,
     longPressed: Boolean = false,
-    uiViewModel: UIViewModel,
+    uiSetsViewModel: UISetsViewModel,
     onClick: () -> Unit,
 ) {
     Row(
@@ -265,7 +260,7 @@ fun FuncHeader(
             color = MaterialTheme.colorScheme.primary,
             fontWeight = FontWeight.Bold
         )
-        if (longPressed) FuncHeaderLine(headStr, uiViewModel, onClick) else GridHeaderLine()
+        if (longPressed) FuncHeaderLine(headStr, uiSetsViewModel, onClick) else GridHeaderLine()
     }
 }
 
@@ -282,7 +277,7 @@ private fun RowScope.GridHeaderLine() {
 @Composable
 private fun RowScope.FuncHeaderLine(
     label: String,
-    uiViewModel: UIViewModel,
+    uiSetsViewModel: UISetsViewModel,
     onClick: () -> Unit,
 ) {
     Row(
@@ -298,7 +293,7 @@ private fun RowScope.FuncHeaderLine(
         )
 
         ShowingIcon(
-            icon = painterResource(id = if (uiViewModel.fullSelected.contains(label)) R.drawable.rounded_check else R.drawable.rounded_uncheck),
+            icon = painterResource(id = if (uiSetsViewModel.fullSelected.contains(label)) R.drawable.rounded_check else R.drawable.rounded_uncheck),
             onclick = {
                 onClick()
             },
@@ -357,7 +352,7 @@ fun DisplayImages(
 @Composable
 fun DisplayTasks(
     modifier: Modifier,
-    uiViewModel: UIViewModel,
+    uiSetsViewModel: UISetsViewModel,
     tasks: List<TaskParam>,
     errorTasks: List<TaskParam>,
     genState: GenerateState,
@@ -367,7 +362,7 @@ fun DisplayTasks(
     val wp = context.resources.displayMetrics.widthPixels
     val pdp = with(LocalDensity.current) { (wp * 0.04F).toDp() }
 
-    val state = rememberLazyListState(initialFirstVisibleItemIndex = uiViewModel.displayingTask)
+    val state = rememberLazyListState(initialFirstVisibleItemIndex = uiSetsViewModel.displayingTask)
 
     val snappingLayout = remember(state) { SnapLayoutInfoProvider(state) }
     val flingBehavior = rememberSnapFlingBehavior(snappingLayout)

@@ -45,7 +45,7 @@ import top.topsea.simplediffusion.data.param.scriptsTxt
 import top.topsea.simplediffusion.data.state.ParamLocalState
 import top.topsea.simplediffusion.data.state.UIEvent
 import top.topsea.simplediffusion.data.viewmodel.NormalViewModel
-import top.topsea.simplediffusion.data.viewmodel.UIViewModel
+import top.topsea.simplediffusion.data.viewmodel.UISetsViewModel
 import top.topsea.simplediffusion.event.ControlNetEvent
 import top.topsea.simplediffusion.event.ParamEvent
 import top.topsea.simplediffusion.navUp
@@ -55,7 +55,6 @@ import top.topsea.simplediffusion.ui.component.ParamRowChooseSampler
 import top.topsea.simplediffusion.ui.component.ParamRowControlNet
 import top.topsea.simplediffusion.ui.component.StepRowFloat
 import top.topsea.simplediffusion.ui.component.ParamRowImgChoose
-import top.topsea.simplediffusion.ui.component.ParamRowNegPrompt
 import top.topsea.simplediffusion.ui.component.StepRowInt
 import top.topsea.simplediffusion.ui.component.ParamRowPrompt
 import top.topsea.simplediffusion.ui.component.SwipeInt
@@ -69,7 +68,7 @@ fun ParamEditScreen(
     navController: NavController,
     cardColor: Color,
     paramState: ParamLocalState,
-    uiViewModel: UIViewModel,
+    uiSetsViewModel: UISetsViewModel,
     paramEvent: (ParamEvent) -> Unit,
     normalViewModel: NormalViewModel,
 ) {
@@ -87,7 +86,7 @@ fun ParamEditScreen(
             currParam = currParam,
             navController = navController,
             paramEvent = paramEvent,
-            uiViewModel = uiViewModel,
+            uiSetsViewModel = uiSetsViewModel,
             normalViewModel = normalViewModel,
         )
     }
@@ -123,7 +122,7 @@ fun ParamEditContent(
     cardColor: Color,
     currParam: BasicParam,
     navController: NavController,
-    uiViewModel: UIViewModel,
+    uiSetsViewModel: UISetsViewModel,
     paramEvent: (ParamEvent) -> Unit,
     normalViewModel: NormalViewModel,
 ) {
@@ -193,7 +192,7 @@ fun ParamEditContent(
                         title = stringResource(id = R.string.r_param_name),
                         name = name
                     )
-                    if ((!isImg2Img && uiViewModel.tDisplayPriSwitch) || uiViewModel.tempParamShow || (isImg2Img && uiViewModel.iDisplayPriSwitch)) {
+                    if ((!isImg2Img && uiSetsViewModel.tDisplayPriSwitch) || uiSetsViewModel.tempParamShow || (isImg2Img && uiSetsViewModel.iDisplayPriSwitch)) {
                         Divider(
                             thickness = 2.dp,
                             color = cardColor
@@ -205,7 +204,7 @@ fun ParamEditContent(
                             max = Int.MAX_VALUE
                         )
                     }
-                    if ((!isImg2Img && uiViewModel.tSDModelSwitch) || uiViewModel.tempParamShow || (isImg2Img && uiViewModel.iSDModelSwitch)) {
+                    if ((!isImg2Img && uiSetsViewModel.tSDModelSwitch) || uiSetsViewModel.tempParamShow || (isImg2Img && uiSetsViewModel.iSDModelSwitch)) {
                         Divider(
                             thickness = 2.dp,
                             color = cardColor
@@ -219,7 +218,7 @@ fun ParamEditContent(
                             }
                         )
                     }
-                    if ((!isImg2Img && uiViewModel.tRefineModelSwitch) || uiViewModel.tempParamShow || (isImg2Img && uiViewModel.iRefineModelSwitch)) {
+                    if ((!isImg2Img && uiSetsViewModel.tRefineModelSwitch) || uiSetsViewModel.tempParamShow || (isImg2Img && uiSetsViewModel.iRefineModelSwitch)) {
                         Divider(
                             thickness = 2.dp,
                             color = cardColor
@@ -233,7 +232,7 @@ fun ParamEditContent(
                             }
                         )
                     }
-                    if ((!isImg2Img && uiViewModel.tRefineAtSwitch) || uiViewModel.tempParamShow || (isImg2Img && uiViewModel.iRefineAtSwitch)) {
+                    if ((!isImg2Img && uiSetsViewModel.tRefineAtSwitch) || uiSetsViewModel.tempParamShow || (isImg2Img && uiSetsViewModel.iRefineAtSwitch)) {
                         Divider(
                             thickness = 2.dp,
                             color = cardColor
@@ -245,7 +244,7 @@ fun ParamEditContent(
                             max = 1f,
                         )
                     }
-                    if ((!isImg2Img && uiViewModel.tImgWidthSwitch) || uiViewModel.tempParamShow || (isImg2Img && uiViewModel.iImgWidthSwitch)) {
+                    if ((!isImg2Img && uiSetsViewModel.tImgWidthSwitch) || uiSetsViewModel.tempParamShow || (isImg2Img && uiSetsViewModel.iImgWidthSwitch)) {
                         Divider(
                             thickness = 2.dp,
                             color = cardColor
@@ -257,7 +256,7 @@ fun ParamEditContent(
                             max = 2048
                         )
                     }
-                    if ((!isImg2Img && uiViewModel.tImgHeightSwitch) || uiViewModel.tempParamShow || (isImg2Img && uiViewModel.iImgHeightSwitch)) {
+                    if ((!isImg2Img && uiSetsViewModel.tImgHeightSwitch) || uiSetsViewModel.tempParamShow || (isImg2Img && uiSetsViewModel.iImgHeightSwitch)) {
                         Divider(
                             thickness = 2.dp,
                             color = cardColor
@@ -269,7 +268,7 @@ fun ParamEditContent(
                             max = 2048
                         )
                     }
-                    if ((!isImg2Img && uiViewModel.tStepsSwitch) || uiViewModel.tempParamShow || (isImg2Img && uiViewModel.iStepsSwitch)) {
+                    if ((!isImg2Img && uiSetsViewModel.tStepsSwitch) || uiSetsViewModel.tempParamShow || (isImg2Img && uiSetsViewModel.iStepsSwitch)) {
                         Divider(
                             thickness = 2.dp,
                             color = cardColor
@@ -281,7 +280,7 @@ fun ParamEditContent(
                             max = 150
                         )
                     }
-                    if ((!isImg2Img && uiViewModel.tCFGSwitch) || uiViewModel.tempParamShow || (isImg2Img && uiViewModel.iCFGSwitch)) {
+                    if ((!isImg2Img && uiSetsViewModel.tCFGSwitch) || uiSetsViewModel.tempParamShow || (isImg2Img && uiSetsViewModel.iCFGSwitch)) {
                         Divider(
                             thickness = 2.dp,
                             color = cardColor
@@ -293,7 +292,7 @@ fun ParamEditContent(
                             max = 15f,
                         )
                     }
-                    if ((!isImg2Img && uiViewModel.tSamplerSwitch) || uiViewModel.tempParamShow || (isImg2Img && uiViewModel.iSamplerSwitch)) {
+                    if ((!isImg2Img && uiSetsViewModel.tSamplerSwitch) || uiSetsViewModel.tempParamShow || (isImg2Img && uiSetsViewModel.iSamplerSwitch)) {
                         Divider(
                             thickness = 2.dp,
                             color = cardColor
@@ -304,7 +303,7 @@ fun ParamEditContent(
                             content = baseState.samplers
                         )
                     }
-                    if ((!isImg2Img && uiViewModel.tBatchSizeSwitch) || uiViewModel.tempParamShow || (isImg2Img && uiViewModel.iBatchSizeSwitch)) {
+                    if ((!isImg2Img && uiSetsViewModel.tBatchSizeSwitch) || uiSetsViewModel.tempParamShow || (isImg2Img && uiSetsViewModel.iBatchSizeSwitch)) {
                         Divider(
                             thickness = 2.dp,
                             color = cardColor
@@ -316,7 +315,7 @@ fun ParamEditContent(
                             min = 1
                         )
                     }
-                    if ((!isImg2Img && uiViewModel.tSDPromptSwitch) || uiViewModel.tempParamShow || (isImg2Img && uiViewModel.iSDPromptSwitch)) {
+                    if ((!isImg2Img && uiSetsViewModel.tSDPromptSwitch) || uiSetsViewModel.tempParamShow || (isImg2Img && uiSetsViewModel.iSDPromptSwitch)) {
                         Divider(
                             thickness = 2.dp,
                             color = cardColor
@@ -340,7 +339,7 @@ fun ParamEditContent(
                             )
                         }
                     }
-                    if ((!isImg2Img && uiViewModel.tPromptSwitch) || uiViewModel.tempParamShow || (isImg2Img && uiViewModel.iPromptSwitch)) {
+                    if ((!isImg2Img && uiSetsViewModel.tPromptSwitch) || uiSetsViewModel.tempParamShow || (isImg2Img && uiSetsViewModel.iPromptSwitch)) {
                         Divider(
                             thickness = 2.dp,
                             color = cardColor
@@ -349,7 +348,7 @@ fun ParamEditContent(
                             name = stringResource(id = R.string.r_prompt),
                             loras = loras,
                             local = prompts,
-                            showAddable = (!isImg2Img && uiViewModel.tPromptAdSwitch) || (isImg2Img && uiViewModel.iPromptAdSwitch),
+                            showAddable = (!isImg2Img && uiSetsViewModel.tPromptAdSwitch) || (isImg2Img && uiSetsViewModel.iPromptAdSwitch),
                             promptSets = promptSets,
                             prompt = defaultPrompt,
                             onRefresh = suspend {
@@ -357,7 +356,7 @@ fun ParamEditContent(
                             }
                         )
                     }
-                    if ((!isImg2Img && uiViewModel.tNPromptSwitch) || uiViewModel.tempParamShow || (isImg2Img && uiViewModel.iNPromptSwitch)) {
+                    if ((!isImg2Img && uiSetsViewModel.tNPromptSwitch) || uiSetsViewModel.tempParamShow || (isImg2Img && uiSetsViewModel.iNPromptSwitch)) {
                         Divider(
                             thickness = 2.dp,
                             color = cardColor
@@ -366,7 +365,7 @@ fun ParamEditContent(
                             name = stringResource(id = R.string.r_neg_prompt),
                             loras = loras,
                             local = prompts,
-                            showAddable = (!isImg2Img && uiViewModel.tNPromptAdSwitch) || (isImg2Img && uiViewModel.iNPromptAdSwitch),
+                            showAddable = (!isImg2Img && uiSetsViewModel.tNPromptAdSwitch) || (isImg2Img && uiSetsViewModel.iNPromptAdSwitch),
                             promptSets = promptSets,
                             prompt = defaultNegPrompt,
                             onRefresh = suspend {
@@ -375,7 +374,7 @@ fun ParamEditContent(
                         )
                     }
                     if (isImg2Img) {
-                        if (uiViewModel.iDnoiseSwitch) {
+                        if (uiSetsViewModel.iDnoiseSwitch) {
                             Divider(
                                 thickness = 2.dp,
                                 color = cardColor
@@ -394,7 +393,7 @@ fun ParamEditContent(
                         )
                         ParamRowImgChoose(base64Str = image)
                     }
-                    if ((!isImg2Img && uiViewModel.tScriptSwitch) || uiViewModel.tempParamShow || (isImg2Img && uiViewModel.iScriptSwitch)) {
+                    if ((!isImg2Img && uiSetsViewModel.tScriptSwitch) || uiSetsViewModel.tempParamShow || (isImg2Img && uiSetsViewModel.iScriptSwitch)) {
                         Divider(
                             thickness = 2.dp,
                             color = cardColor
@@ -412,7 +411,7 @@ fun ParamEditContent(
                             USDUpscaleScript(script_args)
                         }
                     }
-                    if ((!isImg2Img && uiViewModel.tCNSwitch) || uiViewModel.tempParamShow || (isImg2Img && uiViewModel.iCNSwitch)) {
+                    if ((!isImg2Img && uiSetsViewModel.tCNSwitch) || uiSetsViewModel.tempParamShow || (isImg2Img && uiSetsViewModel.iCNSwitch)) {
                         Divider(
                             thickness = 2.dp,
                             color = cardColor
@@ -444,7 +443,7 @@ fun ParamEditContent(
                 TextUtil.topsea("ParamEditScreen currParam: ${currParam}")
 
                 if (baseModel.value != currParam.baseModel) {
-                    uiViewModel.onEvent(UIEvent.ModelChanging(true))
+                    uiSetsViewModel.onEvent(UIEvent.ModelChanging(true))
                 }
 
                 val param = when (currParam) {

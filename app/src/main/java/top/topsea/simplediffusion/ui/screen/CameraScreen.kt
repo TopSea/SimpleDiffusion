@@ -57,7 +57,7 @@ import top.topsea.simplediffusion.data.state.UIEvent
 import top.topsea.simplediffusion.data.viewmodel.BasicViewModel
 import top.topsea.simplediffusion.data.viewmodel.ImgDataViewModel
 import top.topsea.simplediffusion.data.viewmodel.NormalViewModel
-import top.topsea.simplediffusion.data.viewmodel.UIViewModel
+import top.topsea.simplediffusion.data.viewmodel.UISetsViewModel
 import top.topsea.simplediffusion.event.TaskListEvent
 import top.topsea.simplediffusion.ui.component.DisplayImagesInCam
 import top.topsea.simplediffusion.util.TaskQueue
@@ -84,7 +84,7 @@ fun CameraScreen(
     imgViewModel: ImgDataViewModel,
     paramViewModel: BasicViewModel,
     normalViewModel: NormalViewModel,
-    uiViewModel: UIViewModel,
+    uiSetsViewModel: UISetsViewModel,
     taskQueue: TaskQueue,
 ) {
     val context = LocalContext.current
@@ -105,7 +105,7 @@ fun CameraScreen(
         imgViewModel = imgViewModel,
         paramViewModel = paramViewModel,
         normalViewModel = normalViewModel,
-        uiViewModel = uiViewModel,
+        uiSetsViewModel = uiSetsViewModel,
         taskQueue = taskQueue
     )
 
@@ -125,7 +125,7 @@ fun CameraView(
     imgViewModel: ImgDataViewModel,
     paramViewModel: BasicViewModel,
     normalViewModel: NormalViewModel,
-    uiViewModel: UIViewModel,
+    uiSetsViewModel: UISetsViewModel,
     taskQueue: TaskQueue,
 ) {
     val camIndex = remember { mutableStateOf(CameraSelector.LENS_FACING_BACK) }
@@ -174,7 +174,7 @@ fun CameraView(
                 .weight(1f),
             contentAlignment = Alignment.Center
         ) {
-            if (!uiViewModel.displaying) {
+            if (!uiSetsViewModel.displaying) {
                 AndroidView(
                     modifier = Modifier
                         .size(getDpSize(size = currSize.value))
@@ -218,7 +218,7 @@ fun CameraView(
             imageCapture = imageCapture,
             camIndex = camIndex,
             paramViewModel = paramViewModel,
-            uiViewModel = uiViewModel,
+            uiSetsViewModel = uiSetsViewModel,
             taskQueue = taskQueue,
         )
     }
@@ -230,7 +230,7 @@ fun CamBottomBar(
     imageCapture: ImageCapture,
     camIndex: MutableState<Int>,
     paramViewModel: BasicViewModel,
-    uiViewModel: UIViewModel,
+    uiSetsViewModel: UISetsViewModel,
     taskQueue: TaskQueue,
 ) {
     val context = LocalContext.current
@@ -313,7 +313,7 @@ fun CamBottomBar(
                         .size(54.dp)
                         .background(Color.Black)
                         .clickable(enabled = imageList.isNotEmpty() || taskQueue.tasks.isNotEmpty()) {
-                            uiViewModel.onEvent(UIEvent.Display(false))
+                            uiSetsViewModel.onEvent(UIEvent.Display(false))
                         },
                 )
                 // 待生成的图片
@@ -332,7 +332,7 @@ fun CamBottomBar(
                     .border(2.dp, Color.White, CircleShape)
                     .clickable {
                         // 在展示图片时不允许拍照
-                        if (!uiViewModel.displaying) {
+                        if (!uiSetsViewModel.displaying) {
                             val curr = "${System.currentTimeMillis()}.png"
                             val tmpImg = File(context.filesDir, curr)
 
@@ -391,13 +391,13 @@ fun CamBottomBar(
                                             Toast.makeText(context, context.getString(R.string.t_too_many_gen), Toast.LENGTH_SHORT).show()
                                         })
 
-                                        if (uiViewModel.taskQueueSize == 1 && uiViewModel.showGenOn1) {
-                                            uiViewModel.onEvent(UIEvent.Display(true))
+                                        if (uiSetsViewModel.taskQueueSize == 1 && uiSetsViewModel.showGenOn1) {
+                                            uiSetsViewModel.onEvent(UIEvent.Display(true))
                                         }
                                     }
                                 })
                         } else {
-                            uiViewModel.onEvent(UIEvent.Display(false))
+                            uiSetsViewModel.onEvent(UIEvent.Display(false))
                         }
                     },
                 contentAlignment = Alignment.Center
@@ -406,7 +406,7 @@ fun CamBottomBar(
                     modifier = Modifier
                         .size(48.dp)
                         .background(
-                            if (!uiViewModel.displaying) MaterialTheme.colorScheme.inversePrimary else Color.LightGray,
+                            if (!uiSetsViewModel.displaying) MaterialTheme.colorScheme.inversePrimary else Color.LightGray,
                             CircleShape
                         )
                 )
@@ -414,8 +414,8 @@ fun CamBottomBar(
 
             IconButton(
                 onClick = {
-                    if (uiViewModel.displaying) {
-                        uiViewModel.onEvent(UIEvent.Display(false))
+                    if (uiSetsViewModel.displaying) {
+                        uiSetsViewModel.onEvent(UIEvent.Display(false))
                     }
                     camIndex.value = if (camIndex.value != CameraSelector.LENS_FACING_FRONT)
                         CameraSelector.LENS_FACING_FRONT

@@ -1,7 +1,6 @@
 package top.topsea.simplediffusion.ui.screen
 
 import android.Manifest
-import android.util.Log
 import android.widget.Toast
 import androidx.annotation.Keep
 import androidx.compose.animation.AnimatedVisibility
@@ -24,7 +23,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -47,7 +45,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -60,7 +57,6 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import kotlinx.coroutines.launch
 import top.topsea.simplediffusion.CameraScreen
 import top.topsea.simplediffusion.EditScreen
 import top.topsea.simplediffusion.R
@@ -71,7 +67,7 @@ import top.topsea.simplediffusion.data.state.UIEvent
 import top.topsea.simplediffusion.data.viewmodel.BasicViewModel
 import top.topsea.simplediffusion.data.viewmodel.ImgDataViewModel
 import top.topsea.simplediffusion.data.viewmodel.NormalViewModel
-import top.topsea.simplediffusion.data.viewmodel.UIViewModel
+import top.topsea.simplediffusion.data.viewmodel.UISetsViewModel
 import top.topsea.simplediffusion.event.ControlNetEvent
 import top.topsea.simplediffusion.event.GenerateEvent
 import top.topsea.simplediffusion.event.ImageEvent
@@ -94,7 +90,7 @@ enum class Bottom{
 @Composable
 fun BaseScreen(
     navController: NavController,
-    uiViewModel: UIViewModel,
+    uiSetsViewModel: UISetsViewModel,
     selectedItem: MutableState<Bottom>,
     normalViewModel: NormalViewModel = hiltViewModel(),
     imgDataViewModel: ImgDataViewModel = hiltViewModel(),
@@ -124,7 +120,7 @@ fun BaseScreen(
             refreshing = true
             // 每次刷新检查SD的连接状态
             normalViewModel.checkSDConnect {
-                uiViewModel.onEvent(UIEvent.ServerConnected(it))
+                uiSetsViewModel.onEvent(UIEvent.ServerConnected(it))
                 refreshing = false
             }
             state.endRefresh()
@@ -139,7 +135,7 @@ fun BaseScreen(
     LaunchedEffect(key1 = null) {
         // 检查SD的连接状态
         normalViewModel.checkSDConnect {
-            uiViewModel.onEvent(UIEvent.ServerConnected(it))
+            uiSetsViewModel.onEvent(UIEvent.ServerConnected(it))
         }
 
         // 激活对应的 ControlNet
@@ -170,7 +166,7 @@ fun BaseScreen(
                     imageState = imgState,
                     imageEvent = imgDataViewModel::onEvent,
                     selectedID = imgDataViewModel.selectedID,
-                    uiViewModel = uiViewModel,
+                    uiSetsViewModel = uiSetsViewModel,
                     tasks = tasks,
                     errorTasks = errorTasks,
                     genState = genState,
@@ -180,7 +176,7 @@ fun BaseScreen(
             Bottom.PARAM -> {
                 ParamScreen(
                     navController = navController,
-                    uiViewModel = uiViewModel,
+                    uiSetsViewModel = uiSetsViewModel,
                     cnState = cnState,
                     paramState = paramState.value,
                     paramEvent = paramViewModel::paramEvent,
@@ -199,11 +195,11 @@ fun BaseScreen(
     }
 
     AnimatedVisibility(
-        visible = uiViewModel.displaying && uiViewModel.displayingImg >= 0,
+        visible = uiSetsViewModel.displaying && uiSetsViewModel.displayingImg >= 0,
     ) {
         val images = imgState.images
         val displayingImg = images.find {
-            it.index == uiViewModel.displayingImg
+            it.index == uiSetsViewModel.displayingImg
         }
 
         DisplayImages(
@@ -214,7 +210,7 @@ fun BaseScreen(
                     indication = null,
                     interactionSource = remember { MutableInteractionSource() }
                 ) {
-                    uiViewModel.onEvent(UIEvent.DisplayImg(-1))
+                    uiSetsViewModel.onEvent(UIEvent.DisplayImg(-1))
                 },
             displayingIndex = images.indexOf(displayingImg),
             images = images,
@@ -224,7 +220,7 @@ fun BaseScreen(
     }
 
     AnimatedVisibility(
-        visible = uiViewModel.displaying && uiViewModel.displayingTask >= 0,
+        visible = uiSetsViewModel.displaying && uiSetsViewModel.displayingTask >= 0,
     ) {
         DisplayTasks(
             modifier = Modifier
@@ -234,9 +230,9 @@ fun BaseScreen(
                     indication = null,
                     interactionSource = remember { MutableInteractionSource() }
                 ) {
-                    uiViewModel.onEvent(UIEvent.DisplayTask(-1))
+                    uiSetsViewModel.onEvent(UIEvent.DisplayTask(-1))
                 },
-            uiViewModel = uiViewModel,
+            uiSetsViewModel = uiSetsViewModel,
             tasks = tasks,
             errorTasks = errorTasks,
             genState = genState,
@@ -251,7 +247,7 @@ fun BaseBottomBar(
     selectedItem: MutableState<Bottom>,
     navController: NavController,
     imgDataViewModel: ImgDataViewModel,
-    uiViewModel: UIViewModel,
+    uiSetsViewModel: UISetsViewModel,
     paramState: ParamLocalState,
     paramEvent: (ParamEvent) -> Unit,
     tasks: List<TaskParam>,
@@ -259,7 +255,7 @@ fun BaseBottomBar(
 ) {
     val permissionCamera = rememberPermissionState(Manifest.permission.CAMERA)
     val context = LocalContext.current
-    val offsetDP by animateDpAsState(targetValue = if (uiViewModel.longPressImage) 0.dp else -getWidthDp(),
+    val offsetDP by animateDpAsState(targetValue = if (uiSetsViewModel.longPressImage) 0.dp else -getWidthDp(),
         label = ""
     )
 
@@ -295,8 +291,8 @@ fun BaseBottomBar(
                 label = { Text("图片") },
                 selected = selectedItem.value == Bottom.PHOTO,
                 onClick = {
-                    if (uiViewModel.displaying) {
-                        uiViewModel.onEvent(UIEvent.DisplayImg(-1))
+                    if (uiSetsViewModel.displaying) {
+                        uiSetsViewModel.onEvent(UIEvent.DisplayImg(-1))
                     }
                     selectedItem.value = Bottom.PHOTO
                 },
@@ -317,8 +313,8 @@ fun BaseBottomBar(
                             .size(32.dp)
                     )
                 }) {
-                    if (uiViewModel.displaying) {
-                        uiViewModel.onEvent(UIEvent.DisplayImg(-1))
+                    if (uiSetsViewModel.displaying) {
+                        uiSetsViewModel.onEvent(UIEvent.DisplayImg(-1))
                     }
                     paramEvent(ParamEvent.CheckCapture(
                         notInI2I = {
@@ -331,11 +327,11 @@ fun BaseBottomBar(
                                 .show()
                         }
                     ) {
-                        if (uiViewModel.serverConnected)
+                        if (uiSetsViewModel.serverConnected)
                             if (!permissionCamera.status.isGranted) {
                                 permissionCamera.launchPermissionRequest()
                             } else {
-                                uiViewModel.onEvent(UIEvent.Navigate(CameraScreen) {
+                                uiSetsViewModel.onEvent(UIEvent.Navigate(CameraScreen) {
                                     navController.navigate(CameraScreen.route)
                                 })
                             }
@@ -359,10 +355,10 @@ fun BaseBottomBar(
                             .size(32.dp)
                     )
                 }) {
-                    if (uiViewModel.displaying) {
-                        uiViewModel.onEvent(UIEvent.DisplayImg(-1))
+                    if (uiSetsViewModel.displaying) {
+                        uiSetsViewModel.onEvent(UIEvent.DisplayImg(-1))
                     }
-                    if (uiViewModel.serverConnected) {
+                    if (uiSetsViewModel.serverConnected) {
                         val currParam = paramState.currParam
                         if (currParam != null) {
                             taskListEvent(TaskListEvent.AddTaskImage(null to currParam) {
@@ -395,8 +391,8 @@ fun BaseBottomBar(
                             .size(32.dp)
                     )
                 }) {
-                    if (uiViewModel.displaying) {
-                        uiViewModel.onEvent(UIEvent.DisplayImg(-1))
+                    if (uiSetsViewModel.displaying) {
+                        uiSetsViewModel.onEvent(UIEvent.DisplayImg(-1))
                     }
                     paramEvent(
                         ParamEvent.EditActivate(
@@ -412,7 +408,7 @@ fun BaseBottomBar(
                                 .show()
                         })
                     if (paramState.currParam != null) {
-                        uiViewModel.onEvent(UIEvent.Navigate(EditScreen) {
+                        uiSetsViewModel.onEvent(UIEvent.Navigate(EditScreen) {
                             navController.navigate(EditScreen.route)
                         })
                     }
@@ -430,8 +426,8 @@ fun BaseBottomBar(
                 label = { Text("参数") },
                 selected = selectedItem.value == Bottom.PARAM,
                 onClick = {
-                    if (uiViewModel.displaying) {
-                        uiViewModel.onEvent(UIEvent.DisplayImg(-1))
+                    if (uiSetsViewModel.displaying) {
+                        uiSetsViewModel.onEvent(UIEvent.DisplayImg(-1))
                     }
                     selectedItem.value = Bottom.PARAM
                 },

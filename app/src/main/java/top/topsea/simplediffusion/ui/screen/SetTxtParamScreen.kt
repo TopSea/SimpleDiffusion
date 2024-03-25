@@ -41,12 +41,11 @@ import top.topsea.simplediffusion.R
 import top.topsea.simplediffusion.data.param.TxtParam
 import top.topsea.simplediffusion.data.state.UIEvent
 import top.topsea.simplediffusion.data.viewmodel.NormalViewModel
-import top.topsea.simplediffusion.data.viewmodel.UIViewModel
+import top.topsea.simplediffusion.data.viewmodel.UISetsViewModel
 import top.topsea.simplediffusion.event.ParamEvent
 import top.topsea.simplediffusion.navUp
 import top.topsea.simplediffusion.ui.component.ParamRowChoice
 import top.topsea.simplediffusion.ui.component.ParamRowChooseSampler
-import top.topsea.simplediffusion.ui.component.ParamRowNegPrompt
 import top.topsea.simplediffusion.ui.component.ParamRowPrompt
 import top.topsea.simplediffusion.ui.component.ParamTitle
 import top.topsea.simplediffusion.ui.component.SettingSwitch
@@ -58,7 +57,7 @@ import top.topsea.simplediffusion.util.TextUtil
 @Composable
 fun SetTxtParamScreen(
     navController: NavController,
-    uiViewModel: UIViewModel,
+    uiSetsViewModel: UISetsViewModel,
     normalViewModel: NormalViewModel,
     defaultTxtParam: TxtParam,
     paramEvent: (ParamEvent) -> Unit
@@ -104,8 +103,8 @@ fun SetTxtParamScreen(
             Divider(thickness = 2.dp, color = dividerColor)
             SetParam(
                 title = stringResource(id = R.string.r_sort_order),
-                switch = uiViewModel.tDisplayPriSwitch,
-                onSwitch = { uiViewModel.onEvent(UIEvent.UpdateTDPS(it)) },
+                switch = uiSetsViewModel.tDisplayPriSwitch,
+                onSwitch = { uiSetsViewModel.onEvent(UIEvent.UpdateTDPS(it)) },
             ){
                 StepRowInt(
                     name = stringResource(id = R.string.sp_default_value),
@@ -117,8 +116,8 @@ fun SetTxtParamScreen(
             Divider(thickness = 2.dp, color = dividerColor)
             SetParam(
                 title = stringResource(id = R.string.r_base_model),
-                switch = uiViewModel.tSDModelSwitch,
-                onSwitch = { uiViewModel.onEvent(UIEvent.UpdateTSDMS(it)) },
+                switch = uiSetsViewModel.tSDModelSwitch,
+                onSwitch = { uiSetsViewModel.onEvent(UIEvent.UpdateTSDMS(it)) },
             ){
                 ParamRowChoice(
                     name = stringResource(id = R.string.sp_default_value),
@@ -132,8 +131,8 @@ fun SetTxtParamScreen(
             Divider(thickness = 2.dp, color = dividerColor)
             SetParam(
                 title = stringResource(id = R.string.r_refiner_model),
-                switch = uiViewModel.tRefineModelSwitch,
-                onSwitch = { uiViewModel.onEvent(UIEvent.UpdateTRMS(it)) },
+                switch = uiSetsViewModel.tRefineModelSwitch,
+                onSwitch = { uiSetsViewModel.onEvent(UIEvent.UpdateTRMS(it)) },
             ){
                 ParamRowChoice(
                     name = stringResource(id = R.string.sp_default_value),
@@ -147,8 +146,8 @@ fun SetTxtParamScreen(
             Divider(thickness = 2.dp, color = dividerColor)
             SetParam(
                 title = stringResource(id = R.string.r_refiner_at),
-                switch = uiViewModel.tRefineAtSwitch,
-                onSwitch = { uiViewModel.onEvent(UIEvent.UpdateTRAS(it)) },
+                switch = uiSetsViewModel.tRefineAtSwitch,
+                onSwitch = { uiSetsViewModel.onEvent(UIEvent.UpdateTRAS(it)) },
             ){
                 StepRowFloat(
                     name = stringResource(id = R.string.sp_default_value),
@@ -160,8 +159,8 @@ fun SetTxtParamScreen(
             Divider(thickness = 2.dp, color = dividerColor)
             SetParam(
                 title = stringResource(id = R.string.r_img_width),
-                switch = uiViewModel.tImgWidthSwitch,
-                onSwitch = { uiViewModel.onEvent(UIEvent.UpdateTIWS(it)) },
+                switch = uiSetsViewModel.tImgWidthSwitch,
+                onSwitch = { uiSetsViewModel.onEvent(UIEvent.UpdateTIWS(it)) },
             ){
                 SwipeInt(
                     boldTitle = true,
@@ -173,8 +172,8 @@ fun SetTxtParamScreen(
             Divider(thickness = 2.dp, color = dividerColor)
             SetParam(
                 title = stringResource(id = R.string.r_img_height),
-                switch = uiViewModel.tImgHeightSwitch,
-                onSwitch = { uiViewModel.onEvent(UIEvent.UpdateTIHS(it)) },
+                switch = uiSetsViewModel.tImgHeightSwitch,
+                onSwitch = { uiSetsViewModel.onEvent(UIEvent.UpdateTIHS(it)) },
             ){
                 SwipeInt(
                     boldTitle = true,
@@ -186,8 +185,8 @@ fun SetTxtParamScreen(
             Divider(thickness = 2.dp, color = dividerColor)
             SetParam(
                 title = stringResource(id = R.string.r_gen_steps),
-                switch = uiViewModel.tStepsSwitch,
-                onSwitch = { uiViewModel.onEvent(UIEvent.UpdateTSS(it)) },
+                switch = uiSetsViewModel.tStepsSwitch,
+                onSwitch = { uiSetsViewModel.onEvent(UIEvent.UpdateTSS(it)) },
             ){
                 StepRowInt(
                     name = stringResource(id = R.string.sp_default_value),
@@ -199,8 +198,8 @@ fun SetTxtParamScreen(
             Divider(thickness = 2.dp, color = dividerColor)
             SetParam(
                 title = stringResource(id = R.string.r_cfg_scales),
-                switch = uiViewModel.tCFGSwitch,
-                onSwitch = { uiViewModel.onEvent(UIEvent.UpdateTCS(it)) },
+                switch = uiSetsViewModel.tCFGSwitch,
+                onSwitch = { uiSetsViewModel.onEvent(UIEvent.UpdateTCS(it)) },
             ){
                 StepRowFloat(
                     name = stringResource(id = R.string.sp_default_value),
@@ -212,8 +211,8 @@ fun SetTxtParamScreen(
             Divider(thickness = 2.dp, color = dividerColor)
             SetParam(
                 title = stringResource(id = R.string.r_choose_sampler),
-                switch = uiViewModel.tSamplerSwitch,
-                onSwitch = { uiViewModel.onEvent(UIEvent.UpdateTSamplerS(it)) },
+                switch = uiSetsViewModel.tSamplerSwitch,
+                onSwitch = { uiSetsViewModel.onEvent(UIEvent.UpdateTSamplerS(it)) },
             ){
                 ParamRowChooseSampler(
                     name = stringResource(id = R.string.sp_default_value),
@@ -224,8 +223,8 @@ fun SetTxtParamScreen(
             Divider(thickness = 2.dp, color = dividerColor)
             SetParam(
                 title = stringResource(id = R.string.r_batch_size),
-                switch = uiViewModel.tBatchSizeSwitch,
-                onSwitch = { uiViewModel.onEvent(UIEvent.UpdateTBSS(it)) },
+                switch = uiSetsViewModel.tBatchSizeSwitch,
+                onSwitch = { uiSetsViewModel.onEvent(UIEvent.UpdateTBSS(it)) },
             ){
                 StepRowInt(
                     name = stringResource(id = R.string.sp_default_value),
@@ -237,17 +236,17 @@ fun SetTxtParamScreen(
             Divider(thickness = 2.dp, color = dividerColor)
             SetParam(
                 title = stringResource(id = R.string.r_sd_prompt),
-                switch = uiViewModel.tSDPromptSwitch,
-                onSwitch = { uiViewModel.onEvent(UIEvent.UpdateTSDPS(it)) },
+                switch = uiSetsViewModel.tSDPromptSwitch,
+                onSwitch = { uiSetsViewModel.onEvent(UIEvent.UpdateTSDPS(it)) },
             )
             Divider(thickness = 2.dp, color = dividerColor)
             SetParamForPrompt(
                 title = stringResource(id = R.string.r_prompt),
                 titleA = stringResource(id = R.string.sp_show_addable),
-                switch = uiViewModel.tPromptSwitch,
-                switchA = uiViewModel.tPromptAdSwitch,
-                onSwitch = { uiViewModel.onEvent(UIEvent.UpdateTPS(it)) },
-                onSwitchA = { uiViewModel.onEvent(UIEvent.UpdateTPAS(it)) },
+                switch = uiSetsViewModel.tPromptSwitch,
+                switchA = uiSetsViewModel.tPromptAdSwitch,
+                onSwitch = { uiSetsViewModel.onEvent(UIEvent.UpdateTPS(it)) },
+                onSwitchA = { uiSetsViewModel.onEvent(UIEvent.UpdateTPAS(it)) },
             ){
                 ParamRowPrompt(
                     name = stringResource(id = R.string.sp_default_value),
@@ -265,10 +264,10 @@ fun SetTxtParamScreen(
             SetParamForPrompt(
                 title = stringResource(id = R.string.r_neg_prompt),
                 titleA = stringResource(id = R.string.sp_show_addable),
-                switch = uiViewModel.tNPromptSwitch,
-                switchA = uiViewModel.tNPromptAdSwitch,
-                onSwitch = { uiViewModel.onEvent(UIEvent.UpdateTNPS(it)) },
-                onSwitchA = { uiViewModel.onEvent(UIEvent.UpdateTNPAS(it)) },
+                switch = uiSetsViewModel.tNPromptSwitch,
+                switchA = uiSetsViewModel.tNPromptAdSwitch,
+                onSwitch = { uiSetsViewModel.onEvent(UIEvent.UpdateTNPS(it)) },
+                onSwitchA = { uiSetsViewModel.onEvent(UIEvent.UpdateTNPAS(it)) },
             ){
                 ParamRowPrompt(
                     name = stringResource(id = R.string.sp_default_value),
@@ -285,14 +284,14 @@ fun SetTxtParamScreen(
             Divider(thickness = 2.dp, color = dividerColor)
             SetParam(
                 title = stringResource(id = R.string.r_scripts),
-                switch = uiViewModel.tScriptSwitch,
-                onSwitch = { uiViewModel.onEvent(UIEvent.UpdateTScriptS(it)) },
+                switch = uiSetsViewModel.tScriptSwitch,
+                onSwitch = { uiSetsViewModel.onEvent(UIEvent.UpdateTScriptS(it)) },
             )
             Divider(thickness = 2.dp, color = dividerColor)
             SetParam(
                 title = stringResource(id = R.string.r_control_net),
-                switch = uiViewModel.tCNSwitch,
-                onSwitch = { uiViewModel.onEvent(UIEvent.UpdateTCNS(it)) },
+                switch = uiSetsViewModel.tCNSwitch,
+                onSwitch = { uiSetsViewModel.onEvent(UIEvent.UpdateTCNS(it)) },
             )
         }
 

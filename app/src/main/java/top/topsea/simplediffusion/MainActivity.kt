@@ -38,7 +38,7 @@ import top.topsea.simplediffusion.data.state.UIEvent
 import top.topsea.simplediffusion.data.viewmodel.ImgDataViewModel
 import top.topsea.simplediffusion.data.viewmodel.NormalViewModel
 import top.topsea.simplediffusion.data.viewmodel.ParamViewModel
-import top.topsea.simplediffusion.data.viewmodel.UIViewModel
+import top.topsea.simplediffusion.data.viewmodel.UISetsViewModel
 import top.topsea.simplediffusion.event.ControlNetEvent
 import top.topsea.simplediffusion.event.ParamEvent
 import top.topsea.simplediffusion.ui.screen.AboutSDScreen
@@ -99,13 +99,13 @@ class MainActivity : ComponentActivity() {
             val context = LocalContext.current
 
             val imgDataViewModel: ImgDataViewModel = hiltViewModel()
-            val uiViewModel: UIViewModel = hiltViewModel()
+            val uiSetsViewModel: UISetsViewModel = hiltViewModel()
             val normalViewModel: NormalViewModel = hiltViewModel()
             val cnState by normalViewModel.cnState.collectAsState()
             taskQueue.cancelGenerate = normalViewModel::cancelGenerate
             taskQueue.imgViewModel = imgDataViewModel
             taskQueue.cnState = cnState
-            taskQueue.uiViewModel = uiViewModel
+            taskQueue.uiSetsViewModel = uiSetsViewModel
 
             val taskState by taskQueue.tasksState.collectAsState()
             val generateState by taskQueue.genState.collectAsState()
@@ -113,14 +113,14 @@ class MainActivity : ComponentActivity() {
             val paramViewModel = hiltViewModel<ParamViewModel>()
             val paramState by paramViewModel.paramState.collectAsState()
 
-            LaunchedEffect(key1 = uiViewModel.serverConnected) {
-                if (uiViewModel.serverConnected) {
+            LaunchedEffect(key1 = uiSetsViewModel.serverConnected) {
+                if (uiSetsViewModel.serverConnected) {
                     Toast.makeText(context, context.getText(R.string.t_sd_connected), Toast.LENGTH_SHORT).show()
                     // 生成任务循环开始
                     taskQueue.trueOp()
-                    val vae = uiViewModel.currentVae
+                    val vae = uiSetsViewModel.currentVae
                     if (vae.model_name.isNotEmpty())
-                        uiViewModel.onEvent(UIEvent.UpdateVae(vae, {}){})
+                        uiSetsViewModel.onEvent(UIEvent.UpdateVae(vae, {}){})
                 } else {
                     Toast.makeText(context, context.getText(R.string.t_sd_not_connected), Toast.LENGTH_SHORT).show()
                 }
@@ -179,14 +179,14 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     Scaffold (
-                        topBar = { currentScreen.topBar(uiViewModel, navController) },
+                        topBar = { currentScreen.topBar(uiSetsViewModel, navController) },
                         bottomBar = {
                             if (currentScreen is BaseScreen)
                                 BaseBottomBar(
                                     selectedItem,
                                     navController,
                                     imgDataViewModel = imgDataViewModel,
-                                    uiViewModel = uiViewModel,
+                                    uiSetsViewModel = uiSetsViewModel,
                                     paramState = paramState,
                                     paramEvent = paramViewModel::paramEvent,
                                     tasks = taskQueue.tasks,
@@ -202,7 +202,7 @@ class MainActivity : ComponentActivity() {
                             composable(BaseScreen.route) {
                                 BaseScreen(
                                     navController = navController,
-                                    uiViewModel = uiViewModel,
+                                    uiSetsViewModel = uiSetsViewModel,
                                     selectedItem = selectedItem,
                                     normalViewModel = normalViewModel,
                                     imgDataViewModel = imgDataViewModel,
@@ -219,7 +219,7 @@ class MainActivity : ComponentActivity() {
                                     navController = navController,
                                     cardColor = Color.Gray,
                                     paramState = paramState,
-                                    uiViewModel = uiViewModel,
+                                    uiSetsViewModel = uiSetsViewModel,
                                     paramEvent = paramViewModel::paramEvent,
                                     normalViewModel = normalViewModel,
                                 )
@@ -229,14 +229,14 @@ class MainActivity : ComponentActivity() {
                                     navController = navController,
                                     cardColor = Color.Gray,
                                     cnState = cnState,
-                                    uiEvent = uiViewModel::onEvent,
+                                    uiEvent = uiSetsViewModel::onEvent,
                                     cnEvent = normalViewModel::cnEvent,
                                 )
                             }
                             composable(SettingScreen.route) {
                                 SettingScreen(
                                     navController = navController,
-                                    uiViewModel = uiViewModel,
+                                    uiSetsViewModel = uiSetsViewModel,
                                     normalViewModel = normalViewModel,
                                     tasks = taskQueue.tasks,
                                 )
@@ -244,14 +244,14 @@ class MainActivity : ComponentActivity() {
                             composable(SetPEScreen.route) {
                                 SetPEScreen(
                                     navController = navController,
-                                    uiViewModel = uiViewModel,
+                                    uiSetsViewModel = uiSetsViewModel,
                                     normalViewModel = normalViewModel,
                                 )
                             }
                             composable(SetTxtParamScreen.route) {
                                 SetTxtParamScreen(
                                     navController = navController,
-                                    uiViewModel = uiViewModel,
+                                    uiSetsViewModel = uiSetsViewModel,
                                     normalViewModel = normalViewModel,
                                     defaultTxtParam = paramViewModel.tparam.collectAsState().value,
                                     paramEvent = paramViewModel::paramEvent
@@ -260,21 +260,21 @@ class MainActivity : ComponentActivity() {
                             composable(SetImgParamScreen.route) {
                                 SetImgParamScreen(
                                     navController = navController,
-                                    uiViewModel = uiViewModel,
+                                    uiSetsViewModel = uiSetsViewModel,
                                     normalViewModel = normalViewModel,
                                     defaultImgParam = paramViewModel.iparam.collectAsState().value,
                                     paramEvent = paramViewModel::paramEvent
                                 )
                             }
                             composable(AboutScreen.route) {
-                                AboutSDScreen(uiViewModel = uiViewModel)
+                                AboutSDScreen(uiSetsViewModel = uiSetsViewModel)
                             }
                             composable(CameraScreen.route) {
                                 CameraScreen(
                                     imgViewModel = imgDataViewModel,
                                     paramViewModel = paramViewModel,
                                     normalViewModel = normalViewModel,
-                                    uiViewModel = uiViewModel,
+                                    uiSetsViewModel = uiSetsViewModel,
                                     taskQueue = taskQueue,
                                 )
                             }
@@ -283,31 +283,31 @@ class MainActivity : ComponentActivity() {
                                     navController = navController,
                                     paramViewModel = paramViewModel,
                                     normalViewModel = normalViewModel,
-                                    uiViewModel = uiViewModel,
+                                    uiSetsViewModel = uiSetsViewModel,
                                     tasks = taskQueue.tasks,
                                 )
                             }
                             composable(DesktopScreen.route) {
                                 DesktopScreen(
-                                    uiViewModel = uiViewModel,
+                                    uiSetsViewModel = uiSetsViewModel,
                                 )
                             }
                         }
 
                         BackHandler(enabled = true) {
                             TextUtil.topsea("BackHandler.")
-                            if (uiViewModel.longPressImage) {
-                                uiViewModel.onEvent(UIEvent.LongPressImage(false))
-                                uiViewModel.fullSelected.clear()
+                            if (uiSetsViewModel.longPressImage) {
+                                uiSetsViewModel.onEvent(UIEvent.LongPressImage(false))
+                                uiSetsViewModel.fullSelected.clear()
                                 imgDataViewModel.selectedID.clear()
                                 return@BackHandler
                             }
-                            if (uiViewModel.displaying) {
-                                uiViewModel.onEvent(UIEvent.Display(false))
+                            if (uiSetsViewModel.displaying) {
+                                uiSetsViewModel.onEvent(UIEvent.Display(false))
                                 return@BackHandler
                             }
-                            if (uiViewModel.tempParamShow) {
-                                uiViewModel.onEvent(UIEvent.TempParamShow(false))
+                            if (uiSetsViewModel.tempParamShow) {
+                                uiSetsViewModel.onEvent(UIEvent.TempParamShow(false))
                             }
                             if (!navController.popBackStack())
                                 this.finish()
